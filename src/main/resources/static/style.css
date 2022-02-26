@@ -1,0 +1,11 @@
+body {
+    color: #113;
+}
+input.text {
+    width:  200px;
+    height: 15px;
+    padding: 5px 10px 5px 10px;
+    border:1px solid #999;
+    font-size:16px;
+    font-family: Tahoma;
+}
