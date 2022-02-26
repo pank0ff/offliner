@@ -17,9 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 public class MainController {
@@ -43,6 +41,8 @@ public class MainController {
         } else {
             messages = messageRepo.findAll();
         }
+
+        Collections.reverse((List<Message>) messages);
 
         model.addAttribute("messages", messages);
         model.addAttribute("filter", filter);
