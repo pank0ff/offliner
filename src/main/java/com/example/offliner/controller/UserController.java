@@ -1,32 +1,40 @@
 package com.example.offliner.controller;
 
+import com.example.offliner.domain.Message;
 import com.example.offliner.domain.Role;
 import com.example.offliner.domain.User;
+import com.example.offliner.repos.MessageRepo;
 import com.example.offliner.repos.UserRepo;
+import com.example.offliner.service.UserSevice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
-@PreAuthorize("hasAuthority('ADMIN')")
 public class UserController {
     @Autowired
     private UserRepo userRepo;
+    @Autowired
+    private MessageRepo messageRepo;
+    @Autowired
+    private UserSevice userSevice;
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     public String userList(Model model) {
         model.addAttribute("users", userRepo.findAll());
 
         return "userList";
     }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("{user}")
     public String userEditForm(@PathVariable User user, Model model) {
         model.addAttribute("user", user);
@@ -35,7 +43,7 @@ public class UserController {
         return "userEdit";
     }
 
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public String userSave(
             @RequestParam String username,
@@ -59,5 +67,40 @@ public class UserController {
         userRepo.save(user);
 
         return "redirect:/user";
+    }
+
+    @GetMapping("profile")
+    public String getProfile(Model model, @AuthenticationPrincipal User user) {
+        Iterable<Message> messages = messageRepo.findAll();
+        ArrayList<Message> messages1 = new ArrayList<Message>();
+        for(Message message:messages){
+            if(Objects.equals(message.getAuthor().getUsername(), user.getUsername())){
+                messages1.add(message);
+            }
+        }
+        Collections.reverse(messages1);
+        model.addAttribute("user", user);
+        model.addAttribute("messages",messages1);
+
+        return "profile";
+    }
+    @GetMapping("/user/{id}/settings")
+    public String settings(
+            Model model, @AuthenticationPrincipal User user
+    ){
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("email", user.getEmail());
+        return "settings";
+    }
+
+    @PostMapping("/user/{id}/settings")
+    public String updateProfile(
+            @AuthenticationPrincipal User user,
+            @RequestParam String password,
+            @RequestParam String email
+    ) {
+        userSevice.updateProfile(user, password, email);
+
+        return "redirect:/user/profile";
     }
 }

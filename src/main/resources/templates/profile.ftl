@@ -1,6 +1,5 @@
 <#import "parts/common.ftl" as c>
 
-
 <@c.page>
     <style>
         span.mainText {
@@ -45,11 +44,11 @@
         }
 
     </style>
-
-    </style>
+    <h5>${user.username}</h5>
+   <a href="user/${user.id}/settings">Settings</a>
     <div class="form-row">
         <div class="form-group col-md-6">
-            <form method="get" action="/main" class="form-inline">
+            <form method="get" action="/user/profile/${user.id}" class="form-inline">
                 <input type="text" name="filter" class="form-control" value="${filter?ifExists}"
                        placeholder="Search by topic">
                 <button type="submit" class="btn btn-primary ml-2">Search</button>
@@ -57,8 +56,44 @@
         </div>
     </div>
 
-
-    <div style = "height: 400px; width: 900px">
+    <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
+       aria-controls="collapseExample">
+        Add new Message
+    </a>
+    <div class="collapse" id="collapseExample">
+        <div class="form-group mt-3">
+            <form method="post" action="/user/profile/add/${user.id}" enctype="multipart/form-data">
+                <div class="form-group">
+                    <input required type="text" class="form-control" name="name" placeholder="Enter name of your post"/>
+                </div>
+                <div class="form-group">
+                    <input required type="text" class="form-control" name="tag" placeholder="Enter topic of your post"/>
+                </div>
+                <div class="form-group" style="width:  100%;height: 100%;">
+                    <label style="width:  100%;height: 100%;">
+                        <textarea required  type="text" class="form-control" name="text" style="width:  100%;
+                            height: 100%;
+                            padding: 5px 10px 5px 10px;
+                            border:1px solid #999;
+                            font-size:16px;
+                            font-family: Tacoma,serif"
+                                  placeholder="Enter your post"></textarea>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <div class="custom-file">
+                        <input type="file" name="file" id="customFile">
+                        <label class="custom-file-label" for="customFile">Choose file</label>
+                    </div>
+                </div>
+                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div  style = "height: 400px; width: 900px">
         <#list messages as message>
             <div class="card my-3" >
                 <h1 class="title" > ${message.name}</h1>

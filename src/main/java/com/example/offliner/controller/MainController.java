@@ -28,7 +28,8 @@ public class MainController {
     private String uploadPath;
 
     @GetMapping("/")
-    public String greeting(Map<String, Object> model) {
+    public String greeting(Model model, @AuthenticationPrincipal User user) {
+        model.addAttribute("username", user.getUsername());
         return "greeting";
     }
 
@@ -49,8 +50,34 @@ public class MainController {
 
         return "main";
     }
+    @GetMapping("/user/profile/{id}")
+    public String filter(@RequestParam(required = false, defaultValue = "") String filter, Model model,@AuthenticationPrincipal User user){
+        Iterable<Message> messages = messageRepo.findAll();
+        ArrayList<Message> messages1 = new ArrayList<Message>();
+        for(Message message:messages){
+            if(Objects.equals(message.getAuthor().getUsername(), user.getUsername())){
+                messages1.add(message);
+            }
+        }
+        ArrayList<Message> messages2 = new ArrayList<Message>();
+        if (filter != null && !filter.isEmpty()) {
+            for(Message message : messages1){
+                if(Objects.equals(message.getTag(), filter)){
+                    messages2.add(message);
+                }
+            }
+        } else {
+            messages2 = messages1;
+        }
+        Collections.reverse(messages2);
+        model.addAttribute("user",user);
+        model.addAttribute("messages", messages2);
+        model.addAttribute("filter", filter);
 
-    @PostMapping("/main")
+        return "profile";
+    }
+
+    @PostMapping("/user/profile/add/{id}")
     public String add(
             @AuthenticationPrincipal User user,
             @RequestParam String text,
@@ -81,7 +108,7 @@ public class MainController {
 
         model.put("messages", messages);
 
-        return "main";
+        return "redirect:/user/profile";
     }
     @GetMapping("/post/{id}")
     public String userEditForm(@PathVariable Integer id, Model model) {
