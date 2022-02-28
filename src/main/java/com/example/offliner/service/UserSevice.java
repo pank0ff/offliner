@@ -1,6 +1,5 @@
 package com.example.offliner.service;
 
-import com.example.offliner.domain.Role;
 import com.example.offliner.repos.UserRepo;
 import com.example.offliner.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +8,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
-import java.util.Collections;
-import java.util.UUID;
 
 @Service
 public class UserSevice implements UserDetailsService {
@@ -24,8 +20,14 @@ public class UserSevice implements UserDetailsService {
     }
 
 
-    public void updateProfile(User user, String password, String email) {
+    public void updateProfile(User user, String password, String email,String aboutYourself) {
         String userEmail = user.getEmail();
+        String aboutYourself1 = user.getAboutMyself();
+        boolean isAboutMyselfChanged = (aboutYourself != null && !aboutYourself.equals(aboutYourself1)) ||
+                (aboutYourself1 != null && !aboutYourself1.equals(aboutYourself));
+        if (isAboutMyselfChanged) {
+            user.setAboutMyself(aboutYourself);
+        }
         boolean isEmailChanged = (email != null && !email.equals(userEmail)) ||
                 (userEmail != null && !userEmail.equals(email));
         if (isEmailChanged) {

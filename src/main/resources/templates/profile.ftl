@@ -1,50 +1,46 @@
 <#import "parts/common.ftl" as c>
 
 <@c.page>
-    <style>
-        span.mainText {
-            -ms-text-overflow: ellipsis;
-            -o-text-overflow: ellipsis;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            -ms-line-clamp: 10;
-            -webkit-line-clamp: 10;
-            line-clamp: 10;
-            display: -webkit-box;
-            word-wrap: break-word;
-            -webkit-box-orient: vertical;
-            box-orient: vertical;
-        }
-        h1.title {
-            -ms-text-overflow: ellipsis;
-            -o-text-overflow: ellipsis;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            -ms-line-clamp: 1;
-            -webkit-line-clamp: 1;
-            line-clamp: 1;
-            display: -webkit-box;
-            word-wrap: break-word;
-            -webkit-box-orient: vertical;
-            box-orient: vertical;
-        }
 
-        p.topic {
-            -ms-text-overflow: ellipsis;
-            -o-text-overflow: ellipsis;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            -ms-line-clamp: 1;
-            -webkit-line-clamp: 1;
-            line-clamp: 1;
-            display: -webkit-box;
-            word-wrap: break-word;
-            -webkit-box-orient: vertical;
-            box-orient: vertical;
-        }
+    <div class="container mt-5 mb-5">
+        <div class="row no-gutters">
+            <div class="col-md-4 col-lg-4"><img src="https://i.imgur.com/aCwpF7V.jpg"></div>
+            <div class="col-md-8 col-lg-8">
+                <div class="d-flex flex-column">
+                    <div class="d-flex flex-row justify-content-between align-items-center p-5 bg-black text-white">
+                        <h3 class="display-5">${user.username}</h3><i class="fa fa-facebook">facebook</i><i class="fa fa-google">google</i><i class="fa fa-youtube-play">youtube</i><i class="fa fa-dribbble">dribble</i><i class="fa fa-linkedin">linkedin</i>
+                    </div>
 
-    </style>
-    <h5>${user.username}</h5>
+                    <div class="p-3 bg-blue text-white">
+                        <#if user.aboutMyself??>
+                        <h6> ${user.aboutMyself}</h6>
+                        </#if>
+                    </div>
+
+                    <div class="d-flex flex-row text-white">
+                        <div class="p-3 bg-primary text-center skill-block">
+                            <h5>Posts:</h5>
+                             <h6>12</h6>
+                        </div>
+                        <div class="p-3 bg-success text-center skill-block">
+                            <h5>Comments:</h5>
+                            <h6>132</h6>
+                        </div>
+                        <div class="p-3 bg-warning text-center skill-block">
+                            <h5>Likes:</h5>
+                            <h6>54</h6>
+
+                        </div>
+                        <div class="p-3 bg-danger text-center skill-block">
+                           <h5>Date of registration:</h5>
+                            <h6>22.02.2022</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
    <a href="user/${user.id}/settings">Settings</a>
     <div class="form-row">
         <div class="form-group col-md-6">

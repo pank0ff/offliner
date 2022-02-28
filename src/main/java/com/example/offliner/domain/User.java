@@ -17,6 +17,7 @@ public class User implements UserDetails {
     private String password;
     private boolean active;
     private String email;
+    private String aboutMyself;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
@@ -98,5 +99,13 @@ public class User implements UserDetails {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getAboutMyself() {
+        return aboutMyself;
+    }
+
+    public void setAboutMyself(String aboutYourself) {
+        this.aboutMyself = aboutYourself;
     }
 }

@@ -90,6 +90,7 @@ public class UserController {
     ){
         model.addAttribute("username", user.getUsername());
         model.addAttribute("email", user.getEmail());
+        model.addAttribute("aboutMyself",user.getAboutMyself());
         return "settings";
     }
 
@@ -97,10 +98,12 @@ public class UserController {
     public String updateProfile(
             @AuthenticationPrincipal User user,
             @RequestParam String password,
-            @RequestParam String email
+            @RequestParam String email,
+            @RequestParam String aboutMyself
     ) {
-        userSevice.updateProfile(user, password, email);
+        userSevice.updateProfile(user, password, email,aboutMyself);
 
         return "redirect:/user/profile";
     }
+
 }

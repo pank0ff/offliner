@@ -2,51 +2,8 @@
 
 
 <@c.page>
-    <style>
-        span.mainText {
-            -ms-text-overflow: ellipsis;
-            -o-text-overflow: ellipsis;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            -ms-line-clamp: 10;
-            -webkit-line-clamp: 10;
-            line-clamp: 10;
-            display: -webkit-box;
-            word-wrap: break-word;
-            -webkit-box-orient: vertical;
-            box-orient: vertical;
-        }
-        h1.title {
-            -ms-text-overflow: ellipsis;
-            -o-text-overflow: ellipsis;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            -ms-line-clamp: 1;
-            -webkit-line-clamp: 1;
-            line-clamp: 1;
-            display: -webkit-box;
-            word-wrap: break-word;
-            -webkit-box-orient: vertical;
-            box-orient: vertical;
-        }
 
-        p.topic {
-            -ms-text-overflow: ellipsis;
-            -o-text-overflow: ellipsis;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            -ms-line-clamp: 1;
-            -webkit-line-clamp: 1;
-            line-clamp: 1;
-            display: -webkit-box;
-            word-wrap: break-word;
-            -webkit-box-orient: vertical;
-            box-orient: vertical;
-        }
 
-    </style>
-
-    </style>
     <div class="form-row">
         <div class="form-group col-md-6">
             <form method="get" action="/main" class="form-inline">

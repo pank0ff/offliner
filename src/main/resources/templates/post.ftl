@@ -3,7 +3,7 @@
 <@c.page>
    Post #${message.id}
 
-    <div class="card" style = "height: 400px; width: 900px">
+    <div style = "height: 400px; width: 900px">
             <div class="card my-3">
                 <h1 >${message.name}</h1>
                 <div><p >${message.tag}</p></div>
