@@ -41,10 +41,10 @@
         </div>
     </div>
 
-   <a href="user/${user.id}/settings">Settings</a>
+   <a href="/user/profile/${user.username}/settings">Settings</a>
     <div class="form-row">
         <div class="form-group col-md-6">
-            <form method="get" action="/user/profile/${user.id}" class="form-inline">
+            <form method="get" action="/user/profile/${user.username}" class="form-inline">
                 <input type="text" name="filter" class="form-control" value="${filter?ifExists}"
                        placeholder="Search by topic">
                 <button type="submit" class="btn btn-primary ml-2">Search</button>
@@ -60,14 +60,14 @@
         <div class="form-group mt-3">
             <form method="post" action="/user/profile/add/${user.id}" enctype="multipart/form-data">
                 <div class="form-group">
-                    <input required type="text" class="form-control" name="name" placeholder="Enter name of your post"/>
+                    <input required minlength="5" type="text" class="form-control" name="name" placeholder="Enter name of your post"/>
                 </div>
                 <div class="form-group">
                     <input required type="text" class="form-control" name="tag" placeholder="Enter topic of your post"/>
                 </div>
                 <div class="form-group" style="width:  100%;height: 100%;">
                     <label style="width:  100%;height: 100%;">
-                        <textarea required  type="text" class="form-control" name="text" style="width:  100%;
+                        <textarea required minlength="5"  type="text" class="form-control" name="text" style="width:  100%;
                             height: 100%;
                             padding: 5px 10px 5px 10px;
                             border:1px solid #999;
@@ -100,9 +100,11 @@
                 <div >
                     <span class="mainText">${message.text}</span>
                 </div>
-                <div> <a class="nav-link" style="color: cornflowerblue"  href = "/post/${message.id}"> Read full</a></div>
+                <div> <a class="nav-link" style="color: cornflowerblue"  href = "/post/${message.id}"> Read full</a><a class="nav-link" style="color: cornflowerblue" href="/user/profile/update/${message.id}">Edit</a>
+                </div>
                 <div class="card-footer text-muted">
                     ${message.authorName}
+
                 </div>
             </div>
         <#else>

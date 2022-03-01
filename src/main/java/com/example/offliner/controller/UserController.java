@@ -69,9 +69,10 @@ public class UserController {
         return "redirect:/user";
     }
 
-    @GetMapping("profile")
-    public String getProfile(Model model, @AuthenticationPrincipal User user) {
+    @GetMapping("/user/profile/{username}")
+    public String getProfile(Model model, @PathVariable String username) {
         Iterable<Message> messages = messageRepo.findAll();
+        User user = userRepo.findByUsername(username);
         ArrayList<Message> messages1 = new ArrayList<Message>();
         for(Message message:messages){
             if(Objects.equals(message.getAuthor().getUsername(), user.getUsername())){
@@ -84,17 +85,19 @@ public class UserController {
 
         return "profile";
     }
-    @GetMapping("/user/{id}/settings")
+
+    @GetMapping("/profile/{username}/settings")
     public String settings(
-            Model model, @AuthenticationPrincipal User user
+            Model model, @PathVariable String username
     ){
+        User user = userRepo.findByUsername(username);
         model.addAttribute("username", user.getUsername());
         model.addAttribute("email", user.getEmail());
         model.addAttribute("aboutMyself",user.getAboutMyself());
         return "settings";
     }
 
-    @PostMapping("/user/{id}/settings")
+    @PostMapping("/profile/{username}/settings")
     public String updateProfile(
             @AuthenticationPrincipal User user,
             @RequestParam String password,
@@ -103,7 +106,7 @@ public class UserController {
     ) {
         userSevice.updateProfile(user, password, email,aboutMyself);
 
-        return "redirect:/user/profile";
+        return "redirect:/main";
     }
 
 }

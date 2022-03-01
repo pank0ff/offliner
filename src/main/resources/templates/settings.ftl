@@ -2,7 +2,7 @@
 
 <@c.page>
 
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" action ="/user/profile/${username}/settings/" enctype="multipart/form-data">
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label">Password:</label>
                 <div class="col-sm-6">
