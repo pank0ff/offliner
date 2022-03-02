@@ -28,7 +28,7 @@
                 </div>
                 <div> <a class="nav-link" style="color: cornflowerblue"  href = "/post/${message.id}"> Read full</a></div>
                 <div class="card-footer text-muted">
-                    ${message.authorName}
+                    <a href="/user/profile/${message.getAuthor().id}/${message.getAuthor().username}">${message.authorName}</a>
                 </div>
             </div>
         <#else>

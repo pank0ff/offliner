@@ -14,7 +14,7 @@ List of users
     <tbody>
     <#list users as user>
         <tr>
-            <td><a href ="/user/profile/${user.username}">${user.username}</a></td>
+            <td><a href ="/user/profile/${user.getId()}/${user.username}">${user.username}</a></td>
             <td><#list user.roles as role>${role}<#sep>, </#list></td>
             <td><a href="/user/${user.id}">edit</a></td>
         </tr>

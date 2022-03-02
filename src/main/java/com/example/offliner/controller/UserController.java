@@ -7,12 +7,15 @@ import com.example.offliner.repos.MessageRepo;
 import com.example.offliner.repos.UserRepo;
 import com.example.offliner.service.UserSevice;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -25,6 +28,9 @@ public class UserController {
     private MessageRepo messageRepo;
     @Autowired
     private UserSevice userSevice;
+
+    @Value("${upload.path}")
+    private String uploadPath;
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
@@ -69,18 +75,21 @@ public class UserController {
         return "redirect:/user";
     }
 
-    @GetMapping("/user/profile/{username}")
-    public String getProfile(Model model, @PathVariable String username) {
+    @GetMapping("/profile")
+    public String getProfile(Model model, @AuthenticationPrincipal User user) {
         Iterable<Message> messages = messageRepo.findAll();
-        User user = userRepo.findByUsername(username);
-        ArrayList<Message> messages1 = new ArrayList<Message>();
+        ArrayList<Message> messages1 = new ArrayList<>();
+        Integer counter = 0;
         for(Message message:messages){
             if(Objects.equals(message.getAuthor().getUsername(), user.getUsername())){
                 messages1.add(message);
+                counter++;
             }
         }
         Collections.reverse(messages1);
+        model.addAttribute("countOfPosts",counter);
         model.addAttribute("user", user);
+        model.addAttribute("aboutMyself",user.getAboutMyself());
         model.addAttribute("messages",messages1);
 
         return "profile";
@@ -99,14 +108,39 @@ public class UserController {
 
     @PostMapping("/profile/{username}/settings")
     public String updateProfile(
-            @AuthenticationPrincipal User user,
+            @PathVariable String username,
             @RequestParam String password,
             @RequestParam String email,
-            @RequestParam String aboutMyself
-    ) {
-        userSevice.updateProfile(user, password, email,aboutMyself);
+            @RequestParam String aboutMyself,
+            @RequestParam("file") MultipartFile file
 
-        return "redirect:/main";
+    ) throws IOException {
+        User user = userRepo.findByUsername(username);
+        userSevice.updateProfile(user, password, email,aboutMyself,file);
+
+        return "redirect:/user/profile";
     }
 
+    @GetMapping("/profile/{id}/{username}")
+    public String userProfile(
+            Model model, @PathVariable String username,@PathVariable Long id,@AuthenticationPrincipal User user1){
+        Iterable<Message> messages = messageRepo.findAll();
+        User user = userRepo.findByUsername(username);
+        ArrayList<Message> messages1 = new ArrayList<Message>();
+        Integer counter = 0;
+        for(Message message:messages){
+            if(Objects.equals(message.getAuthor().getUsername(), user.getUsername())){
+                messages1.add(message);
+                counter++;
+            }
+        }
+        boolean admin;
+        admin = user1.isAdmin();
+        Collections.reverse(messages1);
+        model.addAttribute("countOfPosts",counter);
+        model.addAttribute("admin",admin);
+        model.addAttribute("user", user);
+        model.addAttribute("messages", messages1);
+        return "userProfile";
+    }
 }

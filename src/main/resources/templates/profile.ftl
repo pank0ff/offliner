@@ -4,7 +4,12 @@
 
     <div class="container mt-5 mb-5">
         <div class="row no-gutters">
-            <div class="col-md-4 col-lg-4"><img src="https://i.imgur.com/aCwpF7V.jpg"></div>
+            <div class="col-md-4 col-lg-4">
+                <#if user.avatarFilename??>
+                    <img src="/img/${user.avatarFilename}">
+                </#if>
+
+            </div>
             <div class="col-md-8 col-lg-8">
                 <div class="d-flex flex-column">
                     <div class="d-flex flex-row justify-content-between align-items-center p-5 bg-black text-white">
@@ -12,15 +17,14 @@
                     </div>
 
                     <div class="p-3 bg-blue text-white">
-                        <#if user.aboutMyself??>
-                        <h6> ${user.aboutMyself}</h6>
+                        <#if    aboutMyself??>
+                            <h6> ${aboutMyself}</h6>
                         </#if>
                     </div>
-
                     <div class="d-flex flex-row text-white">
                         <div class="p-3 bg-primary text-center skill-block">
                             <h5>Posts:</h5>
-                             <h6>12</h6>
+                             <h6>${countOfPosts}</h6>
                         </div>
                         <div class="p-3 bg-success text-center skill-block">
                             <h5>Comments:</h5>
@@ -33,7 +37,7 @@
                         </div>
                         <div class="p-3 bg-danger text-center skill-block">
                            <h5>Date of registration:</h5>
-                            <h6>22.02.2022</h6>
+                            <h6>${user.dateOfRegistration}</h6>
                         </div>
                     </div>
                 </div>

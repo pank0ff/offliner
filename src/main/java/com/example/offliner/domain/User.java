@@ -18,6 +18,8 @@ public class User implements UserDetails {
     private boolean active;
     private String email;
     private String aboutMyself;
+    private String dateOfRegistration;
+    private String avatarFilename;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
@@ -107,5 +109,21 @@ public class User implements UserDetails {
 
     public void setAboutMyself(String aboutYourself) {
         this.aboutMyself = aboutYourself;
+    }
+
+    public String getDateOfRegistration() {
+        return dateOfRegistration;
+    }
+
+    public void setDateOfRegistration(String dateOfRegistration) {
+        this.dateOfRegistration = dateOfRegistration;
+    }
+
+    public String getAvatarFilename() {
+        return avatarFilename;
+    }
+
+    public void setAvatarFilename(String avatarFilename) {
+        this.avatarFilename = avatarFilename;
     }
 }

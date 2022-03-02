@@ -50,7 +50,6 @@ public class MainController {
 
         model.addAttribute("messages", messages);
         model.addAttribute("filter", filter);
-
         return "main";
     }
     @GetMapping("/user/profile/{username}")
@@ -58,9 +57,11 @@ public class MainController {
         Iterable<Message> messages = messageRepo.findAll();
         ArrayList<Message> messages1 = new ArrayList<Message>();
         User user = userRepo.findByUsername(username);
+        Integer counter = 0;
         for(Message message:messages){
             if(Objects.equals(message.getAuthor().getUsername(), user.getUsername())){
                 messages1.add(message);
+                counter++;
             }
         }
         ArrayList<Message> messages2 = new ArrayList<Message>();
@@ -74,13 +75,45 @@ public class MainController {
             messages2 = messages1;
         }
         Collections.reverse(messages2);
+        model.addAttribute("countOfPosts",counter);
         model.addAttribute("user",user);
+        model.addAttribute("aboutMyself",user.getAboutMyself());
         model.addAttribute("messages", messages2);
         model.addAttribute("filter", filter);
 
         return "profile";
     }
+    @GetMapping("/user/profile/{username}/else")
+    public String filterOnSomeoneElsePage(@RequestParam(required = false, defaultValue = "") String filter, Model model,@PathVariable String username){
+        Iterable<Message> messages = messageRepo.findAll();
+        ArrayList<Message> messages1 = new ArrayList<Message>();
+        User user = userRepo.findByUsername(username);
+        Integer counter = 0;
+        for(Message message:messages){
+            if(Objects.equals(message.getAuthor().getUsername(), username)){
+                messages1.add(message);
+                counter++;
+            }
+        }
+        ArrayList<Message> messages2 = new ArrayList<Message>();
+        if (filter != null && !filter.isEmpty()) {
+            for(Message message : messages1){
+                if(Objects.equals(message.getTag(), filter)){
+                    messages2.add(message);
+                }
+            }
+        } else {
+            messages2 = messages1;
+        }
+        Collections.reverse(messages2);
+        model.addAttribute("countOfPosts",counter);
+        model.addAttribute("user",user);
+        model.addAttribute("aboutMyself",user.getAboutMyself());
+        model.addAttribute("messages", messages2);
+        model.addAttribute("filter", filter);
 
+        return "userProfile";
+    }
     @PostMapping("/user/profile/add/{id}")
     public String add(
             @AuthenticationPrincipal User user,

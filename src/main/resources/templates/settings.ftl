@@ -21,9 +21,16 @@
                     <input maxlength="255" type="text" name="aboutMyself" class="form-control" placeholder="about yourself" value="${aboutMyself!''}" />
                     </div>
                 </div>
+            <div class="form-group">
+                <div class="custom-file">
+                    <input type="file" name="file" id="customFile">
+                    <label class="custom-file-label" for="customFile">Choose file</label>
+                </div>
+            </div>
             <input type="hidden" name="_csrf" value="${_csrf.token}" />
             <button class="btn btn-primary" type="submit">Save</button>
         </form>
 
+    <div><h5><b style="color: red">To see that the changes have taken effect re-login.</b></h5></div>
 
 </@c.page>
