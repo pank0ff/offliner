@@ -7,13 +7,40 @@
             <div class="col-md-4 col-lg-4">
                 <#if user.avatarFilename??>
                     <img src="/img/${user.avatarFilename}">
+                    <#else>
+                    <img src="https://hornews.com/upload/images/blank-avatar.jpg">
                 </#if>
 
             </div>
             <div class="col-md-8 col-lg-8">
                 <div class="d-flex flex-column">
                     <div class="d-flex flex-row justify-content-between align-items-center p-5 bg-black text-white">
-                        <h3 class="display-5">${user.username}</h3><i class="fa fa-facebook">facebook</i><i class="fa fa-google">google</i><i class="fa fa-youtube-play">youtube</i><i class="fa fa-dribbble">dribble</i><i class="fa fa-linkedin">linkedin</i>
+                        <h3 class="display-5">${user.username}</h3>
+                        <#if user.getLinkFacebook()??>
+                        <a href="${user.getLinkFacebook()}">
+                            <i class="fa fa-facebook" ></i>
+                        </a>
+                        </#if>
+                        <#if user.getLinkGoogle()??>
+                            <a href="${user.getLinkGoogle()}">
+                        <i class="fa fa-google" ></i>
+                            </a>
+                        </#if>
+                        <#if user.getLinkYoutube()??>
+                            <a href="${user.getLinkYoutube()}">
+                        <i class="fa fa-youtube-play" ></i>
+                            </a>
+                        </#if>
+                        <#if user.getLinkDribble()??>
+                            <a  href="${user.getLinkDribble()}">
+                        <i class="fa fa-dribbble"></i>
+                            </a>
+                        </#if>
+                        <#if user.getLinkLinkedIn()??>
+                            <a href="${user.getLinkLinkedIn()}">
+                        <i class="fa fa-linkedin" ></i>
+                            </a>
+                        </#if>
                     </div>
 
                     <div class="p-3 bg-blue text-white">
@@ -27,11 +54,11 @@
                              <h6>${countOfPosts}</h6>
                         </div>
                         <div class="p-3 bg-success text-center skill-block">
-                            <h5>Comments:</h5>
+                            <h5>Subscribers:</h5>
                             <h6>132</h6>
                         </div>
                         <div class="p-3 bg-warning text-center skill-block">
-                            <h5>Likes:</h5>
+                            <h5>Subscriptions:</h5>
                             <h6>54</h6>
 
                         </div>
@@ -42,11 +69,11 @@
                     </div>
                 </div>
             </div>
+            <a class="btn btn-primary  mt-1"  href="/user/profile/${user.username}/settings">Settings</a>
         </div>
     </div>
 
-   <a href="/user/profile/${user.username}/settings">Settings</a>
-    <div class="form-row">
+    <div class="form-row ">
         <div class="form-group col-md-6">
             <form method="get" action="/user/profile/${user.username}" class="form-inline">
                 <input type="text" name="filter" class="form-control" value="${filter?ifExists}"
@@ -104,11 +131,18 @@
                 <div >
                     <span class="mainText">${message.text}</span>
                 </div>
-                <div> <a class="nav-link" style="color: cornflowerblue"  href = "/post/${message.id}"> Read full</a><a class="nav-link" style="color: cornflowerblue" href="/user/profile/update/${message.id}">Edit</a>
+                <div> <a class="btn btn-primary ml-2 mt-4 mb-2"   href = "/post/${message.id}"> Read full</a>
+                    <a class="btn btn-primary ml-2 mt-4 mb-2" href="/user/profile/update/${message.id}">Edit</a>
                 </div>
                 <div class="card-footer text-muted">
-                    ${message.authorName}
-
+                   <a class="col align-self-center"> ${message.authorName}</a>
+                    <a class="col align-self-end" href="">
+                        <#if true>
+                            <i class = "fa-regular fa-heart"></i>
+                        <#else>
+                            <i class = "fa-solid fa-heart"></i
+                        </#if>
+                    </a>
                 </div>
             </div>
         <#else>

@@ -17,14 +17,15 @@
         </div>
         <div class="form-group row">
             <label class="col-sm-2 col-form-label" >Text:</label>
-            <label style="width:  80%;height: 100%;">
+            <label style="padding-left: 15px;
+             width:  80%;height: 100%;">
                         <textarea required minlength="5"  type="text" class="form-control" name="text" style="width:  100%;
                             height: 100%;
                             padding: 5px 10px 5px 10px;
                             border:1px solid #999;
                             font-size:16px;
                             font-family: Tacoma,serif"
-                                  placeholder="Enter your post" value="${message.text!''}"></textarea>
+                                  placeholder="Enter your post" >${message.text}</textarea>
             </label>
         </div>
         <div class="form-group">

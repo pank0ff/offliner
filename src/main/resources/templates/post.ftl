@@ -14,7 +14,14 @@
                     <span>${message.text}</span>
                 </div>
                 <div class="card-footer text-muted">
-                    ${message.authorName}
+                    <a class="col align-self-center" href="/user/profile/${message.getAuthor().id}/${message.getAuthor().username}">${message.authorName}</a>
+                    <a class="col align-self-end" href="">
+                        <#if true>
+                            <i class = "fa-regular fa-heart"></i>
+                        <#else>
+                            <i class = "fa-solid fa-heart"></i
+                        </#if>
+                    </a>
                 </div>
             </div>
     </div>

@@ -3,6 +3,7 @@
 
 <@c.page>
 
+    <script src="https://kit.fontawesome.com/17c4207260.js" crossorigin="anonymous"></script>
 
     <div class="form-row">
         <div class="form-group col-md-6">
@@ -26,10 +27,17 @@
                 <div >
                     <span class="mainText">${message.text}</span>
                 </div>
-                <div> <a class="nav-link" style="color: cornflowerblue"  href = "/post/${message.id}"> Read full</a></div>
-                <div class="card-footer text-muted">
-                    <a href="/user/profile/${message.getAuthor().id}/${message.getAuthor().username}">${message.authorName}</a>
-                </div>
+                <div> <a class="btn btn-primary ml-2 mt-4 mb-2"   href = "/post/${message.id}"> Read full</a></div>
+                <div class="card-footer text-muted container">
+                    <a class="col align-self-center" href="/user/profile/${message.getAuthor().id}/${message.getAuthor().username}">${message.authorName}</a>
+                        <a class="col align-self-end" href="">
+                            <#if true>
+                                <i class = "fa-regular fa-heart"></i>
+                            <#else>
+                                <i class = "fa-solid fa-heart"></i
+                            </#if>
+                        </a>
+                    </div>
             </div>
         <#else>
             No message

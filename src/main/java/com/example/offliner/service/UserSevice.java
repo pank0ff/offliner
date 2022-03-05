@@ -29,9 +29,14 @@ public class UserSevice implements UserDetailsService {
     }
 
 
-    public void updateProfile(User user, String password, String email, String aboutYourself, MultipartFile file) throws IOException {
+    public void updateProfile(User user, String password, String email, String aboutYourself,String linkFacebook,String linkGoogle,String linkYoutube,String linkDribble,String linkLinkedIn, MultipartFile file) throws IOException {
         String userEmail = user.getEmail();
         String aboutYourself1 = user.getAboutMyself();
+        String linkFacebook1 = user.getLinkFacebook();
+        String linkGoogle1 = user.getLinkGoogle();
+        String linkYoutube1 = user.getLinkYoutube();
+        String linkDribble1 = user.getLinkDribble();
+        String linkLinkedIn1 = user.getLinkLinkedIn();
         boolean isAboutMyselfChanged = (aboutYourself != null && !aboutYourself.equals(aboutYourself1)) ||
                 (aboutYourself1 != null && !aboutYourself1.equals(aboutYourself));
         if (isAboutMyselfChanged) {
@@ -41,6 +46,31 @@ public class UserSevice implements UserDetailsService {
                 (userEmail != null && !userEmail.equals(email));
         if (isEmailChanged) {
             user.setEmail(email);
+        }
+        boolean isLinkFacebookChanged = (linkFacebook != null && !linkFacebook.equals(linkFacebook1)) ||
+                (linkFacebook1 != null && !linkFacebook1.equals(linkFacebook));
+        if (isLinkFacebookChanged) {
+            user.setLinkFacebook(linkFacebook);
+        }
+        boolean isLinkGoogleChanged = (linkGoogle != null && !linkGoogle.equals(linkGoogle1)) ||
+                (linkGoogle1 != null && !linkGoogle1.equals(linkGoogle));
+        if (isLinkGoogleChanged) {
+            user.setLinkGoogle(linkGoogle);
+        }
+        boolean isLinkYoutubeChanged = (linkYoutube != null && !linkYoutube.equals(linkYoutube1)) ||
+                (linkYoutube1 != null && !linkYoutube1.equals(linkYoutube));
+        if (isLinkYoutubeChanged) {
+            user.setLinkYoutube(linkYoutube);
+        }
+        boolean isLinkDribbleChanged = (linkDribble != null && !linkDribble.equals(linkDribble1)) ||
+                (linkDribble1 != null && !linkDribble1.equals(linkDribble));
+        if (isLinkDribbleChanged) {
+            user.setLinkDribble(linkDribble);
+        }
+        boolean isLinkLinkedInChanged = (linkLinkedIn != null && !linkLinkedIn.equals(linkLinkedIn1)) ||
+                (linkLinkedIn1 != null && !linkLinkedIn1.equals(linkLinkedIn));
+        if (isLinkLinkedInChanged) {
+            user.setLinkLinkedIn(linkLinkedIn);
         }
         if (!StringUtils.isEmpty(password)) {
             user.setPassword(password);

@@ -4,6 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
@@ -20,6 +21,12 @@ public class User implements UserDetails {
     private String aboutMyself;
     private String dateOfRegistration;
     private String avatarFilename;
+    private String linkFacebook;
+    private String linkGoogle;
+    private String linkYoutube;
+    private String linkDribble;
+    private String linkLinkedIn;
+
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
@@ -125,5 +132,45 @@ public class User implements UserDetails {
 
     public void setAvatarFilename(String avatarFilename) {
         this.avatarFilename = avatarFilename;
+    }
+
+    public String getLinkFacebook() {
+        return linkFacebook;
+    }
+
+    public void setLinkFacebook(String linkFacebook) {
+        this.linkFacebook = linkFacebook;
+    }
+
+    public String getLinkGoogle() {
+        return linkGoogle;
+    }
+
+    public void setLinkGoogle(String linkGoogle) {
+        this.linkGoogle = linkGoogle;
+    }
+
+    public String getLinkYoutube() {
+        return linkYoutube;
+    }
+
+    public void setLinkYoutube(String linkYoutube) {
+        this.linkYoutube = linkYoutube;
+    }
+
+    public String getLinkDribble() {
+        return linkDribble;
+    }
+
+    public void setLinkDribble(String linkDribble) {
+        this.linkDribble = linkDribble;
+    }
+
+    public String getLinkLinkedIn() {
+        return linkLinkedIn;
+    }
+
+    public void setLinkLinkedIn(String linkLinkedIn) {
+        this.linkLinkedIn = linkLinkedIn;
     }
 }

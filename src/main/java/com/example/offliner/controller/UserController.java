@@ -103,6 +103,11 @@ public class UserController {
         model.addAttribute("username", user.getUsername());
         model.addAttribute("email", user.getEmail());
         model.addAttribute("aboutMyself",user.getAboutMyself());
+        model.addAttribute("linkFacebook",user.getLinkFacebook());
+        model.addAttribute("linkGoogle",user.getLinkGoogle());
+        model.addAttribute("linkYoutube",user.getLinkYoutube());
+        model.addAttribute("linkDribble",user.getLinkDribble());
+        model.addAttribute("linkLinkedIn",user.getLinkLinkedIn());
         return "settings";
     }
 
@@ -112,11 +117,16 @@ public class UserController {
             @RequestParam String password,
             @RequestParam String email,
             @RequestParam String aboutMyself,
+            @RequestParam String linkFacebook,
+            @RequestParam String linkGoogle,
+            @RequestParam String linkYoutube,
+            @RequestParam String linkDribble,
+            @RequestParam String linkLinkedIn,
             @RequestParam("file") MultipartFile file
 
     ) throws IOException {
         User user = userRepo.findByUsername(username);
-        userSevice.updateProfile(user, password, email,aboutMyself,file);
+        userSevice.updateProfile(user, password, email,aboutMyself,linkFacebook,linkGoogle,linkYoutube,linkDribble,linkLinkedIn,file);
 
         return "redirect:/user/profile";
     }
@@ -142,5 +152,14 @@ public class UserController {
         model.addAttribute("user", user);
         model.addAttribute("messages", messages1);
         return "userProfile";
+    }
+
+    @PostMapping("/profile/{username}/settings/delete")
+    public String deleteUser(
+            @PathVariable String username
+    ){
+        User user = userRepo.findByUsername(username);
+        userRepo.delete(user);
+        return "redirect:/main";
     }
 }
