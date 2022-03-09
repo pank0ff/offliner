@@ -12,7 +12,15 @@
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Topic:</label>
             <div class="col-sm-6">
-                <input required type="text" name="tag" class="form-control" placeholder="topic" value="${message.tag!''}" />
+                <select name="tag" size="1" class="rounded">
+                    <option value="Nothing">Choose topic</option>
+                    <option value="Books">Books</option>
+                    <option value="Games">Games</option>
+                    <option value="Music">Music</option>
+                    <option value="Films">Films</option>
+                    <option value="Sport">Sport</option>
+                    <option value="IT">IT</option>
+                </select>
             </div>
         </div>
         <div class="form-group row">

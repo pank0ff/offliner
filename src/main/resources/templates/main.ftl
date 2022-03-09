@@ -21,7 +21,7 @@
             <div class="card my-3" >
                 <h1 class="title" > ${message.name}</h1>
                 <div>
-                    <p class="topic">${message.tag} </p>
+                    <a class="topic" href="/post/topic/${message.tag}">${message.tag}</a>
                     <#if message.hashtag??>
                         <a href="/post/hashtag/${message.hashtag}">#${message.hashtag}</a>
                     </#if>

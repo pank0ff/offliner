@@ -1,16 +1,14 @@
 <#import "parts/common.ftl" as c>
 
 <@c.page>
-    <h3>Posts with hashtag #${hashtag}</h3>
+    <h3>Posts with topic ${topic}</h3>
 
     <div  style = "height: 400px; width: 900px">
         <#list messages as message>
             <div class="card my-3" >
                 <h1 class="title" > ${message.name}</h1>
-                <div>
-                    <a class="topic" href="/post/topic/${message.tag}">${message.tag}</a>
-                    <#if message.hashtag??>
-                        <a>${message.hashtag}</a>
+                <div><p class="topic">${message.tag}</p>  <#if message.hashtag??>
+                        <a href="/post/hashtag/${message.hashtag}">${message.hashtag}</a>
                     </#if></div>
                 <#if message.filename??>
                     <img src="/img/${message.filename}" class="card-img-top">

@@ -94,7 +94,15 @@
                     <input required minlength="5" type="text" class="form-control" name="name" placeholder="Enter name of your post"/>
                 </div>
                 <div class="form-group">
-                    <input required type="text" class="form-control" name="tag" placeholder="Enter topic of your post"/>
+                    <select name="tag" size="1"  class="rounded">
+                        <option value="Nothing">Choose topic</option>
+                        <option value="Books">Books</option>
+                        <option value="Games">Games</option>
+                        <option value="Music">Music</option>
+                        <option value="Films">Films</option>
+                        <option value="Sport">Sport</option>
+                        <option value="IT">IT</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <input required type="text" pattern="^[a-zA-Z]+$" class="form-control" name="hashtag" placeholder="Enter hashtag of your post(only latin letters)"/>
@@ -127,7 +135,8 @@
         <#list messages as message>
             <div class="card my-3" >
                 <h1 class="title" > ${message.name}</h1>
-                <div><p class="topic">${message.tag}</p>  <#if message.hashtag??>
+                <div><a class="topic" href="/post/topic/${message.tag}">${message.tag}</a>
+                    <#if message.hashtag??>
                         <a href="/post/hashtag/${message.hashtag}">#${message.hashtag}</a>
                     </#if></div>
                 <#if message.filename??>

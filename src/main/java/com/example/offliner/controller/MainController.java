@@ -232,4 +232,14 @@ public class MainController {
         return "allByTag";
     }
 
+    @GetMapping("/post/topic/{topic}")
+    public String allByTopic(@PathVariable String topic,Model model){
+        Iterable<Message> messages = messageRepo.findAll();
+        messages = messageRepo.findByTag(topic);
+        Collections.reverse((List<Message>) messages);
+        model.addAttribute("messages",messages);
+        model.addAttribute("topic",topic);
+        return "byTopic";
+    }
+
 }

@@ -7,9 +7,9 @@
             <div class="card my-3">
                 <h1 >${message.name}</h1>
                 <div>
-                    <p >${message.tag}</p>
+                    <a class="topic" href="/post/topic/${message.tag}">${message.tag}</a>
                     <#if message.hashtag??>
-                    <a>${message.hashtag}</a>
+                    <a href="/post/hashtag/${message.hashtag}">${message.hashtag}</a>
                     </#if>
                 </div>
                 <#if message.filename??>
