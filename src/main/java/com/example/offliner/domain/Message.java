@@ -11,7 +11,7 @@ public class Message {
     private String text;
     private String tag;
     private String name;
-
+    private String hashtag;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
@@ -22,10 +22,11 @@ public class Message {
     public Message() {
     }
 
-    public Message(String text, String tag,String name, User user) {
+    public Message(String text, String tag,String name,String hashtag, User user) {
         this.author = user;
         this.text = text;
         this.tag = tag;
+        this.hashtag = hashtag;
         this.name = name;
     }
 
@@ -79,5 +80,13 @@ public class Message {
 
     public void setFilename(String filename) {
         this.filename = filename;
+    }
+
+    public String getHashtag() {
+        return hashtag;
+    }
+
+    public void setHashtag(String hashtag) {
+        this.hashtag = hashtag;
     }
 }

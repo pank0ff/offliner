@@ -16,4 +16,6 @@ public interface MessageRepo extends CrudRepository<Message, Long> {
     Message findById(Integer id);
 
     Message findByAuthor(User user);
+
+    Iterable<Message> findByHashtag(String hashtag);
 }

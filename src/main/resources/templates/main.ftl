@@ -20,12 +20,17 @@
         <#list messages as message>
             <div class="card my-3" >
                 <h1 class="title" > ${message.name}</h1>
-                <div><p class="topic">${message.tag}</p></div>
+                <div>
+                    <p class="topic">${message.tag} </p>
+                    <#if message.hashtag??>
+                        <a href="/post/hashtag/${message.hashtag}">#${message.hashtag}</a>
+                    </#if>
+                </div>
                 <#if message.filename??>
                     <img src="/img/${message.filename}" class="card-img-top">
                 </#if>
                 <div >
-                    <span class="mainText">${message.text}</span>
+                    <span class="mainText" style="margin-top: 10px">${message.text}</span>
                 </div>
                 <div> <a class="btn btn-primary ml-2 mt-4 mb-2"   href = "/post/${message.id}"> Read full</a></div>
                 <div class="card-footer text-muted container">

@@ -119,10 +119,11 @@ public class MainController {
             @AuthenticationPrincipal User user,
             @RequestParam String text,
             @RequestParam String name,
+            @RequestParam String hashtag,
             @RequestParam String tag, Map<String, Object> model,
             @RequestParam("file") MultipartFile file
     ) throws IOException {
-        Message message = new Message(text, tag,name, user);
+        Message message = new Message(text, tag,name,hashtag, user);
 
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadPath);
@@ -145,7 +146,7 @@ public class MainController {
 
         model.put("messages", messages);
 
-        return "redirect:/main";
+        return "redirect:/user/profile";
     }
     @GetMapping("/post/{id}")
     public String userEditForm(@PathVariable Integer id, Model model) {
@@ -158,10 +159,12 @@ public class MainController {
                              @PathVariable Integer id,
                              @RequestParam String text,
                              @RequestParam String name,
+                             @RequestParam String hashtag,
                              @RequestParam String tag, Map<String, Object> model,
                              @RequestParam("file") MultipartFile file) throws IOException {
 
         Message message = messageRepo.findById(id);
+        String messageHashtag = message.getHashtag();
         String messageText = message.getText();
         String messageName = message.getName();
         String messageTopic = message.getTag();
@@ -170,6 +173,13 @@ public class MainController {
         if(isTextChange){
             message.setText(text);
         }
+
+        boolean isHashtagChange = (hashtag != null && !hashtag.equals(messageHashtag)) ||
+                (messageHashtag != null && !messageHashtag.equals(hashtag));
+        if(isHashtagChange){
+            message.setHashtag(hashtag);
+        }
+
         boolean isNameChanged = (name != null && !name.equals(messageName)) ||
                 (messageName != null && !messageName.equals(name));
         if(isNameChanged){
@@ -195,7 +205,7 @@ public class MainController {
             message.setFilename(resultFilename);
         }
         messageRepo.save(message);
-        return "redirect:/main";
+        return "redirect:/user/profile";
     }
 
     @GetMapping("/user/profile/update/{id}")
@@ -208,7 +218,17 @@ public class MainController {
     public String deletePost(@PathVariable Integer id){
         Message message = messageRepo.findById(id);
         messageRepo.delete(message);
-        return "redirect:/main";
+        return "redirect:/user/profile";
+    }
+
+    @GetMapping("/post/hashtag/{hashtag}")
+    public String allByHashtag(@PathVariable String hashtag,Model model){
+        Iterable<Message> messages = messageRepo.findAll();
+        messages = messageRepo.findByHashtag(hashtag);
+        Collections.reverse((List<Message>) messages);
+        model.addAttribute("messages",messages);
+        model.addAttribute("hashtag",hashtag);
+        return "allByTag";
     }
 
 }

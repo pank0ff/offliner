@@ -27,7 +27,7 @@
                             </a>
                         </#if>
                         <#if user.getLinkYoutube()??>
-                            <a href="${user.getLinkYoutube()}">
+                            <a type="hidden" href="${user.getLinkYoutube()}">
                         <i class="fa fa-youtube-play" ></i>
                             </a>
                         </#if>
@@ -96,6 +96,9 @@
                 <div class="form-group">
                     <input required type="text" class="form-control" name="tag" placeholder="Enter topic of your post"/>
                 </div>
+                <div class="form-group">
+                    <input required type="text" pattern="^[a-zA-Z]+$" class="form-control" name="hashtag" placeholder="Enter hashtag of your post(only latin letters)"/>
+                </div>
                 <div class="form-group" style="width:  100%;height: 100%;">
                     <label style="width:  100%;height: 100%;">
                         <textarea required minlength="5"  type="text" class="form-control" name="text" style="width:  100%;
@@ -124,12 +127,14 @@
         <#list messages as message>
             <div class="card my-3" >
                 <h1 class="title" > ${message.name}</h1>
-                <div><p class="topic">${message.tag}</p></div>
+                <div><p class="topic">${message.tag}</p>  <#if message.hashtag??>
+                        <a href="/post/hashtag/${message.hashtag}">#${message.hashtag}</a>
+                    </#if></div>
                 <#if message.filename??>
                     <img src="/img/${message.filename}" class="card-img-top">
                 </#if>
                 <div >
-                    <span class="mainText">${message.text}</span>
+                    <span class="mainText" style="margin-top: 10px">${message.text}</span>
                 </div>
                 <div> <a class="btn btn-primary ml-2 mt-4 mb-2"   href = "/post/${message.id}"> Read full</a>
                     <a class="btn btn-primary ml-2 mt-4 mb-2" href="/user/profile/update/${message.id}">Edit</a>

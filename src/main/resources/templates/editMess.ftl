@@ -16,6 +16,12 @@
             </div>
         </div>
         <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Hashtag:</label>
+            <div class="col-sm-6">
+                <input required type="text" name="hashtag" class="form-control" placeholder="hashtag(#..)" value="${message.hashtag!''}" />
+            </div>
+        </div>
+        <div class="form-group row">
             <label class="col-sm-2 col-form-label" >Text:</label>
             <label style="padding-left: 15px;
              width:  80%;height: 100%;">

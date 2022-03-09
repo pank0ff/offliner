@@ -156,10 +156,16 @@ public class UserController {
 
     @PostMapping("/profile/{username}/settings/delete")
     public String deleteUser(
-            @PathVariable String username
+            @PathVariable String username,
+            @AuthenticationPrincipal User user1
     ){
         User user = userRepo.findByUsername(username);
         userRepo.delete(user);
-        return "redirect:/main";
+        if (user1.isAdmin()) {
+            return "redirect:/user";
+        } else {
+            return "redirect:/login";
+        }
+
     }
 }

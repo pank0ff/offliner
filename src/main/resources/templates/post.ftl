@@ -6,7 +6,12 @@
     <div style = "height: 400px; width: 900px">
             <div class="card my-3">
                 <h1 >${message.name}</h1>
-                <div><p >${message.tag}</p></div>
+                <div>
+                    <p >${message.tag}</p>
+                    <#if message.hashtag??>
+                    <a>${message.hashtag}</a>
+                    </#if>
+                </div>
                 <#if message.filename??>
                     <img src="/img/${message.filename}" class="card-img-top">
                 </#if>
