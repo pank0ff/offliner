@@ -89,7 +89,7 @@
     </a>
     <div class="collapse" id="collapseExample">
         <div class="form-group mt-3">
-            <form method="post" action="/user/profile/add/${user.id}" enctype="multipart/form-data">
+            <form method="post" action="/user/profile/add/${user.username}" enctype="multipart/form-data">
                 <div class="form-group">
                     <input required minlength="5" type="text" class="form-control" name="name" placeholder="Enter name of your post"/>
                 </div>

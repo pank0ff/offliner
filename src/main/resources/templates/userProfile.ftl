@@ -82,6 +82,48 @@
             </form>
         </div>
     </div>
+    <#if admin>
+        <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
+           aria-controls="collapseExample">
+            Add new Message
+        </a>
+        <div class="collapse" id="collapseExample">
+            <div class="form-group mt-3">
+                <form method="post" action="/user/profile/add/${user.username}" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <input required minlength="5" type="text" class="form-control" name="name" placeholder="Enter name of your post"/>
+                    </div>
+                    <div class="form-group">
+                        <input required type="text" class="form-control" name="tag" placeholder="Enter topic of your post"/>
+                    </div>
+                    <div class="form-group">
+                        <input required type="text" pattern="^[a-zA-Z]+$" class="form-control" name="hashtag" placeholder="Enter hashtag of your post(only latin letters)"/>
+                    </div>
+                    <div class="form-group" style="width:  100%;height: 100%;">
+                        <label style="width:  100%;height: 100%;">
+                        <textarea required minlength="5"  type="text" class="form-control" name="text" style="width:  100%;
+                            height: 100%;
+                            padding: 5px 10px 5px 10px;
+                            border:1px solid #999;
+                            font-size:16px;
+                            font-family: Tacoma,serif"
+                                  placeholder="Enter your post"></textarea>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <div class="custom-file">
+                            <input type="file" name="file" id="customFile">
+                            <label class="custom-file-label" for="customFile">Choose file</label>
+                        </div>
+                    </div>
+                    <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </#if>
 
     <div  style = "height: 400px; width: 900px">
         <#list messages as message>

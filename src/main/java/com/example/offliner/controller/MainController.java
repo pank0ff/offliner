@@ -114,15 +114,16 @@ public class MainController {
 
         return "userProfile";
     }
-    @PostMapping("/user/profile/add/{id}")
+    @PostMapping("/user/profile/add/{username}")
     public String add(
-            @AuthenticationPrincipal User user,
+            @PathVariable String username,
             @RequestParam String text,
             @RequestParam String name,
             @RequestParam String hashtag,
             @RequestParam String tag, Map<String, Object> model,
             @RequestParam("file") MultipartFile file
     ) throws IOException {
+        User user = userRepo.findByUsername(username);
         Message message = new Message(text, tag,name,hashtag, user);
 
         if (file != null && !file.getOriginalFilename().isEmpty()) {
