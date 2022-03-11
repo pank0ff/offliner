@@ -6,6 +6,7 @@
     <div style = "height: 400px; width: 900px">
             <div class="card my-3">
                 <h1 >${message.name}</h1>
+                <a>Average rate: ${message.averageRate}</a>
                 <div>
                     <a class="topic" href="/post/topic/${message.tag}">${message.tag}</a>
                     <#if message.hashtag??>
@@ -18,9 +19,8 @@
                 <div >
                     <span>${message.text}</span>
                 </div>
-                <div class="card-footer text-muted">
-                    <a class="col align-self-center" href="/user/profile/${message.getAuthor().id}/${message.getAuthor().username}">${message.authorName}</a>
-                    <a class="col align-self-end" href="">
+                <div class="d-flex align-items-end flex-column">
+                    <a class="mb-2 mx-4 p-2" href="">
                         <#if true>
                             <i class = "fa-regular fa-heart"></i>
                         <#else>
@@ -28,6 +28,62 @@
                         </#if>
                     </a>
                 </div>
+
+                <div class="card-footer text-muted container">
+                    <div class="d-flex justify-content-between flex-row align-items-center">
+                        <div>
+                            <a class="col align-self-center" href="/user/profile/${message.getAuthor().id}/${message.getAuthor().username}">Author: ${message.authorName}</a>
+                        </div>
+                        <div>
+                                <form class="d-flex flex-row justify-content-between align-items-center " method="post" action="/rate/${message.id}/${user.username}">
+                                    <div class="form-group mx-2 ">
+                                        <select name="rate" size="1"  class="rounded">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
+                                    </div>
+                                    <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary">Confirm</button>
+                                    </div>
+                                </form>
+                        </div>
+                    </div>
+                    <div class="form-group mt-3">
+                        <form method="post" action="/post/add/comment/${message.id}" enctype="multipart/form-data">
+                            <div class="form-group" style="width:  100%;height: 100%;">
+                                <label style="width:  100%;height: 100%;">
+                        <textarea required minlength="5" maxlength="255"  type="text" class="form-control" name="text" style="width:  100%;
+                            height: 100%;
+                            padding: 5px 10px 5px 10px;
+                            border:1px solid #999;
+                            font-size:16px;
+                            font-family: Tacoma,serif"
+                                  placeholder="Enter your comment"></textarea>
+                                </label>
+                            </div>
+                            <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Add</button>
+                            </div>
+                        </form>
+                    </div>
             </div>
+        <h4>Comments:</h4>
+        <#list comments as comment>
+        <div class="card my-2">
+                <div>
+                <span>${comment.text}</span>
+                </div>
+            <div class="card-footer text-muted">
+                <a class="col align-self-center" href="/user/profile/${comment.author.id}/${comment.author.username}">${comment.author.username}</a>
+            </div>
+        </div>
+        <#else>
+            No comments
+        </#list>
     </div>
 </@c.page>

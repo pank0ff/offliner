@@ -1,6 +1,8 @@
 package com.example.offliner.domain;
 
 import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Message {
@@ -12,6 +14,10 @@ public class Message {
     private String tag;
     private String name;
     private String hashtag;
+    private double averageRate;
+
+    @OneToMany(mappedBy = "message",orphanRemoval = true)
+    private List<Comment> comments;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
@@ -88,5 +94,13 @@ public class Message {
 
     public void setHashtag(String hashtag) {
         this.hashtag = hashtag;
+    }
+
+    public double getAverageRate() {
+        return averageRate;
+    }
+
+    public void setAverageRate(double averageRate) {
+        this.averageRate = averageRate;
     }
 }

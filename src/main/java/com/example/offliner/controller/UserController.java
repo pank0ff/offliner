@@ -4,6 +4,7 @@ import com.example.offliner.domain.Message;
 import com.example.offliner.domain.Role;
 import com.example.offliner.domain.User;
 import com.example.offliner.repos.MessageRepo;
+import com.example.offliner.repos.RateRepo;
 import com.example.offliner.repos.UserRepo;
 import com.example.offliner.service.UserSevice;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ public class UserController {
     private MessageRepo messageRepo;
     @Autowired
     private UserSevice userSevice;
+    @Autowired
+    private RateRepo rateRepo;
 
     @Value("${upload.path}")
     private String uploadPath;
@@ -166,6 +169,7 @@ public class UserController {
         } else {
             return "redirect:/login";
         }
-
     }
+
+
 }

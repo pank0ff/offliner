@@ -1,10 +1,13 @@
 package com.example.offliner.controller;
 
+import com.example.offliner.domain.Comment;
 import com.example.offliner.domain.Message;
-import com.example.offliner.domain.Role;
 import com.example.offliner.domain.User;
+import com.example.offliner.repos.CommentRepo;
 import com.example.offliner.repos.MessageRepo;
+import com.example.offliner.repos.RateRepo;
 import com.example.offliner.repos.UserRepo;
+import com.example.offliner.service.RateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,7 +29,16 @@ public class MainController {
     private MessageRepo messageRepo;
 
     @Autowired
+    private CommentRepo commentRepo;
+
+    @Autowired
+    private RateService rateService;
+
+    @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private RateRepo rateRepo;
 
     @Value("${upload.path}")
     private String uploadPath;
@@ -37,7 +49,7 @@ public class MainController {
     }
 
     @GetMapping("/main")
-    public String main(@RequestParam(required = false, defaultValue = "") String filter, Model model) {
+    public String main(@RequestParam(required = false, defaultValue = "") String filter, Model model,@AuthenticationPrincipal User user) {
         Iterable<Message> messages = messageRepo.findAll();
 
         if (filter != null && !filter.isEmpty()) {
@@ -47,9 +59,12 @@ public class MainController {
         }
 
         Collections.reverse((List<Message>) messages);
-
+        for(Message message : messages){
+            message.setAverageRate(rateService.calcAverageRate(message));
+        }
         model.addAttribute("messages", messages);
         model.addAttribute("filter", filter);
+        model.addAttribute("user",user);
         return "main";
     }
     @GetMapping("/user/profile/{username}")
@@ -150,9 +165,13 @@ public class MainController {
         return "redirect:/user/profile";
     }
     @GetMapping("/post/{id}")
-    public String userEditForm(@PathVariable Integer id, Model model) {
+    public String userEditForm(@PathVariable Integer id,@AuthenticationPrincipal User user, Model model) {
         Message message = messageRepo.findById(id);
+        List<Comment> comments = commentRepo.findByMessageId(id);
+        model.addAttribute("user",user);
+        model.addAttribute("comments",comments);
         model.addAttribute("message", message);
+
         return "post";
     }
     @PostMapping("/user/profile/update/{id}")
@@ -189,7 +208,7 @@ public class MainController {
         boolean isTopicChanged = (tag != null && !tag.equals(messageTopic)) ||
                 (messageTopic != null && !messageTopic.equals(tag));
         if(isTopicChanged){
-            message.setName(tag);
+            message.setTag(tag);
         }
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadPath);
@@ -241,5 +260,6 @@ public class MainController {
         model.addAttribute("topic",topic);
         return "byTopic";
     }
+
 
 }

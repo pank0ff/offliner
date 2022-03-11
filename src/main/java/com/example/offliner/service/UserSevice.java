@@ -1,5 +1,6 @@
 package com.example.offliner.service;
 
+import com.example.offliner.domain.Message;
 import com.example.offliner.repos.UserRepo;
 import com.example.offliner.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,4 +92,6 @@ public class UserSevice implements UserDetailsService {
         }
         userRepo.save(user);
     }
+
+
 }
