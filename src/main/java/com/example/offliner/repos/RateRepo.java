@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface RateRepo extends JpaRepository<Rate, Long> {
-    @EntityGraph(attributePaths = {"rates"})
+
     List<Rate> findAll();
 
     List<Rate> findByUserId(Long id);

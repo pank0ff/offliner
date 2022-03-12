@@ -28,8 +28,8 @@ public class RateService {
         rateRepo.save(rate);
     }
     public double calcAverageRate(Message message){
-        Integer counter = 0;
-        Integer sum = 0;
+        float counter = 0;
+        float sum = 0;
         double averageRate = 0;
         Integer i;
         List<Rate> rates  = rateRepo.findByMessageId(message.getId());

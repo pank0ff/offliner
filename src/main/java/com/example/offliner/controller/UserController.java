@@ -6,6 +6,7 @@ import com.example.offliner.domain.User;
 import com.example.offliner.repos.MessageRepo;
 import com.example.offliner.repos.RateRepo;
 import com.example.offliner.repos.UserRepo;
+import com.example.offliner.service.RateService;
 import com.example.offliner.service.UserSevice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +32,8 @@ public class UserController {
     private UserSevice userSevice;
     @Autowired
     private RateRepo rateRepo;
+    @Autowired
+    private RateService rateService;
 
     @Value("${upload.path}")
     private String uploadPath;
@@ -89,6 +92,9 @@ public class UserController {
                 counter++;
             }
         }
+        for(Message message : messages){
+            message.setAverageRate(rateService.calcAverageRate(message));
+        }
         Collections.reverse(messages1);
         model.addAttribute("countOfPosts",counter);
         model.addAttribute("user", user);
@@ -146,6 +152,9 @@ public class UserController {
                 messages1.add(message);
                 counter++;
             }
+        }
+        for(Message message : messages){
+            message.setAverageRate(rateService.calcAverageRate(message));
         }
         boolean admin;
         admin = user1.isAdmin();

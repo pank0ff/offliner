@@ -20,7 +20,7 @@
         <#list messages as message>
             <div class="card my-3" >
                 <h1 class="title" > ${message.name} </h1>
-                <a>Average rate: ${message.averageRate}</a>
+                <a>Average rate: ${message.averageRate} stars</a>
                 <div>
                     <a class="topic" href="/post/topic/${message.tag}">${message.tag}</a>
                     <#if message.hashtag??>

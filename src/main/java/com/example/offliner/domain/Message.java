@@ -19,6 +19,9 @@ public class Message {
     @OneToMany(mappedBy = "message",orphanRemoval = true)
     private List<Comment> comments;
 
+    @OneToMany(mappedBy = "message",orphanRemoval = true)
+    private List<Rate> rates;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User author;
@@ -34,6 +37,7 @@ public class Message {
         this.tag = tag;
         this.hashtag = hashtag;
         this.name = name;
+        this.averageRate = 0;
     }
 
     public String getAuthorName() {

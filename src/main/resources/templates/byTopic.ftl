@@ -7,8 +7,9 @@
         <#list messages as message>
             <div class="card my-3" >
                 <h1 class="title" > ${message.name}</h1>
+                <a>Average rate: ${message.averageRate}</a>
                 <div><p class="topic">${message.tag}</p>  <#if message.hashtag??>
-                        <a href="/post/hashtag/${message.hashtag}">${message.hashtag}</a>
+                        <a href="/post/hashtag/${message.hashtag}">#${message.hashtag}</a>
                     </#if></div>
                 <#if message.filename??>
                     <img src="/img/${message.filename}" class="card-img-top">

@@ -90,6 +90,11 @@ public class MainController {
             messages2 = messages1;
         }
         Collections.reverse(messages2);
+
+        for(Message message : messages){
+            message.setAverageRate(rateService.calcAverageRate(message));
+        }
+
         model.addAttribute("countOfPosts",counter);
         model.addAttribute("user",user);
         model.addAttribute("aboutMyself",user.getAboutMyself());
@@ -109,6 +114,10 @@ public class MainController {
                 messages1.add(message);
                 counter++;
             }
+        }
+
+        for(Message message : messages){
+            message.setAverageRate(rateService.calcAverageRate(message));
         }
         ArrayList<Message> messages2 = new ArrayList<Message>();
         if (filter != null && !filter.isEmpty()) {
@@ -171,7 +180,6 @@ public class MainController {
         model.addAttribute("user",user);
         model.addAttribute("comments",comments);
         model.addAttribute("message", message);
-
         return "post";
     }
     @PostMapping("/user/profile/update/{id}")
@@ -231,6 +239,8 @@ public class MainController {
     @GetMapping("/user/profile/update/{id}")
     public String postUpdateForm(@PathVariable Integer id, Model model) {
         Message message = messageRepo.findById(id);
+
+
         model.addAttribute("message", message);
         return "editMess";
     }
@@ -246,8 +256,12 @@ public class MainController {
         Iterable<Message> messages = messageRepo.findAll();
         messages = messageRepo.findByHashtag(hashtag);
         Collections.reverse((List<Message>) messages);
+        for(Message message : messages){
+            message.setAverageRate(rateService.calcAverageRate(message));
+        }
         model.addAttribute("messages",messages);
         model.addAttribute("hashtag",hashtag);
+
         return "allByTag";
     }
 
@@ -256,6 +270,9 @@ public class MainController {
         Iterable<Message> messages = messageRepo.findAll();
         messages = messageRepo.findByTag(topic);
         Collections.reverse((List<Message>) messages);
+        for(Message message : messages){
+            message.setAverageRate(rateService.calcAverageRate(message));
+        }
         model.addAttribute("messages",messages);
         model.addAttribute("topic",topic);
         return "byTopic";
