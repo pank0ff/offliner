@@ -5,7 +5,6 @@ import com.example.offliner.domain.User;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface MessageRepo extends CrudRepository<Message, Long> {
 
@@ -16,7 +15,7 @@ public interface MessageRepo extends CrudRepository<Message, Long> {
 
     Message findById(Integer id);
 
-    Message findByAuthor(User user);
+    List<Message> findByAuthor(User user);
 
     List<Message> findByHashtag(String hashtag);
 }

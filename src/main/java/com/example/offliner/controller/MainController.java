@@ -215,40 +215,42 @@ public class MainController {
 
 
         model.addAttribute("filter", filter);
-        model.addAttribute("user",user);
+        model.addAttribute("user", user);
         return "main";
     }
-    @GetMapping("/user/profile/{username}")
+
+    @GetMapping("/user/profile/{id}")
     public String filter(@RequestParam(required = false, defaultValue = "") String filter,
                          @RequestParam(required = false, defaultValue = "0") int choice,
                          Model model,
-                         @PathVariable String username){
+                         @AuthenticationPrincipal User user
+    ) {
         Iterable<Message> messages = messageRepo.findAll();
-        ArrayList<Message> messages1 = new ArrayList<>();
-        User user = userRepo.findByUsername(username);
+        List<Message> messages1 = messageRepo.findAll();
+        messages1.clear();
         Integer counter = 0;
-        for(Message message:messages){
-            if(Objects.equals(message.getAuthor().getUsername(), user.getUsername())){
+        for (Message message : messages) {
+            if (Objects.equals(message.getAuthor().getUsername(), user.getUsername())) {
                 messages1.add(message);
                 counter++;
             }
         }
         List<Message> messages2 = messageRepo.findAll();
         messages2.clear();
-        switch (choice){
+        switch (choice) {
             case 1:
                 if (filter != null && !filter.isEmpty()) {
-                    for(Message message : messages1){
-                        String[] textOfName = message.getName().split(" ");
+                    for (Message message1 : messages1) {
+                        String[] textOfName = message1.getName().split(" ");
                         boolean flag = false;
-                        for(String str : textOfName){
+                        for (String str : textOfName) {
                             if (Objects.equals(str, filter)) {
                                 flag = true;
                                 break;
                             }
                         }
-                        List<Comment> comments = commentRepo.findByMessageId(message.getId());
-                        for(Comment comment : comments){
+                        List<Comment> comments = commentRepo.findByMessageId(message1.getId());
+                        for (Comment comment : comments) {
                             String[] textOfComment = comment.getText().split(" ");
                             for(String str : textOfComment){
                                 if (Objects.equals(str, filter)) {
@@ -257,13 +259,13 @@ public class MainController {
                                 }
                             }
                         }
-                        if(Objects.equals(message.getTag(), filter)){
+                        if (Objects.equals(message1.getTag(), filter)) {
                             flag = true;
                         }
-                        if(Objects.equals(message.getHashtag(),filter)){
+                        if (Objects.equals(message1.getHashtag(), filter)) {
                             flag = true;
                         }
-                        String[] textOfMessage = message.getText().split(" ");
+                        String[] textOfMessage = message1.getText().split(" ");
                         for(String str : textOfMessage){
                             if (Objects.equals(str, filter)) {
                                 flag = true;
@@ -271,13 +273,13 @@ public class MainController {
                             }
                         }
                         if(flag){
-                            messages2.add(message);
+                            messages2.add(message1);
                         }
                     }
                 } else {
-                    messages2 = messageRepo.findAll();
+                    messages2 = messageRepo.findByAuthor(user);
                 }
-                for(Message message : messages){
+                for (Message message : messages2) {
                     message.setAverageRate(rateService.calcAverageRate(message));
                 }
                 Collections.reverse( messages2);
@@ -299,9 +301,10 @@ public class MainController {
                         }
                     }
                 } else {
-                    messages2 = messageRepo.findAll();
+                    messages2 = messageRepo.findByAuthor(user);
+                    ;
                 }
-                for(Message message : messages){
+                for (Message message : messages1) {
                     message.setAverageRate(rateService.calcAverageRate(message));
                 }
                 Collections.reverse( messages2);
@@ -320,13 +323,15 @@ public class MainController {
                                     break;
                                 }
                             }
-                            if(flag){
+                            if (flag) {
                                 messages2.add(message);
                             }
                         }
                     }
+                } else {
+                    messages2 = messageRepo.findByAuthor(user);
                 }
-                for(Message message : messages){
+                for (Message message : messages1) {
                     message.setAverageRate(rateService.calcAverageRate(message));
                 }
                 Collections.reverse( messages2);
@@ -336,9 +341,9 @@ public class MainController {
                 if (filter != null && !filter.isEmpty()) {
                     messages2 = messageRepo.findByTag(filter);
                 } else {
-                    messages2 = messageRepo.findAll();
+                    messages2 = messageRepo.findByAuthor(user);
                 }
-                for(Message message : messages){
+                for (Message message : messages1) {
                     message.setAverageRate(rateService.calcAverageRate(message));
                 }
                 Collections.reverse( messages2);
@@ -348,9 +353,9 @@ public class MainController {
                 if (filter != null && !filter.isEmpty()) {
                     messages2 = messageRepo.findByHashtag(filter);
                 } else {
-                    messages2 = messageRepo.findAll();
+                    messages2 = messageRepo.findByAuthor(user);
                 }
-                for(Message message : messages){
+                for (Message message : messages1) {
                     message.setAverageRate(rateService.calcAverageRate(message));
                 }
                 Collections.reverse( messages2);
@@ -372,7 +377,7 @@ public class MainController {
                         }
                     }
                 } else {
-                    messages2 = messageRepo.findAll();
+                    messages2 = messageRepo.findByAuthor(user);
                 }
                 Collections.reverse( messages2);
                 for(Message message : messages){
@@ -381,7 +386,7 @@ public class MainController {
                 model.addAttribute("messages",messages2);
                 break;
             default:
-                List<Message> messages3 = messageRepo.findAll();
+                List<Message> messages3 = messageRepo.findByAuthor(user);
                 Collections.reverse( messages3 );
                 for(Message message : messages){
                     message.setAverageRate(rateService.calcAverageRate(message));
@@ -457,7 +462,7 @@ public class MainController {
                         }
                     }
                 } else {
-                    messages2 = messageRepo.findAll();
+                    messages2 = messageRepo.findByAuthor(user);
                 }
                 for(Message message : messages){
                     message.setAverageRate(rateService.calcAverageRate(message));
@@ -481,7 +486,7 @@ public class MainController {
                         }
                     }
                 } else {
-                    messages2 = messageRepo.findAll();
+                    messages2 = messageRepo.findByAuthor(user);
                 }
                 for(Message message : messages){
                     message.setAverageRate(rateService.calcAverageRate(message));
@@ -502,11 +507,13 @@ public class MainController {
                                     break;
                                 }
                             }
-                            if(flag){
+                            if (flag) {
                                 messages2.add(message);
                             }
                         }
                     }
+                } else {
+                    messages2 = messageRepo.findByAuthor(user);
                 }
                 for(Message message : messages){
                     message.setAverageRate(rateService.calcAverageRate(message));
@@ -518,7 +525,7 @@ public class MainController {
                 if (filter != null && !filter.isEmpty()) {
                     messages2 = messageRepo.findByTag(filter);
                 } else {
-                    messages2 = messageRepo.findAll();
+                    messages2 = messageRepo.findByAuthor(user);
                 }
                 for(Message message : messages){
                     message.setAverageRate(rateService.calcAverageRate(message));
@@ -530,7 +537,7 @@ public class MainController {
                 if (filter != null && !filter.isEmpty()) {
                     messages2 = messageRepo.findByHashtag(filter);
                 } else {
-                    messages2 = messageRepo.findAll();
+                    messages2 = messageRepo.findByAuthor(user);
                 }
                 for(Message message : messages){
                     message.setAverageRate(rateService.calcAverageRate(message));
@@ -554,7 +561,7 @@ public class MainController {
                         }
                     }
                 } else {
-                    messages2 = messageRepo.findAll();
+                    messages2 = messageRepo.findByAuthor(user);
                 }
                 Collections.reverse( messages2);
                 for(Message message : messages){
@@ -563,7 +570,7 @@ public class MainController {
                 model.addAttribute("messages",messages2);
                 break;
             default:
-                List<Message> messages3 = messageRepo.findAll();
+                List<Message> messages3 = messageRepo.findByAuthor(user);
                 Collections.reverse( messages3 );
                 for(Message message : messages){
                     message.setAverageRate(rateService.calcAverageRate(message));

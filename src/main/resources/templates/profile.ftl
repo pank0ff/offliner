@@ -69,14 +69,14 @@
                     </div>
                 </div>
             </div>
-            <a class="btn btn-primary  mt-1"  href="/user/profile/${user.username}/settings">Settings</a>
+            <a class="btn btn-primary  mt-1" href="/user/profile/${user.username}/settings">Settings</a>
         </div>
     </div>
 
     <div class="form-row ">
         <div class="form-group col-md-6">
-            <form method="get" action="/user/profile/${user.username}" class="form-inline">
-                <select name="choice" size="1"  class="rounded form-control " >
+            <form method="get" action="/user/profile/${user.id}" class="form-inline">
+                <select name="choice" size="1" class="rounded form-control ">
                     <option value="1">Deep search</option>
                     <option value="2">Post name</option>
                     <option value="3">Comments</option>
