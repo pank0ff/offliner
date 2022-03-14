@@ -76,6 +76,14 @@
     <div class="form-row ">
         <div class="form-group col-md-6">
             <form method="get" action="/user/profile/${user.username}" class="form-inline">
+                <select name="choice" size="1"  class="rounded form-control " >
+                    <option value="1">Deep search</option>
+                    <option value="2">Post name</option>
+                    <option value="3">Comments</option>
+                    <option value="4">Topic</option>
+                    <option value="5">Hashtag</option>
+                    <option value="6">Text</option>
+                </select>
                 <input type="text" name="filter" class="form-control" value="${filter?ifExists}"
                        placeholder="Search by topic">
                 <button type="submit" class="btn btn-primary ml-2">Search</button>

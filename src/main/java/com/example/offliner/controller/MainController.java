@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+
 @Controller
 public class MainController {
     @Autowired
@@ -215,7 +216,10 @@ public class MainController {
         return "main";
     }
     @GetMapping("/user/profile/{username}")
-    public String filter(@RequestParam(required = false, defaultValue = "") String filter, Model model,@PathVariable String username){
+    public String filter(@RequestParam(required = false, defaultValue = "") String filter,
+                         @RequestParam(required = false, defaultValue = "0") int choice,
+                         Model model,
+                         @PathVariable String username){
         Iterable<Message> messages = messageRepo.findAll();
         ArrayList<Message> messages1 = new ArrayList<Message>();
         User user = userRepo.findByUsername(username);
@@ -226,36 +230,181 @@ public class MainController {
                 counter++;
             }
         }
-        ArrayList<Message> messages2 = new ArrayList<Message>();
-        if (filter != null && !filter.isEmpty()) {
-            for(Message message : messages1){
-                if(Objects.equals(message.getTag(), filter)){
-                    messages2.add(message);
+        List<Message> messages2 = messageRepo.findAll();
+        messages2.clear();
+        switch (choice){
+            case 1:
+                if (filter != null && !filter.isEmpty()) {
+                    for(Message message : messages1){
+                        String[] textOfName = message.getName().split(" ");
+                        boolean flag = false;
+                        for(String str : textOfName){
+                            if (Objects.equals(str, filter)) {
+                                flag = true;
+                                break;
+                            }
+                        }
+                        List<Comment> comments = commentRepo.findByMessageId(message.getId());
+                        for(Comment comment : comments){
+                            String[] textOfComment = comment.getText().split(" ");
+                            for(String str : textOfComment){
+                                if (Objects.equals(str, filter)) {
+                                    flag = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if(Objects.equals(message.getTag(), filter)){
+                            flag = true;
+                        }
+                        if(Objects.equals(message.getHashtag(),filter)){
+                            flag = true;
+                        }
+                        String[] textOfMessage = message.getText().split(" ");
+                        for(String str : textOfMessage){
+                            if (Objects.equals(str, filter)) {
+                                flag = true;
+                                break;
+                            }
+                        }
+                        if(flag){
+                            messages2.add(message);
+                        }
+                    }
+                } else {
+                    messages2 = messageRepo.findAll();
                 }
-            }
-        } else {
-            messages2 = messages1;
-        }
-        Collections.reverse(messages2);
-
-        for(Message message : messages){
-            message.setAverageRate(rateService.calcAverageRate(message));
+                for(Message message : messages){
+                    message.setAverageRate(rateService.calcAverageRate(message));
+                }
+                Collections.reverse( messages2);
+                model.addAttribute("messages",messages2);
+                break;
+            case 2:
+                if (filter != null && !filter.isEmpty()) {
+                    for(Message message : messages1){
+                        String[] textOfName = message.getName().split(" ");
+                        boolean flag = false;
+                        for(String str : textOfName){
+                            if (Objects.equals(str, filter)) {
+                                flag = true;
+                                break;
+                            }
+                        }
+                        if(flag){
+                            messages2.add(message);
+                        }
+                    }
+                } else {
+                    messages2 = messageRepo.findAll();
+                }
+                for(Message message : messages){
+                    message.setAverageRate(rateService.calcAverageRate(message));
+                }
+                Collections.reverse( messages2);
+                model.addAttribute("messages",messages2);
+                break;
+            case 3:
+                if (filter != null && !filter.isEmpty()) {
+                    for(Message message : messages1){
+                        List<Comment> comments = commentRepo.findByMessageId(message.getId());
+                        for(Comment comment : comments){
+                            String[] textOfComment = comment.getText().split(" ");
+                            boolean flag = false;
+                            for(String str : textOfComment){
+                                if (Objects.equals(str, filter)) {
+                                    flag = true;
+                                    break;
+                                }
+                            }
+                            if(flag){
+                                messages2.add(message);
+                            }
+                        }
+                    }
+                }
+                for(Message message : messages){
+                    message.setAverageRate(rateService.calcAverageRate(message));
+                }
+                Collections.reverse( messages2);
+                model.addAttribute("messages",messages2);
+                break;
+            case 4:
+                if (filter != null && !filter.isEmpty()) {
+                    messages2 = messageRepo.findByTag(filter);
+                } else {
+                    messages2 = messageRepo.findAll();
+                }
+                for(Message message : messages){
+                    message.setAverageRate(rateService.calcAverageRate(message));
+                }
+                Collections.reverse( messages2);
+                model.addAttribute("messages",messages2);
+                break;
+            case 5:
+                if (filter != null && !filter.isEmpty()) {
+                    messages2 = messageRepo.findByHashtag(filter);
+                } else {
+                    messages2 = messageRepo.findAll();
+                }
+                for(Message message : messages){
+                    message.setAverageRate(rateService.calcAverageRate(message));
+                }
+                Collections.reverse( messages2);
+                model.addAttribute("messages",messages2);
+                break;
+            case 6:
+                if (filter != null && !filter.isEmpty()) {
+                    for(Message message : messages1){
+                        String[] textOfMessage = message.getText().split(" ");
+                        boolean flag = false;
+                        for(String str : textOfMessage){
+                            if (Objects.equals(str, filter)) {
+                                flag = true;
+                                break;
+                            }
+                        }
+                        if(flag){
+                            messages2.add(message);
+                        }
+                    }
+                } else {
+                    messages2 = messageRepo.findAll();
+                }
+                Collections.reverse( messages2);
+                for(Message message : messages){
+                    message.setAverageRate(rateService.calcAverageRate(message));
+                }
+                model.addAttribute("messages",messages2);
+                break;
+            default:
+                List<Message> messages3 = messageRepo.findAll();
+                Collections.reverse( messages3 );
+                for(Message message : messages){
+                    message.setAverageRate(rateService.calcAverageRate(message));
+                }
+                model.addAttribute("messages",messages3);
         }
 
         model.addAttribute("countOfPosts",counter);
         model.addAttribute("user",user);
         model.addAttribute("aboutMyself",user.getAboutMyself());
-        model.addAttribute("messages", messages2);
         model.addAttribute("filter", filter);
 
         return "profile";
     }
     @GetMapping("/user/profile/{username}/else")
-    public String filterOnSomeoneElsePage(@RequestParam(required = false, defaultValue = "") String filter, Model model,@PathVariable String username){
+    public String filterOnSomeoneElsePage(@RequestParam(required = false, defaultValue = "") String filter,
+                                          @RequestParam(required = false, defaultValue = "0") int choice,
+                                          Model model,
+                                          @PathVariable String username,
+                                          @AuthenticationPrincipal User currentUser){
         Iterable<Message> messages = messageRepo.findAll();
         ArrayList<Message> messages1 = new ArrayList<Message>();
         User user = userRepo.findByUsername(username);
         Integer counter = 0;
+        boolean admin;
+        admin = currentUser.isAdmin();
         for(Message message:messages){
             if(Objects.equals(message.getAuthor().getUsername(), username)){
                 messages1.add(message);
@@ -263,24 +412,164 @@ public class MainController {
             }
         }
 
-        for(Message message : messages){
-            message.setAverageRate(rateService.calcAverageRate(message));
-        }
-        ArrayList<Message> messages2 = new ArrayList<Message>();
-        if (filter != null && !filter.isEmpty()) {
-            for(Message message : messages1){
-                if(Objects.equals(message.getTag(), filter)){
-                    messages2.add(message);
+        List<Message> messages2 = messageRepo.findAll();
+        messages2.clear();
+        switch (choice){
+            case 1:
+                if (filter != null && !filter.isEmpty()) {
+                    for(Message message : messages1){
+                        String[] textOfName = message.getName().split(" ");
+                        boolean flag = false;
+                        for(String str : textOfName){
+                            if (Objects.equals(str, filter)) {
+                                flag = true;
+                                break;
+                            }
+                        }
+                        List<Comment> comments = commentRepo.findByMessageId(message.getId());
+                        for(Comment comment : comments){
+                            String[] textOfComment = comment.getText().split(" ");
+                            for(String str : textOfComment){
+                                if (Objects.equals(str, filter)) {
+                                    flag = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if(Objects.equals(message.getTag(), filter)){
+                            flag = true;
+                        }
+                        if(Objects.equals(message.getHashtag(),filter)){
+                            flag = true;
+                        }
+                        String[] textOfMessage = message.getText().split(" ");
+                        for(String str : textOfMessage){
+                            if (Objects.equals(str, filter)) {
+                                flag = true;
+                                break;
+                            }
+                        }
+                        if(flag){
+                            messages2.add(message);
+                        }
+                    }
+                } else {
+                    messages2 = messageRepo.findAll();
                 }
-            }
-        } else {
-            messages2 = messages1;
+                for(Message message : messages){
+                    message.setAverageRate(rateService.calcAverageRate(message));
+                }
+                Collections.reverse( messages2);
+                model.addAttribute("messages",messages2);
+                break;
+            case 2:
+                if (filter != null && !filter.isEmpty()) {
+                    for(Message message : messages1){
+                        String[] textOfName = message.getName().split(" ");
+                        boolean flag = false;
+                        for(String str : textOfName){
+                            if (Objects.equals(str, filter)) {
+                                flag = true;
+                                break;
+                            }
+                        }
+                        if(flag){
+                            messages2.add(message);
+                        }
+                    }
+                } else {
+                    messages2 = messageRepo.findAll();
+                }
+                for(Message message : messages){
+                    message.setAverageRate(rateService.calcAverageRate(message));
+                }
+                Collections.reverse( messages2);
+                model.addAttribute("messages",messages2);
+                break;
+            case 3:
+                if (filter != null && !filter.isEmpty()) {
+                    for(Message message : messages1){
+                        List<Comment> comments = commentRepo.findByMessageId(message.getId());
+                        for(Comment comment : comments){
+                            String[] textOfComment = comment.getText().split(" ");
+                            boolean flag = false;
+                            for(String str : textOfComment){
+                                if (Objects.equals(str, filter)) {
+                                    flag = true;
+                                    break;
+                                }
+                            }
+                            if(flag){
+                                messages2.add(message);
+                            }
+                        }
+                    }
+                }
+                for(Message message : messages){
+                    message.setAverageRate(rateService.calcAverageRate(message));
+                }
+                Collections.reverse( messages2);
+                model.addAttribute("messages",messages2);
+                break;
+            case 4:
+                if (filter != null && !filter.isEmpty()) {
+                    messages2 = messageRepo.findByTag(filter);
+                } else {
+                    messages2 = messageRepo.findAll();
+                }
+                for(Message message : messages){
+                    message.setAverageRate(rateService.calcAverageRate(message));
+                }
+                Collections.reverse( messages2);
+                model.addAttribute("messages",messages2);
+                break;
+            case 5:
+                if (filter != null && !filter.isEmpty()) {
+                    messages2 = messageRepo.findByHashtag(filter);
+                } else {
+                    messages2 = messageRepo.findAll();
+                }
+                for(Message message : messages){
+                    message.setAverageRate(rateService.calcAverageRate(message));
+                }
+                Collections.reverse( messages2);
+                model.addAttribute("messages",messages2);
+                break;
+            case 6:
+                if (filter != null && !filter.isEmpty()) {
+                    for(Message message : messages1){
+                        String[] textOfMessage = message.getText().split(" ");
+                        boolean flag = false;
+                        for(String str : textOfMessage){
+                            if (Objects.equals(str, filter)) {
+                                flag = true;
+                                break;
+                            }
+                        }
+                        if(flag){
+                            messages2.add(message);
+                        }
+                    }
+                } else {
+                    messages2 = messageRepo.findAll();
+                }
+                Collections.reverse( messages2);
+                for(Message message : messages){
+                    message.setAverageRate(rateService.calcAverageRate(message));
+                }
+                model.addAttribute("messages",messages2);
+                break;
+            default:
+                List<Message> messages3 = messageRepo.findAll();
+                Collections.reverse( messages3 );
+                for(Message message : messages){
+                    message.setAverageRate(rateService.calcAverageRate(message));
+                }
+                model.addAttribute("messages",messages3);
         }
-        Collections.reverse(messages2);
         model.addAttribute("countOfPosts",counter);
-        model.addAttribute("user",user);
-        model.addAttribute("aboutMyself",user.getAboutMyself());
-        model.addAttribute("messages", messages2);
+        model.addAttribute("admin",admin);
+        model.addAttribute("user", user);
         model.addAttribute("filter", filter);
 
         return "userProfile";
