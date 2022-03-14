@@ -3,7 +3,10 @@ package com.example.offliner.controller;
 import com.example.offliner.domain.Comment;
 import com.example.offliner.domain.Message;
 import com.example.offliner.domain.User;
-import com.example.offliner.repos.*;
+import com.example.offliner.repos.CommentRepo;
+import com.example.offliner.repos.MessageRepo;
+import com.example.offliner.repos.RateRepo;
+import com.example.offliner.repos.UserRepo;
 import com.example.offliner.service.RateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -221,7 +224,7 @@ public class MainController {
                          Model model,
                          @PathVariable String username){
         Iterable<Message> messages = messageRepo.findAll();
-        ArrayList<Message> messages1 = new ArrayList<Message>();
+        ArrayList<Message> messages1 = new ArrayList<>();
         User user = userRepo.findByUsername(username);
         Integer counter = 0;
         for(Message message:messages){
@@ -400,7 +403,7 @@ public class MainController {
                                           @PathVariable String username,
                                           @AuthenticationPrincipal User currentUser){
         Iterable<Message> messages = messageRepo.findAll();
-        ArrayList<Message> messages1 = new ArrayList<Message>();
+        ArrayList<Message> messages1 = new ArrayList<>();
         User user = userRepo.findByUsername(username);
         Integer counter = 0;
         boolean admin;

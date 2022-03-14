@@ -1,12 +1,10 @@
 package com.example.offliner.controller;
 
 import com.example.offliner.domain.Message;
-import com.example.offliner.domain.User;
 import com.example.offliner.domain.Rate;
+import com.example.offliner.domain.User;
 import com.example.offliner.repos.MessageRepo;
 import com.example.offliner.repos.RateRepo;
-import com.example.offliner.repos.UserRepo;
-import com.example.offliner.service.CommentService;
 import com.example.offliner.service.RateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

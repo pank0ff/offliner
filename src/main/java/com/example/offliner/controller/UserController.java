@@ -4,12 +4,10 @@ import com.example.offliner.domain.Message;
 import com.example.offliner.domain.Role;
 import com.example.offliner.domain.User;
 import com.example.offliner.repos.MessageRepo;
-import com.example.offliner.repos.RateRepo;
 import com.example.offliner.repos.UserRepo;
 import com.example.offliner.service.RateService;
 import com.example.offliner.service.UserSevice;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -30,13 +28,9 @@ public class UserController {
     private MessageRepo messageRepo;
     @Autowired
     private UserSevice userSevice;
-    @Autowired
-    private RateRepo rateRepo;
+
     @Autowired
     private RateService rateService;
-
-    @Value("${upload.path}")
-    private String uploadPath;
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
@@ -145,7 +139,7 @@ public class UserController {
             Model model, @PathVariable String username,@PathVariable Long id,@AuthenticationPrincipal User user1){
         Iterable<Message> messages = messageRepo.findAll();
         User user = userRepo.findByUsername(username);
-        ArrayList<Message> messages1 = new ArrayList<Message>();
+        ArrayList<Message> messages1 = new ArrayList<>();
         Integer counter = 0;
         for(Message message:messages){
             if(Objects.equals(message.getAuthor().getUsername(), user.getUsername())){
