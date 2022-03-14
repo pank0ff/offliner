@@ -51,10 +51,11 @@ public class MainController {
 
     @GetMapping("/main")
     public String main(
-                       @RequestParam(required = false, defaultValue = "") String filter,
-                       @RequestParam(required = false,defaultValue = "0") int choice,
-                       Model model,
-                       @AuthenticationPrincipal User user) {
+            @RequestParam(required = false, defaultValue = "") String filter,
+            @RequestParam(required = false, defaultValue = "0") int choice,
+            @RequestParam(required = false, defaultValue = "1") int sortChoice,
+            Model model,
+            @AuthenticationPrincipal User user) {
         Iterable<Message> messages = messageRepo.findAll();
         List<Message> messages2 = messageRepo.findAll();
         messages2.clear();
@@ -105,7 +106,7 @@ public class MainController {
                     message.setAverageRate(rateService.calcAverageRate(message));
                 }
                 Collections.reverse( messages2);
-                model.addAttribute("messages",messages2);
+
                 break;
             case 2:
                 if (filter != null && !filter.isEmpty()) {
@@ -129,7 +130,7 @@ public class MainController {
                     message.setAverageRate(rateService.calcAverageRate(message));
                 }
                 Collections.reverse( messages2);
-                model.addAttribute("messages",messages2);
+
                 break;
             case 3:
                 if (filter != null && !filter.isEmpty()) {
@@ -154,7 +155,7 @@ public class MainController {
                     message.setAverageRate(rateService.calcAverageRate(message));
                 }
                 Collections.reverse( messages2);
-                model.addAttribute("messages",messages2);
+
                 break;
             case 4:
                 if (filter != null && !filter.isEmpty()) {
@@ -166,7 +167,7 @@ public class MainController {
                     message.setAverageRate(rateService.calcAverageRate(message));
                 }
                 Collections.reverse( messages2);
-                model.addAttribute("messages",messages2);
+
                 break;
             case 5:
                 if (filter != null && !filter.isEmpty()) {
@@ -178,7 +179,7 @@ public class MainController {
                     message.setAverageRate(rateService.calcAverageRate(message));
                 }
                 Collections.reverse( messages2);
-                model.addAttribute("messages",messages2);
+
                 break;
             case 6:
                 if (filter != null && !filter.isEmpty()) {
@@ -198,22 +199,29 @@ public class MainController {
                 } else {
                     messages2 = messageRepo.findAll();
                 }
-                Collections.reverse( messages2);
-                for(Message message : messages){
+                Collections.reverse(messages2);
+                for (Message message : messages) {
                     message.setAverageRate(rateService.calcAverageRate(message));
                 }
-                model.addAttribute("messages",messages2);
+
                 break;
             default:
-                List<Message> messages1 = messageRepo.findAll();
-                Collections.reverse( messages1 );
-                for(Message message : messages){
+                messages2 = messageRepo.findAll();
+                Collections.reverse(messages2);
+                for (Message message : messages) {
                     message.setAverageRate(rateService.calcAverageRate(message));
                 }
-                model.addAttribute("messages",messages1);
         }
 
-
+        switch (sortChoice) {
+            case 1:
+                model.addAttribute("messages", messages2);
+                break;
+            case 2:
+                Collections.reverse(messages2);
+                model.addAttribute("messages", messages2);
+                break;
+        }
         model.addAttribute("filter", filter);
         model.addAttribute("user", user);
         return "main";
@@ -222,6 +230,7 @@ public class MainController {
     @GetMapping("/user/profile/{id}")
     public String filter(@RequestParam(required = false, defaultValue = "") String filter,
                          @RequestParam(required = false, defaultValue = "0") int choice,
+                         @RequestParam(required = false, defaultValue = "1") int sortChoice,
                          Model model,
                          @AuthenticationPrincipal User user
     ) {
@@ -283,7 +292,7 @@ public class MainController {
                     message.setAverageRate(rateService.calcAverageRate(message));
                 }
                 Collections.reverse( messages2);
-                model.addAttribute("messages",messages2);
+
                 break;
             case 2:
                 if (filter != null && !filter.isEmpty()) {
@@ -308,7 +317,7 @@ public class MainController {
                     message.setAverageRate(rateService.calcAverageRate(message));
                 }
                 Collections.reverse( messages2);
-                model.addAttribute("messages",messages2);
+
                 break;
             case 3:
                 if (filter != null && !filter.isEmpty()) {
@@ -335,7 +344,7 @@ public class MainController {
                     message.setAverageRate(rateService.calcAverageRate(message));
                 }
                 Collections.reverse( messages2);
-                model.addAttribute("messages",messages2);
+
                 break;
             case 4:
                 if (filter != null && !filter.isEmpty()) {
@@ -347,7 +356,7 @@ public class MainController {
                     message.setAverageRate(rateService.calcAverageRate(message));
                 }
                 Collections.reverse( messages2);
-                model.addAttribute("messages",messages2);
+
                 break;
             case 5:
                 if (filter != null && !filter.isEmpty()) {
@@ -359,7 +368,7 @@ public class MainController {
                     message.setAverageRate(rateService.calcAverageRate(message));
                 }
                 Collections.reverse( messages2);
-                model.addAttribute("messages",messages2);
+
                 break;
             case 6:
                 if (filter != null && !filter.isEmpty()) {
@@ -379,24 +388,31 @@ public class MainController {
                 } else {
                     messages2 = messageRepo.findByAuthor(user);
                 }
-                Collections.reverse( messages2);
-                for(Message message : messages){
+                Collections.reverse(messages2);
+                for (Message message : messages) {
                     message.setAverageRate(rateService.calcAverageRate(message));
                 }
-                model.addAttribute("messages",messages2);
+
                 break;
             default:
-                List<Message> messages3 = messageRepo.findByAuthor(user);
-                Collections.reverse( messages3 );
-                for(Message message : messages){
+                messages2 = messageRepo.findByAuthor(user);
+                Collections.reverse(messages2);
+                for (Message message : messages) {
                     message.setAverageRate(rateService.calcAverageRate(message));
                 }
-                model.addAttribute("messages",messages3);
         }
-
-        model.addAttribute("countOfPosts",counter);
-        model.addAttribute("user",user);
-        model.addAttribute("aboutMyself",user.getAboutMyself());
+        switch (sortChoice) {
+            case 1:
+                model.addAttribute("messages", messages2);
+                break;
+            case 2:
+                Collections.reverse(messages2);
+                model.addAttribute("messages", messages2);
+                break;
+        }
+        model.addAttribute("countOfPosts", counter);
+        model.addAttribute("user", user);
+        model.addAttribute("aboutMyself", user.getAboutMyself());
         model.addAttribute("filter", filter);
 
         return "profile";
@@ -404,6 +420,7 @@ public class MainController {
     @GetMapping("/user/profile/{username}/else")
     public String filterOnSomeoneElsePage(@RequestParam(required = false, defaultValue = "") String filter,
                                           @RequestParam(required = false, defaultValue = "0") int choice,
+                                          @RequestParam(required = false, defaultValue = "1") int sortChoice,
                                           Model model,
                                           @PathVariable String username,
                                           @AuthenticationPrincipal User currentUser){
@@ -468,7 +485,7 @@ public class MainController {
                     message.setAverageRate(rateService.calcAverageRate(message));
                 }
                 Collections.reverse( messages2);
-                model.addAttribute("messages",messages2);
+
                 break;
             case 2:
                 if (filter != null && !filter.isEmpty()) {
@@ -492,7 +509,7 @@ public class MainController {
                     message.setAverageRate(rateService.calcAverageRate(message));
                 }
                 Collections.reverse( messages2);
-                model.addAttribute("messages",messages2);
+
                 break;
             case 3:
                 if (filter != null && !filter.isEmpty()) {
@@ -519,7 +536,7 @@ public class MainController {
                     message.setAverageRate(rateService.calcAverageRate(message));
                 }
                 Collections.reverse( messages2);
-                model.addAttribute("messages",messages2);
+
                 break;
             case 4:
                 if (filter != null && !filter.isEmpty()) {
@@ -531,7 +548,7 @@ public class MainController {
                     message.setAverageRate(rateService.calcAverageRate(message));
                 }
                 Collections.reverse( messages2);
-                model.addAttribute("messages",messages2);
+
                 break;
             case 5:
                 if (filter != null && !filter.isEmpty()) {
@@ -543,7 +560,7 @@ public class MainController {
                     message.setAverageRate(rateService.calcAverageRate(message));
                 }
                 Collections.reverse( messages2);
-                model.addAttribute("messages",messages2);
+
                 break;
             case 6:
                 if (filter != null && !filter.isEmpty()) {
@@ -563,22 +580,32 @@ public class MainController {
                 } else {
                     messages2 = messageRepo.findByAuthor(user);
                 }
-                Collections.reverse( messages2);
-                for(Message message : messages){
+                Collections.reverse(messages2);
+                for (Message message : messages) {
                     message.setAverageRate(rateService.calcAverageRate(message));
                 }
-                model.addAttribute("messages",messages2);
+
                 break;
             default:
-                List<Message> messages3 = messageRepo.findByAuthor(user);
-                Collections.reverse( messages3 );
-                for(Message message : messages){
+                messages2 = messageRepo.findByAuthor(user);
+                Collections.reverse(messages2);
+                for (Message message : messages) {
                     message.setAverageRate(rateService.calcAverageRate(message));
                 }
-                model.addAttribute("messages",messages3);
+
         }
-        model.addAttribute("countOfPosts",counter);
-        model.addAttribute("admin",admin);
+        switch (sortChoice) {
+            case 1:
+                model.addAttribute("messages", messages2);
+                break;
+            case 2:
+                Collections.reverse(messages2);
+                model.addAttribute("messages", messages2);
+                break;
+        }
+
+        model.addAttribute("countOfPosts", counter);
+        model.addAttribute("admin", admin);
         model.addAttribute("user", user);
         model.addAttribute("filter", filter);
 
@@ -704,9 +731,9 @@ public class MainController {
 
     @GetMapping("/post/hashtag/{hashtag}")
     public String allByHashtag(@PathVariable String hashtag,Model model){
-        Iterable<Message> messages = messageRepo.findAll();
+        List<Message> messages = messageRepo.findAll();
         messages = messageRepo.findByHashtag(hashtag);
-        Collections.reverse((List<Message>) messages);
+        Collections.reverse(messages);
         for(Message message : messages){
             message.setAverageRate(rateService.calcAverageRate(message));
         }
@@ -718,9 +745,9 @@ public class MainController {
 
     @GetMapping("/post/topic/{topic}")
     public String allByTopic(@PathVariable String topic,Model model){
-        Iterable<Message> messages = messageRepo.findAll();
+        List<Message> messages = messageRepo.findAll();
         messages = messageRepo.findByTag(topic);
-        Collections.reverse((List<Message>) messages);
+        Collections.reverse(messages);
         for(Message message : messages){
             message.setAverageRate(rateService.calcAverageRate(message));
         }
@@ -728,6 +755,4 @@ public class MainController {
         model.addAttribute("topic",topic);
         return "byTopic";
     }
-
-
 }

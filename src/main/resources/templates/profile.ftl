@@ -76,7 +76,9 @@
     <div class="form-row ">
         <div class="form-group col-md-6">
             <form method="get" action="/user/profile/${user.id}" class="form-inline">
-                <select name="choice" size="1" class="rounded form-control ">
+                <input type="text" name="filter" class="form-control" value="${filter?ifExists}"
+                       placeholder="Search ">
+                <select name="choice" size="1" class="rounded form-control ml-2">
                     <option value="1">Deep search</option>
                     <option value="2">Post name</option>
                     <option value="3">Comments</option>
@@ -84,9 +86,11 @@
                     <option value="5">Hashtag</option>
                     <option value="6">Text</option>
                 </select>
-                <input type="text" name="filter" class="form-control" value="${filter?ifExists}"
-                       placeholder="Search by topic">
-                <button type="submit" class="btn btn-primary ml-2">Search</button>
+                <select name="sortChoice" size="1" class="rounded form-control ml-1">
+                    <option value="1">Date(first earlier)</option>
+                    <option value="2">Date(first latest)</option>
+                </select>
+                <button type="submit" class="btn btn-primary mt-2">Search</button>
             </form>
         </div>
     </div>
