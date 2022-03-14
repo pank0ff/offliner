@@ -1,15 +1,9 @@
 package com.example.offliner.domain;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
 import javax.persistence.*;
 
 @Entity
 @Table
-
 public class Comment {
     @Id
     @GeneratedValue

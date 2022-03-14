@@ -7,6 +7,8 @@
             <div class="col-md-4 col-lg-4">
                 <#if user.avatarFilename??>
                     <img src="/img/${user.avatarFilename}">
+                    <#else>
+                     <img src="https://hornews.com/upload/images/blank-avatar.jpg">
                 </#if>
             </div>
             <div class="col-md-8 col-lg-8">

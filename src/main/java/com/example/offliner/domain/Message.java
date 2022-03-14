@@ -107,4 +107,5 @@ public class Message {
     public void setAverageRate(double averageRate) {
         this.averageRate = averageRate;
     }
+
 }

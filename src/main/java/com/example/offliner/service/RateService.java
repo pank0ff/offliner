@@ -4,7 +4,6 @@ import com.example.offliner.domain.Message;
 import com.example.offliner.domain.User;
 import com.example.offliner.domain.Rate;
 import com.example.offliner.repos.RateRepo;
-import org.apache.commons.math3.util.Precision;
 import org.decimal4j.util.DoubleRounder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

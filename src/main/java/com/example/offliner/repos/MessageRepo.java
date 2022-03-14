@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public interface MessageRepo extends CrudRepository<Message, Long> {
 
+    List<Message> findAll();
     List<Message> findByTag(String tag);
 
     List<Message> findByName(String filter);
@@ -17,5 +18,5 @@ public interface MessageRepo extends CrudRepository<Message, Long> {
 
     Message findByAuthor(User user);
 
-    Iterable<Message> findByHashtag(String hashtag);
+    List<Message> findByHashtag(String hashtag);
 }
