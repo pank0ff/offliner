@@ -32,7 +32,7 @@ public class UserController {
     @Autowired
     private RateService rateService;
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping
     public String userList(Model model) {
         model.addAttribute("users", userRepo.findAll());
@@ -40,7 +40,7 @@ public class UserController {
         return "userList";
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("{user}")
     public String userEditForm(@PathVariable User user, Model model) {
         model.addAttribute("user", user);
@@ -49,7 +49,7 @@ public class UserController {
         return "userEdit";
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping
     public String userSave(
             @RequestParam String username,
