@@ -2,91 +2,112 @@
 
 
 <@c.page>
-
     <script src="https://kit.fontawesome.com/17c4207260.js" crossorigin="anonymous"></script>
 
     <div class="form-row">
         <div class="form-group col-md-6">
-            <form method="get" action="/main" class="form-inline">
+            <form method="get" action="/main" class="row d-flex flex-row">
+                <#if lang>
+                    <input type="text" name="filter" class="form-control col-4" value="" placeholder="Search ">
+                    <select name="choice" size="1" class="rounded col-3 form-control ml-1">
+                        <option value="1">Deep search</option>
+                        <option value="2">Post name</option>
+                        <option value="3">Comments</option>
+                        <option value="4">Topic</option>
+                        <option value="5">Hashtag</option>
+                        <option value="6">Text</option>
+                    </select>
+                    <select name="sortChoice" size="1" class="col-3 rounded form-control ml-1">
+                        <option value="1">Date(first earlier)</option>
+                        <option value="2">Date(first latest)</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary mt-2 col-2">Search</button>
+                <#else>
+                    <input type="text" name="filter" class="form-control col-4" value="" placeholder="Поиск ">
+                    <select name="choice" size="1" class="rounded col-3 form-control ml-1">
+                        <option value="1">Полный поиск</option>
+                        <option value="2">Название постов</option>
+                        <option value="3">Комментарии</option>
+                        <option value="4">Темы</option>
+                        <option value="5">Хэш-теги</option>
+                        <option value="6">Текст</option>
+                    </select>
+                    <select name="sortChoice" size="1" class="col-3 rounded form-control ml-1">
+                        <option value="1">Дата(сначала ранние)</option>
+                        <option value="2">Дата(сначала поздние)</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary mt-2 col-2">Поиск</button>
+                </#if>
 
-                <input type="text" name="filter" class="form-control" value="${filter?ifExists}"
-                       placeholder="Search ">
-                <select name="choice" size="1" class="rounded form-control ml-2">
-                    <option value="1">Deep search</option>
-                    <option value="2">Post name</option>
-                    <option value="3">Comments</option>
-                    <option value="4">Topic</option>
-                    <option value="5">Hashtag</option>
-                    <option value="6">Text</option>
-                </select>
-                <select name="sortChoice" size="1" class="rounded form-control ml-1">
-                    <option value="1">Date(first earlier)</option>
-                    <option value="2">Date(first latest)</option>
-                </select>
-                <button type="submit" class="btn btn-primary mt-2">Search</button>
+
             </form>
         </div>
     </div>
 
 
     <div style="height: 400px; width: 900px">
-        <#list messages as message>
-            <div class="card my-3" >
-                <h1 class="title" > ${message.name} </h1>
-                <a>Average rate: ${message.averageRate} stars</a>
-                <div>
-                    <a class="topic" href="/post/topic/${message.tag}">${message.tag}</a>
-                    <#if message.hashtag??>
-                        <a href="/post/hashtag/${message.hashtag}">#${message.hashtag}</a>
-                    </#if>
-                </div>
-                <#if message.filename??>
-                    <img src="/img/${message.filename}" class="card-img-top">
-                </#if>
-                <div >
-                    <span class="mainText" style="margin-top: 10px">${message.text}</span>
-                </div>
-                <div class="d-flex justify-content-between flex-row align-items-end"> <a class="btn btn-primary ml-2 mt-4 mb-2 "   href = "/post/${message.id}"> Read full</a>
-                    <a class="mb-2 mx-4" href="">
-                        <#if true>
-                            <i class = "fa-regular fa-heart"></i>
-                        <#else>
-                            <i class = "fa-solid fa-heart"></i
+        <#if lang>
+            <#list messages as message>
+                <div class="card my-3">
+                    <h1 class="title"> ${message.name} </h1>
+                    <a>Average rate: ${message.averageRate} stars</a>
+                    <div>
+                        <a class="topic" href="/post/topic/${message.tag}">${message.tag}</a>
+                        <#if message.hashtag??>
+                            <a href="/post/hashtag/${message.hashtag}">#${message.hashtag}</a>
                         </#if>
-                    </a>
-                </div>
-                <div class="card-footer text-muted container">
-                    <div class="d-flex justify-content-between flex-row align-items-center">
-                        <div>
-                            <a class="col align-self-center" href="/user/profile/${message.getAuthor().id}/${message.getAuthor().username}">Author: ${message.authorName}</a>
-                        </div>
-                        <div>
-                        <#if user??>
-                            <form class="d-flex flex-row justify-content-between align-items-center " method="post" action="/rate/${message.id}/${user.username}">
-                                <div class="form-group mx-2 ">
-                                    <select name="rate" size="1"  class="rounded">
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                    </select>
-                                </div>
-                                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-primary">Confirm</button>
-                                </div>
-                            </form>
-                        </#if>
-                        </div>
                     </div>
+                    <#if message.filename??>
+                        <img src="/img/${message.filename}" class="card-img-top">
+                    </#if>
+                    <div>
+                        <span class="mainText" style="margin-top: 10px">${message.text}</span>
+                    </div>
+                    <div class="d-flex justify-content-between flex-row align-items-end">
+                        <a class="btn btn-primary ml-2 mt-4 mb-2 " href="/post/${message.id}"> Read full</a>
+                        <#if isAdmin>
+                            <a class="btn btn-primary ml-2 mt-4 mb-2" href="/user/profile/update/${message.id}">Edit</a>
+                        </#if>
+                        <a class="mb-2 mx-4" href="">
+                            <#if true>
+                                <i class="fa-regular fa-heart"></i>
+                            <#else>
+                                <i class="fa-solid fa-heart"></i
+                            </#if>
+                        </a>
+                    </div>
+                    <div class="card-footer text-muted container">
+                        <div class="d-flex justify-content-between flex-row align-items-center">
+                            <div>
+                                <a class="col align-self-center" href="/user/profile/${message.getAuthor().id}/${message.getAuthor().username}">Author: ${message.authorName}</a>
+                            </div>
+                            <div>
+                                <#if user??>
+                                    <form class="d-flex flex-row justify-content-between align-items-center " method="post" action="/rate/${message.id}/${user.username}">
+                                        <div class="form-group mx-2 ">
+                                            <select name="rate" size="1" class="rounded">
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
+                                        </div>
+                                        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-primary">Confirm</button>
+                                        </div>
+                                    </form>
+                                </#if>
+                            </div>
+                        </div>
 
-                    <#if user??>
+                        <#if user??>
                             <div class="form-group mt-3">
                                 <form method="post" action="/post/add/comment/${message.id}" enctype="multipart/form-data">
                                     <div class="form-group" style="width:  100%;height: 100%;">
                                         <label style="width:  100%;height: 100%;">
-                        <textarea required minlength="5" maxlength="255"  type="text" class="form-control" name="text" style="width:  100%;
+                        <textarea required minlength="5" maxlength="255" type="text" class="form-control" name="text" style="width:  100%;
                             height: 100%;
                             padding: 5px 10px 5px 10px;
                             border:1px solid #999;
@@ -102,12 +123,102 @@
                                 </form>
                             </div>
 
-                    </#if>
+                        </#if>
 
                     </div>
-            </div>
+                </div>
+            <#else>
+                No posts
+            </#list>
         <#else>
-            No message
-        </#list>
+            <#list messages as message>
+                <div class="card my-3">
+                    <h1 class="title"> ${message.name} </h1>
+                    <a>Средний рейтинг: ${message.averageRate} звезд</a>
+                    <div>
+                        <a class="topic" href="/post/topic/${message.tag}">${message.tag}</a>
+                        <#if message.hashtag??>
+                            <a href="/post/hashtag/${message.hashtag}">#${message.hashtag}</a>
+                        </#if>
+                    </div>
+                    <#if message.filename??>
+                        <img src="/img/${message.filename}" class="card-img-top">
+                    </#if>
+                    <div>
+                        <span class="mainText" style="margin-top: 10px">${message.text}</span>
+                    </div>
+                    <div class="d-flex justify-content-between flex-row align-items-end">
+                        <a class="btn btn-primary ml-2 mt-4 mb-2 " href="/post/${message.id}">Читать полностью</a>
+                        <#if isAdmin>
+                            <a class="btn btn-primary ml-2 mt-4 mb-2"
+                               href="/user/profile/update/${message.id}">Изменить</a>
+                        </#if>
+                        <a class="mb-2 mx-4" href="">
+                            <#if true>
+                                <i class="fa-regular fa-heart"></i>
+                            <#else>
+                                <i class="fa-solid fa-heart"></i
+                            </#if>
+                        </a>
+                    </div>
+                    <div class="card-footer text-muted container">
+                        <div class="d-flex justify-content-between flex-row align-items-center">
+                            <div>
+                                <a class="col align-self-center"
+                                   href="/user/profile/${message.getAuthor().id}/${message.getAuthor().username}">Автор: ${message.authorName}</a>
+                            </div>
+                            <div>
+                                <#if user??>
+                                    <form class="d-flex flex-row justify-content-between align-items-center "
+                                          method="post" action="/rate/${message.id}/${user.username}">
+                                        <div class="form-group mx-2 ">
+                                            <select name="rate" size="1" class="rounded">
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
+                                        </div>
+                                        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-primary">Подтвердить</button>
+                                        </div>
+                                    </form>
+                                </#if>
+                            </div>
+                        </div>
+
+                        <#if user??>
+                            <div class="form-group mt-3">
+                                <form method="post" action="/post/add/comment/${message.id}"
+                                      enctype="multipart/form-data">
+                                    <div class="form-group" style="width:  100%;height: 100%;">
+                                        <label style="width:  100%;height: 100%;">
+                        <textarea required minlength="5" maxlength="255" type="text" class="form-control" name="text"
+                                  style="width:  100%;
+                            height: 100%;
+                            padding: 5px 10px 5px 10px;
+                            border:1px solid #999;
+                            font-size:16px;
+                            font-family: Tacoma,serif"
+                                  placeholder="Введите ваш комментарий"></textarea>
+                                        </label>
+                                    </div>
+                                    <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary">Добавить</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </#if>
+
+                    </div>
+                </div>
+            <#else>
+                Нет постов
+            </#list>
+        </#if>
     </div>
 </@c.page>

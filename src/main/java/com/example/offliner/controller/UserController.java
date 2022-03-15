@@ -34,7 +34,10 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
-    public String userList(Model model) {
+    public String userList(@AuthenticationPrincipal User user, Model model) {
+
+        boolean userChoice = Objects.equals(user.getChoice(), "ENG");
+        model.addAttribute("lang", userChoice);
         model.addAttribute("users", userRepo.findAll());
 
         return "userList";
@@ -42,7 +45,9 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("{user}")
-    public String userEditForm(@PathVariable User user, Model model) {
+    public String userEditForm(@PathVariable User user, @AuthenticationPrincipal User user1, Model model) {
+        boolean userChoice = Objects.equals(user1.getChoice(), "ENG");
+        model.addAttribute("lang", userChoice);
         model.addAttribute("user", user);
         model.addAttribute("roles", Role.values());
 
@@ -80,37 +85,43 @@ public class UserController {
         Iterable<Message> messages = messageRepo.findAll();
         ArrayList<Message> messages1 = new ArrayList<>();
         Integer counter = 0;
-        for(Message message:messages){
-            if(Objects.equals(message.getAuthor().getUsername(), user.getUsername())){
+        for (Message message : messages) {
+            if (Objects.equals(message.getAuthor().getUsername(), user.getUsername())) {
                 messages1.add(message);
                 counter++;
             }
         }
-        for(Message message : messages){
+        for (Message message : messages) {
             message.setAverageRate(rateService.calcAverageRate(message));
         }
         Collections.reverse(messages1);
-        model.addAttribute("countOfPosts",counter);
+        boolean userChoice = Objects.equals(user.getChoice(), "ENG");
+        model.addAttribute("lang", userChoice);
+        model.addAttribute("countOfPosts", counter);
         model.addAttribute("user", user);
-        model.addAttribute("aboutMyself",user.getAboutMyself());
-        model.addAttribute("messages",messages1);
+        model.addAttribute("aboutMyself", user.getAboutMyself());
+        model.addAttribute("messages", messages1);
 
         return "profile";
     }
 
     @GetMapping("/profile/{username}/settings")
     public String settings(
-            Model model, @PathVariable String username
-    ){
+            Model model, @PathVariable String username, @AuthenticationPrincipal User userCurrent
+    ) {
+
         User user = userRepo.findByUsername(username);
+        boolean userChoice = Objects.equals(userCurrent.getChoice(), "ENG");
+        model.addAttribute("lang", userChoice);
+        model.addAttribute("userChoice", user.getChoice());
         model.addAttribute("username", user.getUsername());
         model.addAttribute("email", user.getEmail());
-        model.addAttribute("aboutMyself",user.getAboutMyself());
-        model.addAttribute("linkFacebook",user.getLinkFacebook());
-        model.addAttribute("linkGoogle",user.getLinkGoogle());
-        model.addAttribute("linkYoutube",user.getLinkYoutube());
-        model.addAttribute("linkDribble",user.getLinkDribble());
-        model.addAttribute("linkLinkedIn",user.getLinkLinkedIn());
+        model.addAttribute("aboutMyself", user.getAboutMyself());
+        model.addAttribute("linkFacebook", user.getLinkFacebook());
+        model.addAttribute("linkGoogle", user.getLinkGoogle());
+        model.addAttribute("linkYoutube", user.getLinkYoutube());
+        model.addAttribute("linkDribble", user.getLinkDribble());
+        model.addAttribute("linkLinkedIn", user.getLinkLinkedIn());
         return "settings";
     }
 
@@ -120,6 +131,7 @@ public class UserController {
             @RequestParam String password,
             @RequestParam String email,
             @RequestParam String aboutMyself,
+            @RequestParam String userChoice,
             @RequestParam String linkFacebook,
             @RequestParam String linkGoogle,
             @RequestParam String linkYoutube,
@@ -129,7 +141,7 @@ public class UserController {
 
     ) throws IOException {
         User user = userRepo.findByUsername(username);
-        userSevice.updateProfile(user, password, email,aboutMyself,linkFacebook,linkGoogle,linkYoutube,linkDribble,linkLinkedIn,file);
+        userSevice.updateProfile(user, password, email, aboutMyself, userChoice, linkFacebook, linkGoogle, linkYoutube, linkDribble, linkLinkedIn, file);
 
         return "redirect:/user/profile";
     }
@@ -147,14 +159,16 @@ public class UserController {
                 counter++;
             }
         }
-        for(Message message : messages){
+        for (Message message : messages) {
             message.setAverageRate(rateService.calcAverageRate(message));
         }
         boolean admin;
         admin = user1.isAdmin();
         Collections.reverse(messages1);
-        model.addAttribute("countOfPosts",counter);
-        model.addAttribute("admin",admin);
+        boolean userChoice = Objects.equals(user1.getChoice(), "ENG");
+        model.addAttribute("lang", userChoice);
+        model.addAttribute("countOfPosts", counter);
+        model.addAttribute("admin", admin);
         model.addAttribute("user", user);
         model.addAttribute("messages", messages1);
         return "userProfile";

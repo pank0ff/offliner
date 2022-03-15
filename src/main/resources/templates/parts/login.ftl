@@ -16,7 +16,16 @@
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label">Email:</label>
                 <div class="col-sm-6">
-                    <input type="email" name="email" class="form-control" placeholder="some@some.com" />
+                    <input type="email" name="email" class="form-control" placeholder="some@some.com"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Language of site:</label>
+                <div class="col-sm-6">
+                    <select name="choice" size="1" class="rounded form-control ">
+                        <option value="ENG">ENGLISH</option>
+                        <option value="RU">РУССКИЙ</option>
+                    </select>
                 </div>
             </div>
         </#if>

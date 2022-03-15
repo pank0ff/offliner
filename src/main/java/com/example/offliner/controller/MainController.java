@@ -45,7 +45,13 @@ public class MainController {
     private String uploadPath;
 
     @GetMapping("/")
-    public String greeting(Model model) {
+    public String greeting(Model model, @AuthenticationPrincipal User user) {
+        boolean userChoice = true;
+        if (user != null) {
+            userChoice = Objects.equals(user.getChoice(), "ENG");
+        }
+        model.addAttribute("lang", userChoice);
+        model.addAttribute("user", user);
         return "greeting";
     }
 
@@ -222,6 +228,16 @@ public class MainController {
                 model.addAttribute("messages", messages2);
                 break;
         }
+        boolean userChoice = true;
+        if (user != null) {
+            userChoice = Objects.equals(user.getChoice(), "ENG");
+        }
+        boolean isAdmin = false;
+        if (user != null) {
+            isAdmin = user.isAdmin();
+        }
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("lang", userChoice);
         model.addAttribute("filter", filter);
         model.addAttribute("user", user);
         return "main";
@@ -410,6 +426,16 @@ public class MainController {
                 model.addAttribute("messages", messages2);
                 break;
         }
+        boolean userChoice = true;
+        if (user != null) {
+            userChoice = Objects.equals(user.getChoice(), "ENG");
+        }
+        boolean isAdmin = false;
+        if (user != null) {
+            isAdmin = user.isAdmin();
+        }
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("lang", userChoice);
         model.addAttribute("countOfPosts", counter);
         model.addAttribute("user", user);
         model.addAttribute("aboutMyself", user.getAboutMyself());
@@ -603,7 +629,16 @@ public class MainController {
                 model.addAttribute("messages", messages2);
                 break;
         }
-
+        boolean userChoice = true;
+        if (user != null) {
+            userChoice = Objects.equals(user.getChoice(), "ENG");
+        }
+        boolean isAdmin = false;
+        if (user != null) {
+            isAdmin = user.isAdmin();
+        }
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("lang", userChoice);
         model.addAttribute("countOfPosts", counter);
         model.addAttribute("admin", admin);
         model.addAttribute("user", user);
@@ -622,6 +657,7 @@ public class MainController {
     ) throws IOException {
         User user = userRepo.findByUsername(username);
         Message message = new Message(text, tag,name,hashtag, user);
+
 
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadPath);
@@ -652,11 +688,15 @@ public class MainController {
         Message message = messageRepo.findById(id);
         List<Comment> comments = commentRepo.findByMessageId(id);
         Collections.reverse(comments);
-        for(Message message1 : messages){
+        for (Message message1 : messages) {
             message1.setAverageRate(rateService.calcAverageRate(message1));
         }
-        model.addAttribute("user",user);
-        model.addAttribute("comments",comments);
+        boolean userChoice = Objects.equals(user.getChoice(), "ENG");
+        boolean isAdmin = user.isAdmin();
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("lang", userChoice);
+        model.addAttribute("user", user);
+        model.addAttribute("comments", comments);
         model.addAttribute("message", message);
         return "post";
     }
@@ -715,44 +755,54 @@ public class MainController {
     }
 
     @GetMapping("/user/profile/update/{id}")
-    public String postUpdateForm(@PathVariable Integer id, Model model) {
+    public String postUpdateForm(@PathVariable Integer id, Model model, @AuthenticationPrincipal User user) {
         Message message = messageRepo.findById(id);
 
-
+        boolean userChoice = Objects.equals(user.getChoice(), "ENG");
+        model.addAttribute("lang", userChoice);
         model.addAttribute("message", message);
         return "editMess";
     }
+
     @PostMapping("/user/profile/update/{id}/delete")
-    public String deletePost(@PathVariable Integer id){
+    public String deletePost(@PathVariable Integer id) {
         Message message = messageRepo.findById(id);
         messageRepo.delete(message);
         return "redirect:/user/profile";
     }
 
     @GetMapping("/post/hashtag/{hashtag}")
-    public String allByHashtag(@PathVariable String hashtag,Model model){
+    public String allByHashtag(@PathVariable String hashtag, Model model, @AuthenticationPrincipal User user) {
         List<Message> messages = messageRepo.findAll();
         messages = messageRepo.findByHashtag(hashtag);
         Collections.reverse(messages);
-        for(Message message : messages){
+        for (Message message : messages) {
             message.setAverageRate(rateService.calcAverageRate(message));
         }
-        model.addAttribute("messages",messages);
-        model.addAttribute("hashtag",hashtag);
+        boolean userChoice = Objects.equals(user.getChoice(), "ENG");
+        boolean isAdmin = user.isAdmin();
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("lang", userChoice);
+        model.addAttribute("messages", messages);
+        model.addAttribute("hashtag", hashtag);
 
         return "allByTag";
     }
 
     @GetMapping("/post/topic/{topic}")
-    public String allByTopic(@PathVariable String topic,Model model){
+    public String allByTopic(@PathVariable String topic, Model model, @AuthenticationPrincipal User user) {
         List<Message> messages = messageRepo.findAll();
         messages = messageRepo.findByTag(topic);
         Collections.reverse(messages);
-        for(Message message : messages){
+        for (Message message : messages) {
             message.setAverageRate(rateService.calcAverageRate(message));
         }
-        model.addAttribute("messages",messages);
-        model.addAttribute("topic",topic);
+        boolean isAdmin = user.isAdmin();
+        boolean userChoice = Objects.equals(user.getChoice(), "ENG");
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("lang", userChoice);
+        model.addAttribute("messages", messages);
+        model.addAttribute("topic", topic);
         return "byTopic";
     }
 }

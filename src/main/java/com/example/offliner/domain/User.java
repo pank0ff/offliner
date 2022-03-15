@@ -4,9 +4,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -27,6 +26,7 @@ public class User implements UserDetails {
     private String linkYoutube;
     private String linkDribble;
     private String linkLinkedIn;
+    private String choice;
 
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
@@ -36,6 +36,10 @@ public class User implements UserDetails {
 
     public boolean isAdmin() {
         return roles.contains(Role.ADMIN);
+    }
+
+    public boolean isENG(String choice) {
+        return Objects.equals(choice, "ENG");
     }
 
     public Long getId() {
@@ -77,6 +81,10 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
+    }
+
+    public boolean isEng(String userChoice) {
+        return Objects.equals(userChoice, "ENG");
     }
 
     public String getPassword() {
@@ -173,5 +181,13 @@ public class User implements UserDetails {
 
     public void setLinkLinkedIn(String linkLinkedIn) {
         this.linkLinkedIn = linkLinkedIn;
+    }
+
+    public String getChoice() {
+        return choice;
+    }
+
+    public void setChoice(String choice) {
+        this.choice = choice;
     }
 }

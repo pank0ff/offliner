@@ -1,8 +1,7 @@
 package com.example.offliner.service;
 
-import com.example.offliner.domain.Message;
-import com.example.offliner.repos.UserRepo;
 import com.example.offliner.domain.User;
+import com.example.offliner.repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,8 +29,9 @@ public class UserSevice implements UserDetailsService {
     }
 
 
-    public void updateProfile(User user, String password, String email, String aboutYourself,String linkFacebook,String linkGoogle,String linkYoutube,String linkDribble,String linkLinkedIn, MultipartFile file) throws IOException {
+    public void updateProfile(User user, String password, String email, String aboutYourself, String userChoice, String linkFacebook, String linkGoogle, String linkYoutube, String linkDribble, String linkLinkedIn, MultipartFile file) throws IOException {
         String userEmail = user.getEmail();
+        String choice = user.getChoice();
         String aboutYourself1 = user.getAboutMyself();
         String linkFacebook1 = user.getLinkFacebook();
         String linkGoogle1 = user.getLinkGoogle();
@@ -42,6 +42,11 @@ public class UserSevice implements UserDetailsService {
                 (aboutYourself1 != null && !aboutYourself1.equals(aboutYourself));
         if (isAboutMyselfChanged) {
             user.setAboutMyself(aboutYourself);
+        }
+        boolean isUserChoiceChanged = (userChoice != null && !userChoice.equals(choice)) ||
+                (choice != null && !choice.equals(userChoice));
+        if (isUserChoiceChanged) {
+            user.setChoice(userChoice);
         }
         boolean isEmailChanged = (email != null && !email.equals(userEmail)) ||
                 (userEmail != null && !userEmail.equals(email));
