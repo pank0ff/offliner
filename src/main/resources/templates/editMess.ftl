@@ -54,7 +54,11 @@
         </form>
         <form method="post" action="/user/profile/update/${message.id}/delete">
             <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-            <button class="btn btn-danger" type="submit">Delete</button>
+            <#if theme>
+                <button class="btn btn-danger mt-5" type="submit">Delete</button>
+            <#else>
+                <button style="filter: invert()" class="btn btn-danger mt-5" type="submit">Delete</button>
+            </#if>
         </form>
     <#else>
         <form method="post" action="/user/profile/update/${message.id}" enctype="multipart/form-data">
@@ -110,7 +114,11 @@
         </form>
         <form method="post" action="/user/profile/update/${message.id}/delete">
             <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-            <button class="btn btn-danger" type="submit">Удалить</button>
+            <#if theme>
+                <button class="btn btn-danger mt-5" type="submit">Удалить</button>
+            <#else>
+                <button class="btn btn-danger mt-5" style="filter: invert()" type="submit">Удалить</button>
+            </#if>
         </form>
     </#if>
 </@c.page>
