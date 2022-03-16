@@ -29,9 +29,10 @@ public class UserSevice implements UserDetailsService {
     }
 
 
-    public void updateProfile(User user, String password, String email, String aboutYourself, String userChoice, String linkFacebook, String linkGoogle, String linkYoutube, String linkDribble, String linkLinkedIn, MultipartFile file) throws IOException {
+    public void updateProfile(User user, String password, String email, String aboutYourself, String userChoice, String theme, String linkFacebook, String linkGoogle, String linkYoutube, String linkDribble, String linkLinkedIn, MultipartFile file) throws IOException {
         String userEmail = user.getEmail();
         String choice = user.getChoice();
+        String userTheme = user.getTheme();
         String aboutYourself1 = user.getAboutMyself();
         String linkFacebook1 = user.getLinkFacebook();
         String linkGoogle1 = user.getLinkGoogle();
@@ -42,6 +43,11 @@ public class UserSevice implements UserDetailsService {
                 (aboutYourself1 != null && !aboutYourself1.equals(aboutYourself));
         if (isAboutMyselfChanged) {
             user.setAboutMyself(aboutYourself);
+        }
+        boolean isThemeChanged = (theme != null && !theme.equals(userTheme)) ||
+                (userTheme != null && !userTheme.equals(theme));
+        if (isThemeChanged) {
+            user.setTheme(theme);
         }
         boolean isUserChoiceChanged = (userChoice != null && !userChoice.equals(choice)) ||
                 (choice != null && !choice.equals(userChoice));

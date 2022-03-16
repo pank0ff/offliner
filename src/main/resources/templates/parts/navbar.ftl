@@ -1,6 +1,9 @@
 <#include "security.ftl">
 <#import "login.ftl" as l>
-
+<#if isLight>
+<#else>
+    <div style="background-color:white ">
+</#if>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/">OFFliner</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -70,3 +73,7 @@
         <@l.logout />
     </div>
 </nav>
+<#if isLight>
+<#else>
+    </div>
+</#if>

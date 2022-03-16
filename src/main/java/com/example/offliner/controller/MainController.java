@@ -47,9 +47,14 @@ public class MainController {
     @GetMapping("/")
     public String greeting(Model model, @AuthenticationPrincipal User user) {
         boolean userChoice = true;
+        boolean theme = true;
         if (user != null) {
             userChoice = Objects.equals(user.getChoice(), "ENG");
         }
+        if (user != null) {
+            theme = Objects.equals(user.getTheme(), "LIGHT");
+        }
+        model.addAttribute("theme", theme);
         model.addAttribute("lang", userChoice);
         model.addAttribute("user", user);
         return "greeting";
@@ -236,6 +241,12 @@ public class MainController {
         if (user != null) {
             isAdmin = user.isAdmin();
         }
+        boolean theme = true;
+        if (user != null) {
+            theme = Objects.equals(user.getTheme(), "LIGHT");
+            ;
+        }
+        model.addAttribute("theme", theme);
         model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("lang", userChoice);
         model.addAttribute("filter", filter);
@@ -434,6 +445,12 @@ public class MainController {
         if (user != null) {
             isAdmin = user.isAdmin();
         }
+        boolean theme = true;
+        if (user != null) {
+            theme = Objects.equals(user.getTheme(), "LIGHT");
+            ;
+        }
+        model.addAttribute("theme", theme);
         model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("lang", userChoice);
         model.addAttribute("countOfPosts", counter);
@@ -637,6 +654,11 @@ public class MainController {
         if (user != null) {
             isAdmin = user.isAdmin();
         }
+        boolean theme = true;
+        if (user != null) {
+            theme = Objects.equals(user.getTheme(), "LIGHT");
+        }
+        model.addAttribute("theme", theme);
         model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("lang", userChoice);
         model.addAttribute("countOfPosts", counter);
@@ -693,6 +715,8 @@ public class MainController {
         }
         boolean userChoice = Objects.equals(user.getChoice(), "ENG");
         boolean isAdmin = user.isAdmin();
+        boolean theme = Objects.equals(user.getTheme(), "LIGHT");
+        model.addAttribute("theme", theme);
         model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("lang", userChoice);
         model.addAttribute("user", user);
@@ -759,6 +783,8 @@ public class MainController {
         Message message = messageRepo.findById(id);
 
         boolean userChoice = Objects.equals(user.getChoice(), "ENG");
+        boolean theme = Objects.equals(user.getTheme(), "LIGHT");
+        model.addAttribute("theme", theme);
         model.addAttribute("lang", userChoice);
         model.addAttribute("message", message);
         return "editMess";
@@ -781,6 +807,8 @@ public class MainController {
         }
         boolean userChoice = Objects.equals(user.getChoice(), "ENG");
         boolean isAdmin = user.isAdmin();
+        boolean theme = Objects.equals(user.getTheme(), "LIGHT");
+        model.addAttribute("theme", theme);
         model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("lang", userChoice);
         model.addAttribute("messages", messages);
@@ -799,6 +827,8 @@ public class MainController {
         }
         boolean isAdmin = user.isAdmin();
         boolean userChoice = Objects.equals(user.getChoice(), "ENG");
+        boolean theme = Objects.equals(user.getTheme(), "LIGHT");
+        model.addAttribute("theme", theme);
         model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("lang", userChoice);
         model.addAttribute("messages", messages);

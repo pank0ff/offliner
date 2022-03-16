@@ -31,6 +31,15 @@
                     </div>
                 </div>
                 <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Chosen theme:</label>
+                    <div class="col-sm-6">
+                        <select name="theme" size="1" class="rounded">
+                            <option value="LIGHT">LIGHT</option>
+                            <option value="DARK">DARK</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Facebook</label>
                     <div class="col-sm-6">
                         <input maxlength="255" type="url" name="linkFacebook" class="form-control"
@@ -76,9 +85,21 @@
 
             <form method="post" action="/user/profile/${username}/settings/delete">
                 <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-                <button class="btn btn-danger mt-5" type="submit">Delete</button>
+                <#if theme>
+                    <button class="btn btn-danger mt-5" type="submit">Delete</button>
+                <#else>
+                    <button style="filter: invert()" class="btn btn-danger mt-5" type="submit">Delete</button>
+                </#if>
             </form>
-            <div><h5><b style="color: red">To see that the changes have taken effect re-login.</b></h5></div>
+            <#if theme>
+                <div>
+                    <h5><b style="color: red">To see that the changes have taken effect re-login.</b></h5>
+                </div>
+            <#else>
+                <div style="filter:invert()">
+                    <h5><b style="color: red">To see that the changes have taken effect re-login.</b></h5>
+                </div>
+            </#if>
         <#else>
             <form method="post" action="/user/profile/${username}/settings/" enctype="multipart/form-data">
                 <div class="form-group row">
@@ -107,6 +128,15 @@
                         <select name="userChoice" size="1" class="rounded">
                             <option value="ENG">ENGLISH</option>
                             <option value="RU">РУССКИЙ</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Выбранная тема:</label>
+                    <div class="col-sm-6">
+                        <select name="theme" size="1" class="rounded">
+                            <option value="LIGHT">СВЕТЛАЯ</option>
+                            <option value="DARK">ТЁМНАЯ</option>
                         </select>
                     </div>
                 </div>
@@ -157,12 +187,24 @@
                 <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                 <button class="btn btn-primary" type="submit">Сохранить</button>
             </form>
-
             <form method="post" action="/user/profile/${username}/settings/delete">
                 <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-                <button class="btn btn-danger mt-5" type="submit">Удалить</button>
+                <#if theme>
+                    <button class="btn btn-danger mt-5" type="submit">Удалить</button>
+                <#else>
+                    <button class="btn btn-danger mt-5" style="filter: invert()" type="submit">Удалить</button>
+                </#if>
             </form>
-            <div><h5><b style="color: red">Чтобы увидеть изменения в вашем профиле перезайдите на ваш аккаунт.</b></h5>
-            </div>
+            <#if theme>
+                <div>
+                    <h5><b style="color: red">Чтобы увидеть изменения в вашем профиле перезайдите на ваш аккаунт.</b>
+                    </h5>
+                </div>
+            <#else>
+                <div style="filter: invert()">
+                    <h5><b style="color: red">Чтобы увидеть изменения в вашем профиле перезайдите на ваш аккаунт.</b>
+                    </h5>
+                </div>
+            </#if>
         </#if>
 </@c.page>

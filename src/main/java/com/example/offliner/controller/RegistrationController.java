@@ -24,7 +24,7 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    public String addUser(@RequestParam String choice, User user, Map<String, Object> model) {
+    public String addUser(@RequestParam String choice, @RequestParam String theme, User user, Map<String, Object> model) {
         User userFromDb = userRepo.findByUsername(user.getUsername());
 
         if (userFromDb != null) {
@@ -35,6 +35,7 @@ public class RegistrationController {
         user.setDateOfRegistration(date.toString().substring(4));
         user.setActive(true);
         user.setRoles(Collections.singleton(Role.USER));
+        user.setTheme(theme);
         user.setChoice(choice);
         userRepo.save(user);
 

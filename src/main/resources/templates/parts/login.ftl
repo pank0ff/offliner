@@ -28,6 +28,15 @@
                     </select>
                 </div>
             </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Theme of site:</label>
+                <div class="col-sm-6">
+                    <select name="theme" size="1" class="rounded form-control ">
+                        <option value="LIGHT">LIGHT</option>
+                        <option value="DARK">DARK</option>
+                    </select>
+                </div>
+            </div>
         </#if>
         <input type="hidden" name="_csrf" value="${_csrf.token}" />
         <#if !isRegisterForm><a href="/registration">Add new user</a></#if>

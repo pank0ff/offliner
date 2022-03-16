@@ -37,6 +37,8 @@ public class UserController {
     public String userList(@AuthenticationPrincipal User user, Model model) {
 
         boolean userChoice = Objects.equals(user.getChoice(), "ENG");
+        boolean theme = Objects.equals(user.getTheme(), "LIGHT");
+        model.addAttribute("theme", theme);
         model.addAttribute("lang", userChoice);
         model.addAttribute("users", userRepo.findAll());
 
@@ -47,6 +49,8 @@ public class UserController {
     @GetMapping("{user}")
     public String userEditForm(@PathVariable User user, @AuthenticationPrincipal User user1, Model model) {
         boolean userChoice = Objects.equals(user1.getChoice(), "ENG");
+        boolean theme = Objects.equals(user1.getTheme(), "LIGHT");
+        model.addAttribute("theme", theme);
         model.addAttribute("lang", userChoice);
         model.addAttribute("user", user);
         model.addAttribute("roles", Role.values());
@@ -96,6 +100,8 @@ public class UserController {
         }
         Collections.reverse(messages1);
         boolean userChoice = Objects.equals(user.getChoice(), "ENG");
+        boolean theme = Objects.equals(user.getTheme(), "LIGHT");
+        model.addAttribute("theme", theme);
         model.addAttribute("lang", userChoice);
         model.addAttribute("countOfPosts", counter);
         model.addAttribute("user", user);
@@ -112,6 +118,9 @@ public class UserController {
 
         User user = userRepo.findByUsername(username);
         boolean userChoice = Objects.equals(userCurrent.getChoice(), "ENG");
+        boolean theme = Objects.equals(userCurrent.getTheme(), "LIGHT");
+
+        model.addAttribute("theme", theme);
         model.addAttribute("lang", userChoice);
         model.addAttribute("userChoice", user.getChoice());
         model.addAttribute("username", user.getUsername());
@@ -132,6 +141,7 @@ public class UserController {
             @RequestParam String email,
             @RequestParam String aboutMyself,
             @RequestParam String userChoice,
+            @RequestParam String theme,
             @RequestParam String linkFacebook,
             @RequestParam String linkGoogle,
             @RequestParam String linkYoutube,
@@ -141,7 +151,7 @@ public class UserController {
 
     ) throws IOException {
         User user = userRepo.findByUsername(username);
-        userSevice.updateProfile(user, password, email, aboutMyself, userChoice, linkFacebook, linkGoogle, linkYoutube, linkDribble, linkLinkedIn, file);
+        userSevice.updateProfile(user, password, email, aboutMyself, userChoice, theme, linkFacebook, linkGoogle, linkYoutube, linkDribble, linkLinkedIn, file);
 
         return "redirect:/user/profile";
     }
@@ -166,6 +176,8 @@ public class UserController {
         admin = user1.isAdmin();
         Collections.reverse(messages1);
         boolean userChoice = Objects.equals(user1.getChoice(), "ENG");
+        boolean theme = Objects.equals(user1.getTheme(), "LIGHT");
+        model.addAttribute("theme", theme);
         model.addAttribute("lang", userChoice);
         model.addAttribute("countOfPosts", counter);
         model.addAttribute("admin", admin);

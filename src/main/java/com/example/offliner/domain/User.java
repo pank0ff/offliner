@@ -27,7 +27,7 @@ public class User implements UserDetails {
     private String linkDribble;
     private String linkLinkedIn;
     private String choice;
-
+    private String theme;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
@@ -40,6 +40,10 @@ public class User implements UserDetails {
 
     public boolean isENG(String choice) {
         return Objects.equals(choice, "ENG");
+    }
+
+    public boolean isLight(String theme) {
+        return Objects.equals(theme, "LIGHT");
     }
 
     public Long getId() {
@@ -189,5 +193,13 @@ public class User implements UserDetails {
 
     public void setChoice(String choice) {
         this.choice = choice;
+    }
+
+    public String getTheme() {
+        return theme;
+    }
+
+    public void setTheme(String theme) {
+        this.theme = theme;
     }
 }

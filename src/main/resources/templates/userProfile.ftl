@@ -6,106 +6,119 @@
             <div class="row no-gutters">
                 <div class="col-md-4 col-lg-4">
                     <#if user.avatarFilename??>
-                        <img src="/img/${user.avatarFilename}">
+                        <#if theme>
+                            <img src="/img/${user.avatarFilename}">
+                        <#else>
+                            <img style="filter: invert()" src="/img/${user.avatarFilename}">
+                        </#if>
                     <#else>
-                        <img src="https://hornews.com/upload/images/blank-avatar.jpg">
+                        <#if theme>
+                            <img src="https://hornews.com/upload/images/blank-avatar.jpg">
+                        <#else>
+                            <img style="filter:invert()" src="https://hornews.com/upload/images/blank-avatar.jpg">
+                        </#if>
                     </#if>
                 </div>
+                <#if theme>
                 <div class="col-md-8 col-lg-8">
-                <div class="d-flex flex-column">
-                    <div class="d-flex flex-row justify-content-between align-items-center p-5 bg-black text-white">
-                        <h3 class="display-5">${user.getUsername()}</h3>
-                        <#if user.getLinkFacebook()??>
-                            <a href="${user.getLinkFacebook()}">
-                                <i class="fa fa-facebook" ></i>
-                            </a>
+                    <#else>
+                    <div style="filter: invert()" class="col-md-8 col-lg-8">
                         </#if>
-                        <#if user.getLinkGoogle()??>
-                            <a href="${user.getLinkGoogle()}">
-                                <i class="fa fa-google" ></i>
-                            </a>
-                        </#if>
-                        <#if user.getLinkYoutube()??>
-                            <a href="${user.getLinkYoutube()}">
-                                <i class="fa fa-youtube-play" ></i>
-                            </a>
-                        </#if>
-                        <#if user.getLinkDribble()??>
-                            <a  href="${user.getLinkDribble()}">
-                                <i class="fa fa-dribbble"></i>
-                            </a>
-                        </#if>
-                        <#if user.getLinkLinkedIn()??>
-                            <a href="${user.getLinkLinkedIn()}">
-                                <i class="fa fa-linkedin" ></i>
-                            </a>
-                        </#if>
-                    </div>
+                        <div class="d-flex flex-column">
+                            <div class="d-flex flex-row justify-content-between align-items-center p-5 bg-black text-white">
+                                <h3 class="display-5">${user.getUsername()}</h3>
+                                <#if user.getLinkFacebook()??>
+                                    <a href="${user.getLinkFacebook()}">
+                                        <i class="fa fa-facebook" ></i>
+                                    </a>
+                                </#if>
+                                <#if user.getLinkGoogle()??>
+                                    <a href="${user.getLinkGoogle()}">
+                                        <i class="fa fa-google" ></i>
+                                    </a>
+                                </#if>
+                                <#if user.getLinkYoutube()??>
+                                    <a href="${user.getLinkYoutube()}">
+                                        <i class="fa fa-youtube-play" ></i>
+                                    </a>
+                                </#if>
+                                <#if user.getLinkDribble()??>
+                                    <a href="${user.getLinkDribble()}">
+                                        <i class="fa fa-dribbble"></i>
+                                    </a>
+                                </#if>
+                                <#if user.getLinkLinkedIn()??>
+                                    <a href="${user.getLinkLinkedIn()}">
+                                        <i class="fa fa-linkedin" ></i>
+                                    </a>
+                                </#if>
+                            </div>
 
-                    <div class="p-3 bg-blue text-white">
-                        <#if user.aboutMyself??>
-                            <h6> ${user.aboutMyself}</h6>
-                        </#if>
-                    </div>
+                            <div class="p-3 bg-blue text-white">
+                                <#if user.aboutMyself??>
+                                    <h6> ${user.aboutMyself}</h6>
+                                </#if>
+                            </div>
 
-                    <div class="d-flex flex-row text-white">
-                        <div class="p-3 bg-primary text-center skill-block">
-                            <h5>Posts:</h5>
-                            <h6>${countOfPosts}</h6>
-                        </div>
-                        <div class="p-3 bg-success text-center skill-block">
-                            <h5>Subscribers:</h5>
-                            <h6>132</h6>
-                        </div>
-                        <div class="p-3 bg-warning text-center skill-block">
-                            <h5>Subscriptions:</h5>
-                            <h6>54</h6>
+                            <div class="d-flex flex-row text-white">
+                                <div class="p-3 bg-primary text-center skill-block">
+                                    <h5>Posts:</h5>
+                                    <h6>${countOfPosts}</h6>
+                                </div>
+                                <div class="p-3 bg-success text-center skill-block">
+                                    <h5>Subscribers:</h5>
+                                    <h6>132</h6>
+                                </div>
+                                <div class="p-3 bg-warning text-center skill-block">
+                                    <h5>Subscriptions:</h5>
+                                    <h6>54</h6>
 
-                        </div>
-                        <div class="p-3 bg-danger text-center skill-block">
-                            <h5>Date of registration:</h5>
-                            <h6>${user.dateOfRegistration}</h6>
+                                </div>
+                                <div class="p-3 bg-danger text-center skill-block">
+                                    <h5>Date of registration:</h5>
+                                    <h6>${user.dateOfRegistration}</h6>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <#if admin>
+                        <a class="btn btn-primary  mt-1" href="/user/profile/${user.username}/settings">Settings</a>
+                    </#if>
                 </div>
             </div>
-            <#if admin>
-                <a class="btn btn-primary  mt-1" href="/user/profile/${user.username}/settings">Settings</a>
-            </#if>
-        </div>
-    </div>
 
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <form method="get" action="/user/profile/${user.username}/else" class="form-inline">
-                <input type="text" name="filter" class="form-control" value="${filter?ifExists}"
-                       placeholder="Search ">
-                <select name="choice" size="1" class="rounded form-control ml-2">
-                    <option value="1">Deep search</option>
-                    <option value="2">Post name</option>
-                    <option value="3">Comments</option>
-                    <option value="4">Topic</option>
-                    <option value="5">Hashtag</option>
-                    <option value="6">Text</option>
-                </select>
-                <select name="sortChoice" size="1" class="rounded form-control ml-1">
-                    <option value="1">Date(first earlier)</option>
-                    <option value="2">Date(first latest)</option>
-                </select>
-                <button type="submit" class="btn btn-primary mt-2">Search</button>
-            </form>
+        <div class="form-row ">
+            <div class="form-group col-md-6">
+                <form method="get" action="/user/profile/${user.id}" class="row d-flex flex-row">
+                    <input type="text" name="filter" class="form-control col-4" value="" placeholder="Search ">
+                    <select name="choice" size="1" class="rounded col-3 form-control ml-1">
+                        <option value="1">Deep search</option>
+                        <option value="2">Post name</option>
+                        <option value="3">Comments</option>
+                        <option value="4">Topic</option>
+                        <option value="5">Hashtag</option>
+                        <option value="6">Text</option>
+                    </select>
+                    <select name="sortChoice" size="1" class="col-3 rounded form-control ml-1">
+                        <option value="1">Date(first earlier)</option>
+                        <option value="2">Date(first latest)</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary mt-2 col-2">Search</button>
+                </form>
+            </div>
         </div>
-    </div>
-    <#if admin>
-        <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
-           aria-controls="collapseExample">
-            Add new post
-        </a>
-        <div class="collapse" id="collapseExample">
-            <div class="form-group mt-3">
-                <form method="post" action="/user/profile/add/${user.username}" enctype="multipart/form-data">
-                    <div class="form-group">
-                        <input required minlength="5" type="text" class="form-control" name="name" placeholder="Enter name of your post"/>
+        <#if admin>
+            <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button"
+               aria-expanded="false"
+               aria-controls="collapseExample">
+                Add post
+            </a>
+            <div class="collapse" id="collapseExample">
+                <div class="form-group mt-3">
+                    <form method="post" action="/user/profile/add/${user.username}" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <input required minlength="5" type="text" class="form-control" name="name"
+                                   placeholder="Enter name of your post"/>
                     </div>
                     <div class="form-group">
                         <select name="tag" size="1" class="rounded" >
@@ -227,81 +240,92 @@
             <div class="row no-gutters">
                 <div class="col-md-4 col-lg-4">
                     <#if user.avatarFilename??>
-                        <img src="/img/${user.avatarFilename}">
+                        <#if theme>
+                            <img src="/img/${user.avatarFilename}">
+                        <#else>
+                            <img style="filter: invert()" src="/img/${user.avatarFilename}">
+                        </#if>
                     <#else>
-                        <img src="https://hornews.com/upload/images/blank-avatar.jpg">
+                        <#if theme>
+                            <img src="https://hornews.com/upload/images/blank-avatar.jpg">
+                        <#else>
+                            <img style="filter:invert()" src="https://hornews.com/upload/images/blank-avatar.jpg">
+                        </#if>
                     </#if>
                 </div>
+                <#if theme>
                 <div class="col-md-8 col-lg-8">
-                    <div class="d-flex flex-column">
-                        <div class="d-flex flex-row justify-content-between align-items-center p-5 bg-black text-white">
-                            <h3 class="display-5">${user.getUsername()}</h3>
-                            <#if user.getLinkFacebook()??>
-                                <a href="${user.getLinkFacebook()}">
-                                    <i class="fa fa-facebook"></i>
-                                </a>
-                            </#if>
-                            <#if user.getLinkGoogle()??>
-                                <a href="${user.getLinkGoogle()}">
-                                    <i class="fa fa-google"></i>
-                                </a>
-                            </#if>
-                            <#if user.getLinkYoutube()??>
-                                <a href="${user.getLinkYoutube()}">
-                                    <i class="fa fa-youtube-play"></i>
-                                </a>
-                            </#if>
-                            <#if user.getLinkDribble()??>
-                                <a href="${user.getLinkDribble()}">
-                                    <i class="fa fa-dribbble"></i>
-                                </a>
-                            </#if>
-                            <#if user.getLinkLinkedIn()??>
-                                <a href="${user.getLinkLinkedIn()}">
-                                    <i class="fa fa-linkedin"></i>
-                                </a>
-                            </#if>
-                        </div>
-
-                        <div class="p-3 bg-blue text-white">
-                            <#if user.aboutMyself??>
-                                <h6> ${user.aboutMyself}</h6>
-                            </#if>
-                        </div>
-
-                        <div class="d-flex flex-row text-white">
-                            <div class="p-3 bg-primary text-center skill-block">
-                                <h5>Постов:</h5>
-                                <h6>${countOfPosts}</h6>
+                    <#else>
+                    <div style="filter: invert()" class="col-md-8 col-lg-8">
+                        </#if>
+                        <div class="d-flex flex-column">
+                            <div class="d-flex flex-row justify-content-between align-items-center p-5 bg-black text-white">
+                                <h3 class="display-5">${user.getUsername()}</h3>
+                                <#if user.getLinkFacebook()??>
+                                    <a href="${user.getLinkFacebook()}">
+                                        <i class="fa fa-facebook"></i>
+                                    </a>
+                                </#if>
+                                <#if user.getLinkGoogle()??>
+                                    <a href="${user.getLinkGoogle()}">
+                                        <i class="fa fa-google"></i>
+                                    </a>
+                                </#if>
+                                <#if user.getLinkYoutube()??>
+                                    <a href="${user.getLinkYoutube()}">
+                                        <i class="fa fa-youtube-play"></i>
+                                    </a>
+                                </#if>
+                                <#if user.getLinkDribble()??>
+                                    <a href="${user.getLinkDribble()}">
+                                        <i class="fa fa-dribbble"></i>
+                                    </a>
+                                </#if>
+                                <#if user.getLinkLinkedIn()??>
+                                    <a href="${user.getLinkLinkedIn()}">
+                                        <i class="fa fa-linkedin"></i>
+                                    </a>
+                                </#if>
                             </div>
-                            <div class="p-3 bg-success text-center skill-block">
-                                <h5>Подписчиков:</h5>
-                                <h6>132</h6>
-                            </div>
-                            <div class="p-3 bg-warning text-center skill-block">
-                                <h5>Подписок:</h5>
-                                <h6>54</h6>
 
+                            <div class="p-3 bg-blue text-white">
+                                <#if user.aboutMyself??>
+                                    <h6> ${user.aboutMyself}</h6>
+                                </#if>
                             </div>
-                            <div class="p-3 bg-danger text-center skill-block">
-                                <h5>Дата регистрации:</h5>
-                                <h6>${user.dateOfRegistration}</h6>
+
+                            <div class="d-flex flex-row text-white">
+                                <div class="p-3 bg-primary text-center skill-block">
+                                    <h5>Постов:</h5>
+                                    <h6>${countOfPosts}</h6>
+                                </div>
+                                <div class="p-3 bg-success text-center skill-block">
+                                    <h5>Подписчиков:</h5>
+                                    <h6>132</h6>
+                                </div>
+                                <div class="p-3 bg-warning text-center skill-block">
+                                    <h5>Подписки:</h5>
+                                    <h6>54</h6>
+
+                                </div>
+                                <div class="p-3 bg-danger text-center skill-block">
+                                    <h5>Дата регистрации:</h5>
+                                    <h6>${user.dateOfRegistration}</h6>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <#if admin>
+                        <a class="btn btn-primary  mt-1" href="/user/profile/${user.username}/settings">Настройки</a>
+                    </#if>
                 </div>
-                <#if admin>
-                    <a class="btn btn-primary  mt-1" href="/user/profile/${user.username}/settings">Настройки</a>
-                </#if>
             </div>
-        </div>
 
-        <div class="form-row">
+        <div class="form-row ">
             <div class="form-group col-md-6">
-                <form method="get" action="/user/profile/${user.username}/else" class="form-inline">
-                    <input type="text" name="filter" class="form-control" value="${filter?ifExists}"
-                           placeholder="Поиск ">
-                    <select name="choice" size="1" class="rounded form-control ml-2">
+                <form method="get" action="/user/profile/${user.id}" class="row d-flex flex-row">
+                    <input type="text" name="filter" class="form-control col-4" value="" placeholder="Поиск ">
+                    <select name="choice" size="1" class="rounded col-3 form-control ml-1">
                         <option value="1">Полный поиск</option>
                         <option value="2">Название постов</option>
                         <option value="3">Комментарии</option>
@@ -309,11 +333,11 @@
                         <option value="5">Хэш-теги</option>
                         <option value="6">Текст</option>
                     </select>
-                    <select name="sortChoice" size="1" class="rounded form-control ml-1">
+                    <select name="sortChoice" size="1" class="col-3 rounded form-control ml-1">
                         <option value="1">Дата(сначала ранние)</option>
                         <option value="2">Дата(сначала поздние)</option>
                     </select>
-                    <button type="submit" class="btn btn-primary mt-2">Поиск</button>
+                    <button type="submit" class="btn btn-primary mt-2 col-2">Поиск</button>
                 </form>
             </div>
         </div>
@@ -321,7 +345,7 @@
             <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button"
                aria-expanded="false"
                aria-controls="collapseExample">
-                Добавить новый пост
+                Добавить пост
             </a>
             <div class="collapse" id="collapseExample">
                 <div class="form-group mt-3">
