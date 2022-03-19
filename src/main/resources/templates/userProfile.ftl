@@ -7,9 +7,9 @@
                 <div class="col-md-4 col-lg-4">
                     <#if user.avatarFilename??>
                         <#if theme>
-                            <img src="/img/${user.avatarFilename}">
+                            <img src="${user.avatarFilename}">
                         <#else>
-                            <img style="filter: invert()" src="/img/${user.avatarFilename}">
+                            <img style="filter: invert()" src="${user.avatarFilename}">
                         </#if>
                     <#else>
                         <#if theme>
@@ -170,7 +170,7 @@
                         <a href="/post/hashtag/${message.hashtag}">#${message.hashtag}</a>
                     </#if></div>
                 <#if message.filename??>
-                    <img src="/img/${message.filename}" class="card-img-top">
+                    <img src="${message.filename}" class="card-img-top">
                 </#if>
                 <div >
                     <span class="mainText" style="margin-top: 10px">${message.text}</span>
@@ -241,9 +241,9 @@
                 <div class="col-md-4 col-lg-4">
                     <#if user.avatarFilename??>
                         <#if theme>
-                            <img src="/img/${user.avatarFilename}">
+                            <img src="${user.avatarFilename}">
                         <#else>
-                            <img style="filter: invert()" src="/img/${user.avatarFilename}">
+                            <img style="filter: invert()" src="${user.avatarFilename}">
                         </#if>
                     <#else>
                         <#if theme>
@@ -405,7 +405,7 @@
                             <a href="/post/hashtag/${message.hashtag}">#${message.hashtag}</a>
                         </#if></div>
                     <#if message.filename??>
-                        <img src="/img/${message.filename}" class="card-img-top">
+                        <img src="${message.filename}" class="card-img-top">
                     </#if>
                     <div>
                         <span class="mainText" style="margin-top: 10px">${message.text}</span>

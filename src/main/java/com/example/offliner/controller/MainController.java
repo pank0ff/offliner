@@ -1,5 +1,7 @@
 package com.example.offliner.controller;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.example.offliner.domain.Comment;
 import com.example.offliner.domain.Message;
 import com.example.offliner.domain.User;
@@ -43,6 +45,11 @@ public class MainController {
 
     @Value("${upload.path}")
     private String uploadPath;
+
+    Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
+            "cloud_name", "dwnzejl4h",
+            "api_key", "424976915584458",
+            "api_secret", "TlQsPJt2OHBBSJVzwe31u3zFqgY"));
 
     @GetMapping("/")
     public String greeting(Model model, @AuthenticationPrincipal User user) {
@@ -675,24 +682,16 @@ public class MainController {
             @RequestParam String name,
             @RequestParam String hashtag,
             @RequestParam String tag, Map<String, Object> model,
-            @RequestParam("file") MultipartFile file
+            @RequestParam MultipartFile file
     ) throws IOException {
         User user = userRepo.findByUsername(username);
-        Message message = new Message(text, tag,name,hashtag, user);
+        Message message = new Message(text, tag, name, hashtag, user);
 
-
-        if (file != null && !file.getOriginalFilename().isEmpty()) {
-            File uploadDir = new File(uploadPath);
-
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
-
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File(uploadPath + "/" + resultFilename));
-
+        if (file != null) {
+            File file1 = new File("src/main/resources/img.png");
+            file.transferTo(file1);
+            Map uploadResult = cloudinary.uploader().upload(file1, ObjectUtils.emptyMap());
+            String resultFilename = (String) uploadResult.get("url");
             message.setFilename(resultFilename);
         }
 
@@ -761,17 +760,12 @@ public class MainController {
             message.setTag(tag);
         }
         if (file != null && !file.getOriginalFilename().isEmpty()) {
-            File uploadDir = new File(uploadPath);
-
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
-
             String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File(uploadPath + "/" + resultFilename));
-
+            String resultFilename1 = uuidFile + "." + file.getOriginalFilename();
+            File file1 = new File(uploadPath + "/" + resultFilename1);
+            file.transferTo(file1);
+            Map uploadResult = cloudinary.uploader().upload(file1, ObjectUtils.emptyMap());
+            String resultFilename = (String) uploadResult.get("url");
             message.setFilename(resultFilename);
         }
         messageRepo.save(message);

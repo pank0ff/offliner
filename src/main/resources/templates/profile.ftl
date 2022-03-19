@@ -7,9 +7,9 @@
                 <div class="col-md-4 col-lg-4">
                     <#if user.avatarFilename??>
                         <#if theme>
-                            <img src="/img/${user.avatarFilename}">
+                            <img src="${user.avatarFilename}">
                         <#else>
-                            <img style="filter: invert()" src="/img/${user.avatarFilename}">
+                            <img style="filter: invert()" src="${user.avatarFilename}">
                         </#if>
                     <#else>
                         <#if theme>
@@ -132,7 +132,7 @@
                 </div>
                 <div class="form-group" style="width:  100%;height: 100%;">
                     <label style="width:  100%;height: 100%;">
-                        <textarea required minlength="5"  type="text" class="form-control" name="text" style="width:  100%;
+                        <textarea required minlength="5" type="text" class="form-control" name="text" style="width:  100%;
                             height: 100%;
                             padding: 5px 10px 5px 10px;
                             border:1px solid #999;
@@ -141,13 +141,13 @@
                                   placeholder="Enter your post"></textarea>
                     </label>
                 </div>
-                <div class="form-group">
-                    <div class="custom-file">
-                        <input type="file" name="file" id="customFile">
-                        <label class="custom-file-label" for="customFile">Choose file</label>
+                    <div class="form-group">
+                        <div class="custom-file">
+                            <input type="file" name="file" id="customFile">
+                            <label class="custom-file-label" for="customFile">Choose file</label>
+                        </div>
                     </div>
-                </div>
-                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                    <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">Add</button>
                 </div>
@@ -164,7 +164,7 @@
                         <a href="/post/hashtag/${message.hashtag}">#${message.hashtag}</a>
                     </#if></div>
                 <#if message.filename??>
-                    <img src="/img/${message.filename}" class="card-img-top">
+                    <img src="${message.filename}" class="card-img-top">
                 </#if>
                 <div >
                     <span class="mainText" style="margin-top: 10px">${message.text}</span>
@@ -228,9 +228,9 @@
 
                     <#if user.avatarFilename??>
                         <#if theme>
-                            <img src="/img/${user.avatarFilename}">
+                            <img src="${user.avatarFilename}">
                         <#else>
-                            <img style="filter: invert()" src="/img/${user.avatarFilename}">
+                            <img style="filter: invert()" src="${user.avatarFilename}">
                         </#if>
                     <#else>
                         <#if theme>
@@ -386,7 +386,7 @@
                             <a href="/post/hashtag/${message.hashtag}">#${message.hashtag}</a>
                         </#if></div>
                     <#if message.filename??>
-                        <img src="/img/${message.filename}" class="card-img-top">
+                        <img src="${message.filename}" class="card-img-top">
                     </#if>
                     <div>
                         <span class="mainText" style="margin-top: 10px">${message.text}</span>

@@ -1,5 +1,7 @@
 package com.example.offliner.service;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.example.offliner.domain.User;
 import com.example.offliner.repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.UUID;
+import java.util.Map;
 
 @Service
 public class UserSevice implements UserDetailsService {
@@ -39,6 +41,11 @@ public class UserSevice implements UserDetailsService {
         String linkYoutube1 = user.getLinkYoutube();
         String linkDribble1 = user.getLinkDribble();
         String linkLinkedIn1 = user.getLinkLinkedIn();
+        Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
+                "cloud_name", "dwnzejl4h",
+                "api_key", "424976915584458",
+                "api_secret", "TlQsPJt2OHBBSJVzwe31u3zFqgY"));
+
         boolean isAboutMyselfChanged = (aboutYourself != null && !aboutYourself.equals(aboutYourself1)) ||
                 (aboutYourself1 != null && !aboutYourself1.equals(aboutYourself));
         if (isAboutMyselfChanged) {
@@ -88,16 +95,10 @@ public class UserSevice implements UserDetailsService {
             user.setPassword(password);
         }
         if (file != null && !file.getOriginalFilename().isEmpty()) {
-            File uploadDir = new File(uploadPath);
-
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
-
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File(uploadPath + "/" + resultFilename));
+            File file1 = new File("src/main/resources/img.png");
+            file.transferTo(file1);
+            Map uploadResult = cloudinary.uploader().upload(file1, ObjectUtils.emptyMap());
+            String resultFilename = (String) uploadResult.get("url");
 
             user.setAvatarFilename(resultFilename);
         }

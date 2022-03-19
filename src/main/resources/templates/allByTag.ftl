@@ -18,7 +18,7 @@
                             <a>#${message.hashtag}</a>
                         </#if></div>
                     <#if message.filename??>
-                        <img src="/img/${message.filename}" class="card-img-top">
+                        <img src="${message.filename}" class="card-img-top">
                     </#if>
                     <div>
                         <span class="mainText" style="margin-top: 10px">${message.text}</span>
@@ -55,7 +55,7 @@
                             <a>#${message.hashtag}</a>
                         </#if></div>
                     <#if message.filename??>
-                        <img src="/img/${message.filename}" class="card-img-top">
+                        <img src="${message.filename}" class="card-img-top">
                     </#if>
                     <div>
                         <span class="mainText" style="margin-top: 10px">${message.text}</span>

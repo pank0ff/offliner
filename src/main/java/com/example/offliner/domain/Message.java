@@ -2,7 +2,6 @@ package com.example.offliner.domain;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 public class Message {
@@ -19,7 +18,7 @@ public class Message {
     @OneToMany(mappedBy = "message",orphanRemoval = true)
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "message",orphanRemoval = true)
+    @OneToMany(mappedBy = "message", orphanRemoval = true)
     private List<Rate> rates;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -28,16 +27,20 @@ public class Message {
 
     private String filename;
 
-    public Message() {
+    public Message(List<Comment> comments) {
+        this.comments = comments;
     }
 
-    public Message(String text, String tag,String name,String hashtag, User user) {
+    public Message(String text, String tag, String name, String hashtag, User user) {
         this.author = user;
         this.text = text;
         this.tag = tag;
         this.hashtag = hashtag;
         this.name = name;
         this.averageRate = 0;
+    }
+
+    public Message() {
     }
 
     public String getAuthorName() {

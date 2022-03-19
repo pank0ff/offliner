@@ -16,13 +16,12 @@ public class CommentService {
         this.commentRepo = commentRepo;
     }
 
-    public Comment create(Message message, String text, User user){
+    public void create(Message message, String text, User user) {
         Comment comment = new Comment();
         comment.setMessage(message);
         comment.setText(text);
         comment.setAuthor(user);
         commentRepo.save(comment);
-        return comment;
     }
 
 }
