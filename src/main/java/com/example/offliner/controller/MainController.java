@@ -688,7 +688,12 @@ public class MainController {
         Message message = new Message(text, tag, name, hashtag, user);
 
         if (file != null) {
-            File file1 = new File("src/main/resources/img.png");
+            File uploadDir = new File("C:/offliner/src/main/resources/img.png");
+
+            if (!uploadDir.exists()) {
+                uploadDir.mkdir();
+            }
+            File file1 = new File("C:/offliner/src/main/resources/img.png");
             file.transferTo(file1);
             Map uploadResult = cloudinary.uploader().upload(file1, ObjectUtils.emptyMap());
             String resultFilename = (String) uploadResult.get("url");
