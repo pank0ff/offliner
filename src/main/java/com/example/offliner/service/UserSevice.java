@@ -5,7 +5,6 @@ import com.cloudinary.utils.ObjectUtils;
 import com.example.offliner.domain.User;
 import com.example.offliner.repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,9 +20,6 @@ import java.util.Map;
 public class UserSevice implements UserDetailsService {
     @Autowired
     private UserRepo userRepo;
-
-    @Value("${upload.path}")
-    private String uploadPath;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -95,11 +91,15 @@ public class UserSevice implements UserDetailsService {
             user.setPassword(password);
         }
         if (file != null && !file.getOriginalFilename().isEmpty()) {
-            File file1 = new File("src/main/resources/img.png");
-            file.transferTo(file1);
-            Map uploadResult = cloudinary.uploader().upload(file1, ObjectUtils.emptyMap());
+            File temp = null;
+            try {
+                temp = File.createTempFile("myTempFile", ".png");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            file.transferTo(temp);
+            Map uploadResult = cloudinary.uploader().upload(temp, ObjectUtils.emptyMap());
             String resultFilename = (String) uploadResult.get("url");
-
             user.setAvatarFilename(resultFilename);
         }
         userRepo.save(user);

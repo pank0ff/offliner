@@ -11,7 +11,6 @@ import com.example.offliner.repos.RateRepo;
 import com.example.offliner.repos.UserRepo;
 import com.example.offliner.service.RateService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,9 +41,6 @@ public class MainController {
 
     @Autowired
     private RateRepo rateRepo;
-
-    @Value("${upload.path}")
-    private String uploadPath;
 
     Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
             "cloud_name", "dwnzejl4h",
@@ -688,14 +684,15 @@ public class MainController {
         Message message = new Message(text, tag, name, hashtag, user);
 
         if (file != null) {
-            File uploadDir = new File("C:/offliner/src/main/resources/img.png");
-
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
+            File temp = null;
+            try {
+                temp = File.createTempFile("myTempFile", ".png");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            File file1 = new File("C:/offliner/src/main/resources/img.png");
-            file.transferTo(file1);
-            Map uploadResult = cloudinary.uploader().upload(file1, ObjectUtils.emptyMap());
+
+            file.transferTo(temp);
+            Map uploadResult = cloudinary.uploader().upload(temp, ObjectUtils.emptyMap());
             String resultFilename = (String) uploadResult.get("url");
             message.setFilename(resultFilename);
         }
@@ -756,20 +753,23 @@ public class MainController {
 
         boolean isNameChanged = (name != null && !name.equals(messageName)) ||
                 (messageName != null && !messageName.equals(name));
-        if(isNameChanged){
+        if (isNameChanged) {
             message.setName(name);
         }
         boolean isTopicChanged = (tag != null && !tag.equals(messageTopic)) ||
                 (messageTopic != null && !messageTopic.equals(tag));
-        if(isTopicChanged){
+        if (isTopicChanged) {
             message.setTag(tag);
         }
-        if (file != null && !file.getOriginalFilename().isEmpty()) {
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename1 = uuidFile + "." + file.getOriginalFilename();
-            File file1 = new File(uploadPath + "/" + resultFilename1);
-            file.transferTo(file1);
-            Map uploadResult = cloudinary.uploader().upload(file1, ObjectUtils.emptyMap());
+        if (file != null) {
+            File temp = null;
+            try {
+                temp = File.createTempFile("myTempFile", ".png");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            file.transferTo(temp);
+            Map uploadResult = cloudinary.uploader().upload(temp, ObjectUtils.emptyMap());
             String resultFilename = (String) uploadResult.get("url");
             message.setFilename(resultFilename);
         }
