@@ -2,7 +2,9 @@ package com.example.offliner.service;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.example.offliner.domain.Message;
 import com.example.offliner.domain.User;
+import com.example.offliner.repos.MessageRepo;
 import com.example.offliner.repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +23,9 @@ import java.util.Objects;
 public class UserSevice implements UserDetailsService {
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private MessageRepo messageRepo;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -115,5 +120,15 @@ public class UserSevice implements UserDetailsService {
     public void unsubscribe(User currentUser, User user) {
         user.getSubscribers().removeIf(user1 -> Objects.equals(user1.getUsername(), currentUser.getUsername()));
         userRepo.save(user);
+    }
+
+    public void like(User user, Message message) {
+        message.getLikes().add(user);
+        messageRepo.save(message);
+    }
+
+    public void unlike(User user, Message message) {
+        message.getLikes().remove(user);
+        messageRepo.save(message);
     }
 }

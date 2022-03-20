@@ -34,19 +34,22 @@
                         <#if isAdmin>
                             <a class="btn btn-primary ml-2 mt-4 mb-2" href="/user/profile/update/${message.id}">Edit</a>
                         </#if>
-                        <a class="mb-2 mx-4" href="">
-                            <#if true>
-                                <i class="fa-regular fa-heart"></i>
-                            <#else>
-                                <i class="fa-solid fa-heart"></i
-                            </#if>
-                        </a>
+                        <#if true>
+                            <a class="mb-2 mx-4" href="/user/like/${message.id}">
+                                ${message.likesCount}<i class="fa-regular fa-heart"></i>
+                            </a>
+                        <#else>
+                            <a class="mb-2 mx-4" href="/user/unlike/${message.id}">
+                                ${message.likesCount}<i class="fa-solid fa-heart"></i>
+                            </a>
+                        </#if>
                     </div>
                     <div class="card-footer text-muted container">
                         <div class="d-flex justify-content-between flex-row align-items-center">
                             <div>
                                 <a class="col align-self-center"
                                    href="/user/profile/${message.getAuthor().id}/${message.getAuthor().username}">Author: ${message.authorName}</a>
+                                rate: ${message.getAuthor().getCountOfLikes()/message.getAuthor().getCountOfPosts()}
                             </div>
                             <div>
                                 <form class="d-flex flex-row justify-content-between align-items-center " method="post"
@@ -125,19 +128,22 @@
                             <a class="btn btn-primary ml-2 mt-4 mb-2"
                                href="/user/profile/update/${message.id}">Изменить</a>
                         </#if>
-                        <a class="mb-2 mx-4" href="">
-                            <#if true>
-                                <i class="fa-regular fa-heart"></i>
-                            <#else>
-                                <i class="fa-solid fa-heart"></i
-                            </#if>
-                        </a>
+                        <#if true>
+                            <a class="mb-2 mx-4" href="/user/like/${message.id}">
+                                ${message.likesCount}<i class="fa-regular fa-heart"></i>
+                            </a>
+                        <#else>
+                            <a class="mb-2 mx-4" href="/user/unlike/${message.id}">
+                                ${message.likesCount}<i class="fa-solid fa-heart"></i>
+                            </a>
+                        </#if>
                     </div>
                     <div class="card-footer text-muted container">
                         <div class="d-flex justify-content-between flex-row align-items-center">
                             <div>
                                 <a class="col align-self-center"
                                    href="/user/profile/${message.getAuthor().id}/${message.getAuthor().username}">Автор: ${message.authorName}</a>
+                                рейтинг: ${message.getAuthor().getCountOfLikes()/message.getAuthor().getCountOfPosts()}
                             </div>
                             <div>
                                 <form class="d-flex flex-row justify-content-between align-items-center "

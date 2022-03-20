@@ -29,7 +29,8 @@ public class User implements UserDetails {
     private String linkLinkedIn;
     private String choice;
     private String theme;
-
+    private int countOfPosts;
+    private int countOfLikes;
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
@@ -50,7 +51,6 @@ public class User implements UserDetails {
             inverseJoinColumns = {@JoinColumn(name = "channel_id")}
     )
     private Set<User> subscriptions = new HashSet<>();
-
 
     public boolean isAdmin() {
         return roles.contains(Role.ADMIN);
@@ -235,5 +235,21 @@ public class User implements UserDetails {
 
     public void setSubscriptions(Set<User> subscriptions) {
         this.subscriptions = subscriptions;
+    }
+
+    public int getCountOfPosts() {
+        return countOfPosts;
+    }
+
+    public void setCountOfPosts(int countOfPosts) {
+        this.countOfPosts = countOfPosts;
+    }
+
+    public int getCountOfLikes() {
+        return countOfLikes;
+    }
+
+    public void setCountOfLikes(int countOfLikes) {
+        this.countOfLikes = countOfLikes;
     }
 }

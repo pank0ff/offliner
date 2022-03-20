@@ -27,7 +27,8 @@
                         </#if>
                         <div class="d-flex flex-column">
                             <div class="d-flex flex-row justify-content-between align-items-center p-5 bg-black text-white">
-                                <h3 class="display-5">${user.username}</h3>
+                                <h3 class="display-5">${user.username} </h3><h5>${userLikes} <i
+                                            class="fa-regular fa-heart"></i></h5>
                                 <#if user.getLinkFacebook()??>
                                     <a href="${user.getLinkFacebook()}">
                                         <i class="fa fa-facebook"></i>
@@ -35,9 +36,9 @@
                                 </#if>
                                 <#if user.getLinkGoogle()??>
                                     <a href="${user.getLinkGoogle()}">
-                        <i class="fa fa-google" ></i>
-                            </a>
-                        </#if>
+                                        <i class="fa fa-google"></i>
+                                    </a>
+                                </#if>
                         <#if user.getLinkYoutube()??>
                             <a type="hidden" href="${user.getLinkYoutube()}">
                         <i class="fa fa-youtube-play" ></i>
@@ -173,23 +174,37 @@
                 <div>
                     <span class="mainText" style="margin-top: 10px">${message.text}</span>
                 </div>
-                <div> <a class="btn btn-primary ml-2 mt-4 mb-2"   href = "/post/${message.id}"> Read full</a>
+                <div class="d-flex align-items-end flex-column">
+                    <#if true>
+                        <a class="mb-2 mx-4" href="/user/like/${message.id}">
+                            ${message.likesCount}<i class="fa-regular fa-heart"></i>
+                        </a>
+                    <#else>
+                        <a class="mb-2 mx-4" href="/user/unlike/${message.id}">
+                            ${message.likesCount}<i class="fa-solid fa-heart"></i>
+                        </a>
+                    </#if>
+                </div>
+                <div><a class="btn btn-primary ml-2 mt-4 mb-2" href="/post/${message.id}"> Read full</a>
                     <a class="btn btn-primary ml-2 mt-4 mb-2" href="/user/profile/update/${message.id}">Edit</a>
                 </div>
                 <div class="card-footer text-muted container">
                     <div class="d-flex justify-content-between flex-row align-items-center">
                         <div>
-                            <a class="col align-self-center" href="/user/profile/${message.getAuthor().id}/${message.getAuthor().username}">Author: ${message.authorName}</a>
+                            <a class="col align-self-center"
+                               href="/user/profile/${message.getAuthor().id}/${message.getAuthor().username}">Author: ${message.authorName}</a>
+                            rate: ${userLikes/user.getCountOfPosts()}
                         </div>
                         <div>
-                                <form class="d-flex flex-row justify-content-between align-items-center " method="post" action="/rate/${message.id}/${user.username}">
-                                    <div class="form-group mx-2 ">
-                                        <select name="rate" size="1" class="rounded">
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
+                            <form class="d-flex flex-row justify-content-between align-items-center " method="post"
+                                  action="/rate/${message.id}/${user.username}">
+                                <div class="form-group mx-2 ">
+                                    <select name="rate" size="1" class="rounded">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
                                         </select>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"
                                              fill="currentColor"
@@ -256,7 +271,8 @@
                         </#if>
                         <div class="d-flex flex-column">
                             <div class="d-flex flex-row justify-content-between align-items-center p-5 bg-black text-white">
-                                <h3 class="display-5">${user.username}</h3>
+                                <h3 class="display-5">${user.username}</h3><h5>${userLikes} <i
+                                            class="fa-regular fa-heart"></i></h5>
                                 <#if user.getLinkFacebook()??>
                                     <a href="${user.getLinkFacebook()}">
                                         <i class="fa fa-facebook"></i>
@@ -404,6 +420,17 @@
                     <div>
                         <span class="mainText" style="margin-top: 10px">${message.text}</span>
                     </div>
+                    <div class="d-flex align-items-end flex-column">
+                        <#if true>
+                            <a class="mb-2 mx-4" href="/user/like/${message.id}">
+                                ${message.likesCount}<i class="fa-regular fa-heart"></i>
+                            </a>
+                        <#else>
+                            <a class="mb-2 mx-4" href="/user/unlike/${message.id}">
+                                ${message.likesCount}<i class="fa-solid fa-heart"></i>
+                            </a>
+                        </#if>
+                    </div>
                     <div><a class="btn btn-primary ml-2 mt-4 mb-2" href="/post/${message.id}"> Читать полностью</a>
                         <a class="btn btn-primary ml-2 mt-4 mb-2" href="/user/profile/update/${message.id}">Изменить</a>
                     </div>
@@ -411,7 +438,7 @@
                         <div class="d-flex justify-content-between flex-row align-items-center">
                             <div>
                                 <a class="col align-self-center"
-                                   href="/user/profile/${message.getAuthor().id}/${message.getAuthor().username}">Автор: ${message.authorName}</a>
+                                   href="/user/profile/${message.getAuthor().id}/${message.getAuthor().username}">Автор: ${message.authorName}</a>рейтинг: ${userLikes/user.getCountOfPosts()}
                             </div>
                             <div>
                                 <form class="d-flex flex-row justify-content-between align-items-center " method="post"

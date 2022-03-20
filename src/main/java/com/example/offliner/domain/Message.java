@@ -1,7 +1,9 @@
 package com.example.offliner.domain;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Message {
@@ -15,12 +17,21 @@ public class Message {
     private String name;
     private String hashtag;
     private double averageRate;
+    private int likesCount;
 
-    @OneToMany(mappedBy = "message",orphanRemoval = true)
+    @OneToMany(mappedBy = "message", orphanRemoval = true)
     private List<Comment> comments;
 
     @OneToMany(mappedBy = "message", orphanRemoval = true)
     private List<Rate> rates;
+
+    @ManyToMany
+    @JoinTable(
+            name = "message_likes",
+            joinColumns = {@JoinColumn(name = "message_id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_id")}
+    )
+    private Set<User> likes = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
@@ -39,9 +50,18 @@ public class Message {
         this.hashtag = hashtag;
         this.name = name;
         this.averageRate = 0;
+        this.likesCount = 0;
     }
 
     public Message() {
+    }
+
+    public int getLikesCount() {
+        return likesCount;
+    }
+
+    public void setLikesCount(int likesCount) {
+        this.likesCount = likesCount;
     }
 
     public String getAuthorName() {
@@ -112,4 +132,27 @@ public class Message {
         this.averageRate = averageRate;
     }
 
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public List<Rate> getRates() {
+        return rates;
+    }
+
+    public void setRates(List<Rate> rates) {
+        this.rates = rates;
+    }
+
+    public Set<User> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Set<User> likes) {
+        this.likes = likes;
+    }
 }

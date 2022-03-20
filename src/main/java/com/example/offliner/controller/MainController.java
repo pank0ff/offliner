@@ -60,6 +60,7 @@ public class MainController {
         if (user != null) {
             theme = Objects.equals(user.getTheme(), "LIGHT");
         }
+
         model.addAttribute("theme", theme);
         model.addAttribute("lang", userChoice);
         model.addAttribute("user", user);
@@ -74,16 +75,31 @@ public class MainController {
             Model model,
             @AuthenticationPrincipal User user) {
         Iterable<Message> messages = messageRepo.findAll();
+        List<User> users = userRepo.findAll();
         List<Message> messages2 = messageRepo.findAll();
+        for (Message message : messages) {
+            message.setLikesCount(message.getLikes().size());
+        }
+        for (User user1 : users) {
+            Integer postCount = 0;
+            Integer likesCount = 0;
+            for (Message message : messages) {
+                if (Objects.equals(message.getAuthor().getUsername(), user1.getUsername())) {
+                    postCount++;
+                    likesCount += message.getLikes().size();
+                }
+            }
+            user1.setCountOfLikes(likesCount);
+            user1.setCountOfPosts(postCount);
+        }
         messages2.clear();
-
-        switch (choice){
+        switch (choice) {
             case 1:
                 if (filter != null && !filter.isEmpty()) {
-                    for(Message message : messages){
+                    for (Message message : messages) {
                         String[] textOfName = message.getName().split(" ");
                         boolean flag = false;
-                        for(String str : textOfName){
+                        for (String str : textOfName) {
                             if (Objects.equals(str, filter)) {
                                 flag = true;
                                 break;
@@ -270,6 +286,9 @@ public class MainController {
         Iterable<Message> messages = messageRepo.findAll();
         List<Message> messages1 = messageRepo.findAll();
         messages1.clear();
+        for (Message message : messages) {
+            message.setLikesCount(message.getLikes().size());
+        }
         Integer counter = 0;
         for (Message message : messages) {
             if (Objects.equals(message.getAuthor().getUsername(), user.getUsername())) {
@@ -277,6 +296,20 @@ public class MainController {
                 counter++;
             }
         }
+        List<User> users = userRepo.findAll();
+        for (User user1 : users) {
+            Integer postCount = 0;
+            Integer likesCount = 0;
+            for (Message message : messages) {
+                if (Objects.equals(message.getAuthor().getUsername(), user1.getUsername())) {
+                    postCount++;
+                    likesCount += message.getLikes().size();
+                }
+            }
+            user1.setCountOfLikes(likesCount);
+            user1.setCountOfPosts(postCount);
+        }
+
         List<Message> messages2 = messageRepo.findAll();
         messages2.clear();
         switch (choice) {
@@ -472,20 +505,35 @@ public class MainController {
                                           @RequestParam(required = false, defaultValue = "1") int sortChoice,
                                           Model model,
                                           @PathVariable String username,
-                                          @AuthenticationPrincipal User currentUser){
+                                          @AuthenticationPrincipal User currentUser) {
         Iterable<Message> messages = messageRepo.findAll();
         ArrayList<Message> messages1 = new ArrayList<>();
         User user = userRepo.findByUsername(username);
         Integer counter = 0;
+        for (Message message : messages) {
+            message.setLikesCount(message.getLikes().size());
+        }
+        List<User> users = userRepo.findAll();
+        for (User user1 : users) {
+            Integer postCount = 0;
+            Integer likesCount = 0;
+            for (Message message : messages) {
+                if (Objects.equals(message.getAuthor().getUsername(), user1.getUsername())) {
+                    postCount++;
+                    likesCount += message.getLikes().size();
+                }
+            }
+            user1.setCountOfLikes(likesCount);
+            user1.setCountOfPosts(postCount);
+        }
         boolean admin;
         admin = currentUser.isAdmin();
-        for(Message message:messages){
-            if(Objects.equals(message.getAuthor().getUsername(), username)){
+        for (Message message : messages) {
+            if (Objects.equals(message.getAuthor().getUsername(), username)) {
                 messages1.add(message);
                 counter++;
             }
         }
-
         List<Message> messages2 = messageRepo.findAll();
         messages2.clear();
         switch (choice){
@@ -721,13 +769,27 @@ public class MainController {
     }
 
     @GetMapping("/post/{id}")
-    public String userEditForm(@PathVariable Integer id,@AuthenticationPrincipal User user, Model model) {
+    public String userPost(@PathVariable Integer id, @AuthenticationPrincipal User user, Model model) {
         List<Message> messages = (List<Message>) messageRepo.findAll();
         Message message = messageRepo.findById(id);
         List<Comment> comments = commentRepo.findByMessageId(id);
         Collections.reverse(comments);
         for (Message message1 : messages) {
             message1.setAverageRate(rateService.calcAverageRate(message1));
+            message.setLikesCount(message.getLikes().size());
+        }
+        List<User> users = userRepo.findAll();
+        for (User user1 : users) {
+            Integer postCount = 0;
+            Integer likesCount = 0;
+            for (Message message1 : messages) {
+                if (Objects.equals(message1.getAuthor().getUsername(), user1.getUsername())) {
+                    postCount++;
+                    likesCount += message1.getLikes().size();
+                }
+            }
+            user1.setCountOfLikes(likesCount);
+            user1.setCountOfPosts(postCount);
         }
         boolean userChoice = Objects.equals(user.getChoice(), "ENG");
         boolean isAdmin = user.isAdmin();
@@ -820,6 +882,20 @@ public class MainController {
         Collections.reverse(messages);
         for (Message message : messages) {
             message.setAverageRate(rateService.calcAverageRate(message));
+            message.setLikesCount(message.getLikes().size());
+        }
+        List<User> users = userRepo.findAll();
+        for (User user1 : users) {
+            Integer postCount = 0;
+            Integer likesCount = 0;
+            for (Message message1 : messages) {
+                if (Objects.equals(message1.getAuthor().getUsername(), user1.getUsername())) {
+                    postCount++;
+                    likesCount += message1.getLikes().size();
+                }
+            }
+            user1.setCountOfLikes(likesCount);
+            user1.setCountOfPosts(postCount);
         }
         boolean userChoice = Objects.equals(user.getChoice(), "ENG");
         boolean isAdmin = user.isAdmin();
@@ -841,6 +917,20 @@ public class MainController {
         Collections.reverse(messages);
         for (Message message : messages) {
             message.setAverageRate(rateService.calcAverageRate(message));
+            message.setLikesCount(message.getLikes().size());
+        }
+        List<User> users = userRepo.findAll();
+        for (User user1 : users) {
+            Integer postCount = 0;
+            Integer likesCount = 0;
+            for (Message message1 : messages) {
+                if (Objects.equals(message1.getAuthor().getUsername(), user1.getUsername())) {
+                    postCount++;
+                    likesCount += message1.getLikes().size();
+                }
+            }
+            user1.setCountOfLikes(likesCount);
+            user1.setCountOfPosts(postCount);
         }
         boolean isAdmin = user.isAdmin();
         boolean userChoice = Objects.equals(user.getChoice(), "ENG");

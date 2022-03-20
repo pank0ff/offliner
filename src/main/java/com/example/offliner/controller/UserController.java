@@ -88,19 +88,27 @@ public class UserController {
     public String getProfile(Model model, @AuthenticationPrincipal User user) {
         Iterable<Message> messages = messageRepo.findAll();
         ArrayList<Message> messages1 = new ArrayList<>();
+        Integer userLikes = 0;
+        for (Message message : messages) {
+            message.setLikesCount(message.getLikes().size());
+        }
         Integer counter = 0;
         for (Message message : messages) {
             if (Objects.equals(message.getAuthor().getUsername(), user.getUsername())) {
                 messages1.add(message);
+                userLikes += message.getLikesCount();
                 counter++;
             }
         }
+        user.setCountOfLikes(userLikes);
+        user.setCountOfPosts(counter);
         for (Message message : messages) {
             message.setAverageRate(rateService.calcAverageRate(message));
         }
         Collections.reverse(messages1);
         boolean userChoice = Objects.equals(user.getChoice(), "ENG");
         boolean theme = Objects.equals(user.getTheme(), "LIGHT");
+        model.addAttribute("userLikes", userLikes);
         model.addAttribute("theme", theme);
         model.addAttribute("lang", userChoice);
         model.addAttribute("countOfPosts", counter);
@@ -162,13 +170,20 @@ public class UserController {
         Iterable<Message> messages = messageRepo.findAll();
         User user = userRepo.findByUsername(username);
         ArrayList<Message> messages1 = new ArrayList<>();
+        Integer userLikes = 0;
+        for (Message message : messages) {
+            message.setLikesCount(message.getLikes().size());
+        }
         Integer counter = 0;
         for (Message message : messages) {
             if (Objects.equals(message.getAuthor().getUsername(), user.getUsername())) {
                 messages1.add(message);
+                userLikes += message.getLikesCount();
                 counter++;
             }
         }
+        user.setCountOfLikes(userLikes);
+        user.setCountOfPosts(counter);
         for (Message message : messages) {
             message.setAverageRate(rateService.calcAverageRate(message));
         }
@@ -184,6 +199,7 @@ public class UserController {
         }
         boolean userChoice = Objects.equals(currentUser.getChoice(), "ENG");
         boolean theme = Objects.equals(currentUser.getTheme(), "LIGHT");
+        model.addAttribute("userLikes", userLikes);
         model.addAttribute("isCurrentUser", isCurrentUser);
         model.addAttribute("subscribersCount", user.getSubscribers().size());
         model.addAttribute("subscriptionsCount", user.getSubscriptions().size());
@@ -221,6 +237,20 @@ public class UserController {
     public String unsubscribe(@PathVariable User user, @AuthenticationPrincipal User currentUser) {
         userSevice.unsubscribe(currentUser, user);
         return "redirect:/user/profile/" + user.getId() + "/" + user.getUsername();
+    }
+
+    @GetMapping("/like/{messageId}")
+    public String like(@PathVariable Integer messageId, @AuthenticationPrincipal User user) {
+        Message message = messageRepo.findById(messageId);
+        userSevice.like(user, message);
+        return "redirect:/post/" + message.getId();
+    }
+
+    @GetMapping("/unlike/{messageId}")
+    public String unlike(@PathVariable Integer messageId, @AuthenticationPrincipal User user) {
+        Message message = messageRepo.findById(messageId);
+        userSevice.unlike(user, message);
+        return "redirect:/post/" + message.getId();
     }
 
     @GetMapping("{type}/{user}/list")
