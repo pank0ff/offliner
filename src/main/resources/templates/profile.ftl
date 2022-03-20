@@ -60,29 +60,28 @@
                             <h6> ${aboutMyself}</h6>
                         </#if>
                     </div>
-                    <div class="d-flex flex-row text-white">
-                        <div class="p-3 bg-primary text-center skill-block">
-                            <h5>Posts:</h5>
-                             <h6>${countOfPosts}</h6>
-                        </div>
-                        <div class="p-3 bg-success text-center skill-block">
-                            <h5>Subscribers:</h5>
-                            <h6>132</h6>
-                        </div>
-                        <div class="p-3 bg-warning text-center skill-block">
-                            <h5>Subscriptions:</h5>
-                            <h6>54</h6>
-
-                        </div>
-                        <div class="p-3 bg-danger text-center skill-block">
-                           <h5>Date of registration:</h5>
-                            <h6>${user.dateOfRegistration}</h6>
+                            <div class="d-flex flex-row text-white">
+                                <div class="p-3 bg-primary text-center skill-block">
+                                    <h5>Posts:</h5>
+                                    <h6>${countOfPosts}</h6>
+                                </div>
+                                <div class="p-3 bg-success text-center skill-block">
+                                    <h5>Subscribers:</h5>
+                                    <h5><a href="/user/subscribers/${user.id}/list">list</a></h5>
+                                </div>
+                                <div class="p-3 bg-warning text-center skill-block">
+                                    <h5>Subscriptions:</h5>
+                                    <h5><a href="/user/subscriptions/${user.id}/list">list</a></h5>
+                                </div>
+                                <div class="p-3 bg-danger text-center skill-block">
+                                    <h5>Date of registration:</h5>
+                                    <h6>${user.dateOfRegistration}</h6>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <a class="btn btn-primary  mt-1" href="/user/profile/${user.username}/settings">Settings</a>
                 </div>
-            </div>
-                <a class="btn btn-primary  mt-1" href="/user/profile/${user.username}/settings">Settings</a>
-            </div>
         </div>
 
         <div class="form-row ">
@@ -228,7 +227,7 @@
                 </div>
             </div>
         <#else>
-            No message
+            No posts
         </#list>
     </div>
     <#else>
@@ -297,12 +296,11 @@
                                 </div>
                                 <div class="p-3 bg-success text-center skill-block">
                                     <h5>Подписчики:</h5>
-                                    <h6>132</h6>
+                                    <h5><a href="/user/subscribers/${user.id}/list">список</a></h5>
                                 </div>
                                 <div class="p-3 bg-warning text-center skill-block">
                                     <h5>Подписки:</h5>
-                                    <h6>54</h6>
-
+                                    <h5><a href="/user/subscriptions/${user.id}/list">список</a></h5>
                                 </div>
                                 <div class="p-3 bg-danger text-center skill-block">
                                     <h5>Дата регистрации:</h5>
@@ -311,8 +309,8 @@
                             </div>
                         </div>
                     </div>
-                <a class="btn btn-primary  mt-1" href="/user/profile/${user.username}/settings">Настройки</a>
-            </div>
+                    <a class="btn btn-primary  mt-1" href="/user/profile/${user.username}/settings">Настройки</a>
+                </div>
         </div>
 
         <div class="form-row ">
