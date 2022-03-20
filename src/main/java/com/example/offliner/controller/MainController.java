@@ -824,6 +824,7 @@ public class MainController {
         boolean userChoice = Objects.equals(user.getChoice(), "ENG");
         boolean isAdmin = user.isAdmin();
         boolean theme = Objects.equals(user.getTheme(), "LIGHT");
+        model.addAttribute("user", user);
         model.addAttribute("theme", theme);
         model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("lang", userChoice);
@@ -844,6 +845,7 @@ public class MainController {
         boolean isAdmin = user.isAdmin();
         boolean userChoice = Objects.equals(user.getChoice(), "ENG");
         boolean theme = Objects.equals(user.getTheme(), "LIGHT");
+        model.addAttribute("user", user);
         model.addAttribute("theme", theme);
         model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("lang", userChoice);
