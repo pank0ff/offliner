@@ -678,12 +678,12 @@ public class MainController {
             @RequestParam String name,
             @RequestParam String hashtag,
             @RequestParam String tag, Map<String, Object> model,
-            @RequestParam MultipartFile file
+            @RequestParam("file") MultipartFile file
     ) throws IOException {
         User user = userRepo.findByUsername(username);
         Message message = new Message(text, tag, name, hashtag, user);
 
-        if (file != null) {
+        if (file != null && !file.getOriginalFilename().isEmpty()) {
             File temp = null;
             try {
                 temp = File.createTempFile("myTempFile", ".png");
@@ -761,7 +761,7 @@ public class MainController {
         if (isTopicChanged) {
             message.setTag(tag);
         }
-        if (file != null) {
+        if (file != null && !file.getOriginalFilename().isEmpty()) {
             File temp = null;
             try {
                 temp = File.createTempFile("myTempFile", ".png");
