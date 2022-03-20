@@ -158,13 +158,13 @@ public class UserController {
 
     @GetMapping("/profile/{id}/{username}")
     public String userProfile(
-            Model model, @PathVariable String username,@PathVariable Long id,@AuthenticationPrincipal User user1){
+            Model model, @PathVariable String username, @PathVariable Long id, @AuthenticationPrincipal User currentUser) {
         Iterable<Message> messages = messageRepo.findAll();
         User user = userRepo.findByUsername(username);
         ArrayList<Message> messages1 = new ArrayList<>();
         Integer counter = 0;
-        for(Message message:messages){
-            if(Objects.equals(message.getAuthor().getUsername(), user.getUsername())){
+        for (Message message : messages) {
+            if (Objects.equals(message.getAuthor().getUsername(), user.getUsername())) {
                 messages1.add(message);
                 counter++;
             }
@@ -172,12 +172,23 @@ public class UserController {
         for (Message message : messages) {
             message.setAverageRate(rateService.calcAverageRate(message));
         }
+        boolean isCurrentUser = Objects.equals(user.getUsername(), currentUser.getUsername());
+        boolean isSubscriber = false;
         boolean admin;
-        admin = user1.isAdmin();
+        admin = currentUser.isAdmin();
         Collections.reverse(messages1);
-        boolean userChoice = Objects.equals(user1.getChoice(), "ENG");
-        boolean theme = Objects.equals(user1.getTheme(), "LIGHT");
+        for (User user2 : user.getSubscribers()) {
+            if (Objects.equals(user2.getUsername(), currentUser.getUsername())) {
+                isSubscriber = true;
+            }
+        }
+        boolean userChoice = Objects.equals(currentUser.getChoice(), "ENG");
+        boolean theme = Objects.equals(currentUser.getTheme(), "LIGHT");
+        model.addAttribute("isCurrentUser", isCurrentUser);
+        model.addAttribute("subscribersCount", user.getSubscribers().size());
+        model.addAttribute("subscriptionsCount", user.getSubscriptions().size());
         model.addAttribute("theme", theme);
+        model.addAttribute("isSubscriber", isSubscriber);
         model.addAttribute("lang", userChoice);
         model.addAttribute("countOfPosts", counter);
         model.addAttribute("admin", admin);
@@ -190,7 +201,7 @@ public class UserController {
     public String deleteUser(
             @PathVariable String username,
             @AuthenticationPrincipal User user1
-    ){
+    ) {
         User user = userRepo.findByUsername(username);
         userRepo.delete(user);
         if (user1.isAdmin()) {
@@ -198,6 +209,33 @@ public class UserController {
         } else {
             return "redirect:/login";
         }
+    }
+
+    @GetMapping("subscribe/{user}")
+    public String subscribe(@PathVariable User user, @AuthenticationPrincipal User currentUser) {
+        userSevice.subscribe(currentUser, user);
+        return "redirect:/user/profile/" + user.getId() + "/" + user.getUsername();
+    }
+
+    @GetMapping("/unsubscribe/{user}")
+    public String unsubscribe(@PathVariable User user, @AuthenticationPrincipal User currentUser) {
+        userSevice.unsubscribe(currentUser, user);
+        return "redirect:/user/profile/" + user.getId() + "/" + user.getUsername();
+    }
+
+    @GetMapping("{type}/{user}/list")
+    public String userListOf(Model model,
+                             @PathVariable User user,
+                             @PathVariable String type) {
+        model.addAttribute("userChannel", user);
+        model.addAttribute("type", type);
+        if ("subscriptions".equals(type)) {
+            model.addAttribute("users", user.getSubscriptions());
+        } else {
+            model.addAttribute("users", user.getSubscribers());
+        }
+
+        return "subscriptions";
     }
 
 
