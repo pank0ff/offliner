@@ -10,6 +10,9 @@ import com.example.offliner.repos.MessageRepo;
 import com.example.offliner.repos.RateRepo;
 import com.example.offliner.repos.UserRepo;
 import com.example.offliner.service.RateService;
+import org.commonmark.node.Node;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -671,6 +674,14 @@ public class MainController {
 
         return "userProfile";
     }
+
+    public static String convertMarkdownToHTML(String markdown) {
+        Parser parser = Parser.builder().build();
+        Node document = parser.parse(markdown);
+        HtmlRenderer htmlRenderer = HtmlRenderer.builder().build();
+        return htmlRenderer.render(document);
+    }
+
     @PostMapping("/user/profile/add/{username}")
     public String add(
             @PathVariable String username,
@@ -697,6 +708,9 @@ public class MainController {
             message.setFilename(resultFilename);
         }
 
+        String htmlValue = convertMarkdownToHTML(message.getText());
+
+        message.setText(htmlValue);
         messageRepo.save(message);
 
         Iterable<Message> messages = messageRepo.findAll();
@@ -705,6 +719,7 @@ public class MainController {
 
         return "redirect:/user/profile";
     }
+
     @GetMapping("/post/{id}")
     public String userEditForm(@PathVariable Integer id,@AuthenticationPrincipal User user, Model model) {
         List<Message> messages = (List<Message>) messageRepo.findAll();
@@ -725,6 +740,7 @@ public class MainController {
         model.addAttribute("message", message);
         return "post";
     }
+
     @PostMapping("/user/profile/update/{id}")
     public String postUpdate(@AuthenticationPrincipal User user,
                              @PathVariable Integer id,
@@ -741,8 +757,9 @@ public class MainController {
         String messageTopic = message.getTag();
         boolean isTextChange = (text != null && !text.equals(messageText)) ||
                 (messageText != null && !messageText.equals(text));
-        if(isTextChange){
-            message.setText(text);
+        if(isTextChange) {
+            String htmlValue = convertMarkdownToHTML(text);
+            message.setText(htmlValue);
         }
 
         boolean isHashtagChange = (hashtag != null && !hashtag.equals(messageHashtag)) ||

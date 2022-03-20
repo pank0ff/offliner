@@ -14,7 +14,7 @@
                     <div>
                         <a class="topic" href="/post/topic/${message.tag}">${message.tag}</a>
                         <#if message.hashtag??>
-                            <a href="/post/hashtag/${message.hashtag}">${message.hashtag}</a>
+                            <a href="/post/hashtag/${message.hashtag}">#${message.hashtag}</a>
                         </#if>
                     </div>
                     <#if message.filename??>
@@ -101,7 +101,7 @@
                     <div>
                         <a class="topic" href="/post/topic/${message.tag}">${message.tag}</a>
                         <#if message.hashtag??>
-                            <a href="/post/hashtag/${message.hashtag}">${message.hashtag}</a>
+                            <a href="/post/hashtag/${message.hashtag}">#${message.hashtag}</a>
                         </#if>
                     </div>
                     <#if message.filename??>
