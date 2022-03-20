@@ -63,13 +63,13 @@
                 </#if>
                 <#if user??>
                     <li class="nav-item">
-                        <a class="nav-link" href="/user/profile/">Profile</a>
+                        <a class="nav-link" href="/user/profile">Profile</a>
                     </li>
                 </#if>
             </#if>
         </ul>
 
-        <div class="navbar-text mr-3"><#if user??>${name}<#else>Please,login</#if></div>
+        <div class="navbar-text mr-3">${name}</div>
         <@l.logout />
     </div>
 </nav>

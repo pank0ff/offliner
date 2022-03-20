@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
-import java.util.Objects;
 
 @Service
 public class UserSevice implements UserDetailsService {
@@ -107,13 +106,4 @@ public class UserSevice implements UserDetailsService {
     }
 
 
-    public void subscribe(User currentUser, User user) {
-        user.getSubscribers().add(currentUser);
-        userRepo.save(user);
-    }
-
-    public void unsubscribe(User currentUser, User user) {
-        user.getSubscribers().removeIf(user1 -> Objects.equals(user1.getUsername(), currentUser.getUsername()));
-        userRepo.save(user);
-    }
 }

@@ -67,11 +67,12 @@
                                 </div>
                                 <div class="p-3 bg-success text-center skill-block">
                                     <h5>Subscribers:</h5>
-                                    <h5><a href="/user/subscribers/${user.id}/list">${subscribersCount}</a></h5>
+                                    <h6>132</h6>
                                 </div>
                                 <div class="p-3 bg-warning text-center skill-block">
                                     <h5>Subscriptions:</h5>
-                                    <h5><a href="/user/subscriptions/${user.id}/list">${subscriptionsCount}</a></h5>
+                                    <h6>54</h6>
+
                                 </div>
                                 <div class="p-3 bg-danger text-center skill-block">
                                     <h5>Date of registration:</h5>
@@ -85,14 +86,7 @@
                     </#if>
                 </div>
             </div>
-        <#if isCurrentUser>
-        <#else>
-            <#if isSubscriber>
-                <a class="btn btn-info mb-5" href="/user/unsubscribe/${user.id}">Unsubscribe</a>
-            <#else>
-                <a class="btn btn-info mb-5" href="/user/subscribe/${user.id}">Subscribe</a>
-            </#if>
-        </#if>
+
         <div class="form-row ">
             <div class="form-group col-md-6">
                 <form method="get" action="/user/profile/${user.id}" class="row d-flex flex-row">
@@ -316,12 +310,13 @@
                                     <h6>${countOfPosts}</h6>
                                 </div>
                                 <div class="p-3 bg-success text-center skill-block">
-                                    <h5>Подписчики:</h5>
-                                    <h5><a href="/user/subscribers/${user.id}/list">${subscribersCount}</a></h5>
+                                    <h5>Подписчиков:</h5>
+                                    <h6>132</h6>
                                 </div>
                                 <div class="p-3 bg-warning text-center skill-block">
                                     <h5>Подписки:</h5>
-                                    <h5><a href="/user/subscriptions/${user.id}/list">${subscriptionsCount}</a></h5>
+                                    <h6>54</h6>
+
                                 </div>
                                 <div class="p-3 bg-danger text-center skill-block">
                                     <h5>Дата регистрации:</h5>
@@ -335,14 +330,7 @@
                     </#if>
                 </div>
             </div>
-        <#if isCurrentUser>
-        <#else>
-            <#if isSubscriber>
-                <a class="btn btn-info mb-5" href="/user/unsubscribe/${user.id}">Отписаться</a>
-            <#else>
-                <a class="btn btn-info mb-5" href="/user/subscribe/${user.id}">Подписаться</a>
-            </#if>
-        </#if>
+
         <div class="form-row ">
             <div class="form-group col-md-6">
                 <form method="get" action="/user/profile/${user.id}" class="row d-flex flex-row">
