@@ -17,6 +17,7 @@ public class Message {
     private String hashtag;
     private double averageRate;
     private int likesCount;
+    private int meLiked;
 
     @OneToMany(mappedBy = "message", orphanRemoval = true)
     private List<Comment> comments;
@@ -50,6 +51,7 @@ public class Message {
         this.name = name;
         this.averageRate = 0;
         this.likesCount = 0;
+        this.meLiked = 0;
     }
 
     public Message() {
@@ -153,5 +155,13 @@ public class Message {
 
     public void setLikes(Set<User> likes) {
         this.likes = likes;
+    }
+
+    public int getMeLiked() {
+        return meLiked;
+    }
+
+    public void setMeLiked(int meLiked) {
+        this.meLiked = meLiked;
     }
 }

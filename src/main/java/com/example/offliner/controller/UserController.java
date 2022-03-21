@@ -92,8 +92,16 @@ public class UserController {
         for (Message message : messages) {
             message.setLikesCount(message.getLikes().size());
         }
+        for (Message message : messages) {
+            message.setMeLiked(0);
+        }
         Integer counter = 0;
         for (Message message : messages) {
+            for (User user3 : message.getLikes()) {
+                if (Objects.equals(user3.getUsername(), user.getUsername())) {
+                    message.setMeLiked(1);
+                }
+            }
             if (Objects.equals(message.getAuthor().getUsername(), user.getUsername())) {
                 messages1.add(message);
                 userLikes += message.getLikesCount();
@@ -174,8 +182,16 @@ public class UserController {
         for (Message message : messages) {
             message.setLikesCount(message.getLikes().size());
         }
+        for (Message message : messages) {
+            message.setMeLiked(0);
+        }
         Integer counter = 0;
         for (Message message : messages) {
+            for (User user3 : message.getLikes()) {
+                if (Objects.equals(user3.getUsername(), user.getUsername())) {
+                    message.setMeLiked(1);
+                }
+            }
             if (Objects.equals(message.getAuthor().getUsername(), user.getUsername())) {
                 messages1.add(message);
                 userLikes += message.getLikesCount();

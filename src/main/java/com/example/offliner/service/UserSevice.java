@@ -128,7 +128,7 @@ public class UserSevice implements UserDetailsService {
     }
 
     public void unlike(User user, Message message) {
-        message.getLikes().remove(user);
+        message.getLikes().removeIf(user1 -> Objects.equals(user1.getUsername(), user.getUsername()));
         messageRepo.save(message);
     }
 }

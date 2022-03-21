@@ -80,10 +80,18 @@ public class MainController {
         for (Message message : messages) {
             message.setLikesCount(message.getLikes().size());
         }
+        for (Message message : messages) {
+            message.setMeLiked(0);
+        }
         for (User user1 : users) {
             Integer postCount = 0;
             Integer likesCount = 0;
             for (Message message : messages) {
+                for (User user3 : message.getLikes()) {
+                    if (Objects.equals(user3.getUsername(), user.getUsername())) {
+                        message.setMeLiked(1);
+                    }
+                }
                 if (Objects.equals(message.getAuthor().getUsername(), user1.getUsername())) {
                     postCount++;
                     likesCount += message.getLikes().size();
@@ -296,11 +304,20 @@ public class MainController {
                 counter++;
             }
         }
+        for (Message message : messages) {
+            message.setMeLiked(0);
+        }
         List<User> users = userRepo.findAll();
         for (User user1 : users) {
             Integer postCount = 0;
             Integer likesCount = 0;
+
             for (Message message : messages) {
+                for (User user3 : message.getLikes()) {
+                    if (Objects.equals(user3.getUsername(), user.getUsername())) {
+                        message.setMeLiked(1);
+                    }
+                }
                 if (Objects.equals(message.getAuthor().getUsername(), user1.getUsername())) {
                     postCount++;
                     likesCount += message.getLikes().size();
@@ -513,11 +530,19 @@ public class MainController {
         for (Message message : messages) {
             message.setLikesCount(message.getLikes().size());
         }
+        for (Message message : messages) {
+            message.setMeLiked(0);
+        }
         List<User> users = userRepo.findAll();
         for (User user1 : users) {
             Integer postCount = 0;
             Integer likesCount = 0;
             for (Message message : messages) {
+                for (User user3 : message.getLikes()) {
+                    if (Objects.equals(user3.getUsername(), user.getUsername())) {
+                        message.setMeLiked(1);
+                    }
+                }
                 if (Objects.equals(message.getAuthor().getUsername(), user1.getUsername())) {
                     postCount++;
                     likesCount += message.getLikes().size();
@@ -778,11 +803,19 @@ public class MainController {
             message1.setAverageRate(rateService.calcAverageRate(message1));
             message.setLikesCount(message.getLikes().size());
         }
+        for (Message message12 : messages) {
+            message12.setMeLiked(0);
+        }
         List<User> users = userRepo.findAll();
         for (User user1 : users) {
             Integer postCount = 0;
             Integer likesCount = 0;
             for (Message message1 : messages) {
+                for (User user3 : message.getLikes()) {
+                    if (Objects.equals(user3.getUsername(), user.getUsername())) {
+                        message.setMeLiked(1);
+                    }
+                }
                 if (Objects.equals(message1.getAuthor().getUsername(), user1.getUsername())) {
                     postCount++;
                     likesCount += message1.getLikes().size();
@@ -881,6 +914,14 @@ public class MainController {
         messages = messageRepo.findByHashtag(hashtag);
         Collections.reverse(messages);
         for (Message message : messages) {
+            message.setMeLiked(0);
+        }
+        for (Message message : messages) {
+            for (User user3 : message.getLikes()) {
+                if (Objects.equals(user3.getUsername(), user.getUsername())) {
+                    message.setMeLiked(1);
+                }
+            }
             message.setAverageRate(rateService.calcAverageRate(message));
             message.setLikesCount(message.getLikes().size());
         }
@@ -888,6 +929,7 @@ public class MainController {
         for (User user1 : users) {
             Integer postCount = 0;
             Integer likesCount = 0;
+
             for (Message message1 : messages) {
                 if (Objects.equals(message1.getAuthor().getUsername(), user1.getUsername())) {
                     postCount++;
@@ -916,6 +958,14 @@ public class MainController {
         messages = messageRepo.findByTag(topic);
         Collections.reverse(messages);
         for (Message message : messages) {
+            message.setMeLiked(0);
+        }
+        for (Message message : messages) {
+            for (User user3 : message.getLikes()) {
+                if (Objects.equals(user3.getUsername(), user.getUsername())) {
+                    message.setMeLiked(1);
+                }
+            }
             message.setAverageRate(rateService.calcAverageRate(message));
             message.setLikesCount(message.getLikes().size());
         }
@@ -923,6 +973,7 @@ public class MainController {
         for (User user1 : users) {
             Integer postCount = 0;
             Integer likesCount = 0;
+
             for (Message message1 : messages) {
                 if (Objects.equals(message1.getAuthor().getUsername(), user1.getUsername())) {
                     postCount++;

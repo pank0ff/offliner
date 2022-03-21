@@ -34,13 +34,14 @@
                         <#if isAdmin>
                             <a class="btn btn-primary ml-2 mt-4 mb-2" href="/user/profile/update/${message.id}">Edit</a>
                         </#if>
-                        <#if true>
+                        <#if message.meLiked == 0>
                             <a class="mb-2 mx-4" href="/user/like/${message.id}">
                                 ${message.likesCount}<i class="fa-regular fa-heart"></i>
                             </a>
                         <#else>
                             <a class="mb-2 mx-4" href="/user/unlike/${message.id}">
-                                ${message.likesCount}<i class="fa-solid fa-heart"></i>
+                                ${message.likesCount}<img style="width: 15px;height: 15px"
+                                                          src="https://cdn-icons-png.flaticon.com/512/32/32557.png"/>
                             </a>
                         </#if>
                     </div>
@@ -128,13 +129,14 @@
                             <a class="btn btn-primary ml-2 mt-4 mb-2"
                                href="/user/profile/update/${message.id}">Изменить</a>
                         </#if>
-                        <#if true>
+                        <#if message.meLiked == 0>
                             <a class="mb-2 mx-4" href="/user/like/${message.id}">
                                 ${message.likesCount}<i class="fa-regular fa-heart"></i>
                             </a>
                         <#else>
                             <a class="mb-2 mx-4" href="/user/unlike/${message.id}">
-                                ${message.likesCount}<i class="fa-solid fa-heart"></i>
+                                ${message.likesCount}<img style="width: 15px;height: 15px"
+                                                          src="https://cdn-icons-png.flaticon.com/512/32/32557.png"/>
                             </a>
                         </#if>
                     </div>
