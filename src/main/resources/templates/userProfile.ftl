@@ -97,7 +97,7 @@
         </#if>
         <div class="form-row ">
             <div class="form-group col-md-6">
-                <form method="get" action="/user/profile/${user.id}" class="row d-flex flex-row">
+                <form method="get" action="/user/profile/${user.username}/else" class="row d-flex flex-row">
                     <input type="text" name="filter" class="form-control col-4" value="" placeholder="Search ">
                     <select name="choice" size="1" class="rounded col-3 form-control ml-1">
                         <option value="1">Deep search</option>
@@ -368,7 +368,7 @@
         </#if>
         <div class="form-row ">
             <div class="form-group col-md-6">
-                <form method="get" action="/user/profile/${user.id}" class="row d-flex flex-row">
+                <form method="get" action="/user/profile/${user.username}/else" class="row d-flex flex-row">
                     <input type="text" name="filter" class="form-control col-4" value="" placeholder="Поиск ">
                     <select name="choice" size="1" class="rounded col-3 form-control ml-1">
                         <option value="1">Полный поиск</option>

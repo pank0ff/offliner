@@ -506,6 +506,7 @@ public class MainController {
             theme = Objects.equals(user.getTheme(), "LIGHT");
             ;
         }
+        model.addAttribute("userLikes", user.getCountOfLikes());
         model.addAttribute("theme", theme);
         model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("lang", userChoice);
@@ -737,6 +738,18 @@ public class MainController {
         if (user != null) {
             theme = Objects.equals(user.getTheme(), "LIGHT");
         }
+        boolean isCurrentUser = Objects.equals(user.getUsername(), currentUser.getUsername());
+        boolean isSubscriber = false;
+        for (User user2 : user.getSubscribers()) {
+            if (Objects.equals(user2.getUsername(), currentUser.getUsername())) {
+                isSubscriber = true;
+            }
+        }
+        model.addAttribute("isSubscriber", isSubscriber);
+        model.addAttribute("isCurrentUser", isCurrentUser);
+        model.addAttribute("subscribersCount", user.getSubscribers().size());
+        model.addAttribute("subscriptionsCount", user.getSubscriptions().size());
+        model.addAttribute("userLikes", user.getCountOfLikes());
         model.addAttribute("theme", theme);
         model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("lang", userChoice);
