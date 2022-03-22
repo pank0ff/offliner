@@ -26,8 +26,9 @@
                         </#if>
                         <div class="d-flex flex-column">
                             <div class="d-flex flex-row justify-content-between align-items-center p-5 bg-black text-white">
-                                <h3 class="display-5">${user.getUsername()}</h3><h5>${userLikes} <i
-                                            class="fa-regular fa-heart"></i></h5>
+                                <h3 class="display-5">${user.getUsername()}</h3><h5>${userLikes} <img
+                                            style="width: 15px;height: 15px"
+                                            src="https://img.icons8.com/ios/50/000000/like--v1.png"/></h5>
                                 <#if user.getLinkFacebook()??>
                                     <a href="${user.getLinkFacebook()}">
                                         <i class="fa fa-facebook"></i>
@@ -182,7 +183,11 @@
                         <a href="/post/hashtag/${message.hashtag}">#${message.hashtag}</a>
                     </#if></div>
                 <#if message.filename??>
-                    <img src="${message.filename}" class="card-img-top">
+                    <#if theme>
+                        <img src="${message.filename}" class="card-img-top">
+                    <#else>
+                        <img style="filter: invert()" src="${message.filename}" class="card-img-top">
+                    </#if>
                 </#if>
                 <div>
                     <span class="mainText" style="margin-top: 10px">${message.text}</span>
@@ -190,7 +195,8 @@
                 <div class="d-flex align-items-end flex-column">
                     <#if message.meLiked == 0>
                         <a class="mb-2 mx-4" href="/user/like/${message.id}">
-                            ${message.likesCount}<i class="fa-regular fa-heart"></i>
+                            ${message.likesCount}<img style="width: 15px;height: 15px"
+                                                      src="https://img.icons8.com/ios/50/000000/like--v1.png"/>
                         </a>
                     <#else>
                         <a class="mb-2 mx-4" href="/user/unlike/${message.id}">
@@ -291,8 +297,9 @@
                         </#if>
                         <div class="d-flex flex-column">
                             <div class="d-flex flex-row justify-content-between align-items-center p-5 bg-black text-white">
-                                <h3 class="display-5">${user.getUsername()}</h3><h5>${userLikes} <i
-                                            class="fa-regular fa-heart"></i></h5>
+                                <h3 class="display-5">${user.getUsername()}</h3><h5>${userLikes} <img
+                                            style="width: 15px;height: 15px"
+                                            src="https://img.icons8.com/ios/50/000000/like--v1.png"/></h5>
                                 <#if user.getLinkFacebook()??>
                                     <a href="${user.getLinkFacebook()}">
                                         <i class="fa fa-facebook"></i>
@@ -448,7 +455,11 @@
                             <a href="/post/hashtag/${message.hashtag}">#${message.hashtag}</a>
                         </#if></div>
                     <#if message.filename??>
-                        <img src="${message.filename}" class="card-img-top">
+                        <#if theme>
+                            <img src="${message.filename}" class="card-img-top">
+                        <#else>
+                            <img style="filter: invert()" src="${message.filename}" class="card-img-top">
+                        </#if>
                     </#if>
                     <div>
                         <span class="mainText" style="margin-top: 10px">${message.text}</span>
@@ -456,7 +467,8 @@
                     <div class="d-flex align-items-end flex-column">
                         <#if message.meLiked == 0>
                             <a class="mb-2 mx-4" href="/user/like/${message.id}">
-                                ${message.likesCount}<i class="fa-regular fa-heart"></i>
+                                ${message.likesCount}<img style="width: 15px;height: 15px"
+                                                          src="https://img.icons8.com/ios/50/000000/like--v1.png"/>
                             </a>
                         <#else>
                             <a class="mb-2 mx-4" href="/user/unlike/${message.id}">
