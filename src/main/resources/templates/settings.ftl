@@ -93,9 +93,15 @@
             </form>
             <#if theme>
                 <div>
+                    <h5><b style="color: red">Check lang and theme fields</b></h5>
+                </div>
+                <div>
                     <h5><b style="color: red">To see that the changes have taken effect re-login.</b></h5>
                 </div>
             <#else>
+                <div style="filter:invert()">
+                    <h5><b style="color: red">Check lang and theme fields</b></h5>
+                </div>
                 <div style="filter:invert()">
                     <h5><b style="color: red">To see that the changes have taken effect re-login.</b></h5>
                 </div>
@@ -197,10 +203,20 @@
             </form>
             <#if theme>
                 <div>
-                    <h5><b style="color: red">Чтобы увидеть изменения в вашем профиле перезайдите на ваш аккаунт.</b>
+                    <h5><b style="color: red">
+                            Проверьте значения полей тема и язык</b>
+                    </h5>
+                </div>
+                <div>
+                    <h5><b style="color: red">
+                            Чтобы увидеть изменения в вашем профиле перезайдите на ваш аккаунт.</b>
                     </h5>
                 </div>
             <#else>
+                <div style="filter: invert()">
+                    <h5><b style="color: red"> Проверьте значения полей тема и язык</b>
+                    </h5>
+                </div>
                 <div style="filter: invert()">
                     <h5><b style="color: red">Чтобы увидеть изменения в вашем профиле перезайдите на ваш аккаунт.</b>
                     </h5>

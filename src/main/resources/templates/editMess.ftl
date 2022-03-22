@@ -60,6 +60,17 @@
                 <button style="filter: invert()" class="btn btn-danger mt-5" type="submit">Delete</button>
             </#if>
         </form>
+        <#if theme>
+            <div>
+                <h5><b style="color: red">Check topic field</b></h5>
+            </div>
+
+        <#else>
+            <div style="filter:invert()">
+                <h5><b style="color: red">Check topic field</b></h5>
+            </div>
+        </#if>
+
     <#else>
         <form method="post" action="/user/profile/update/${message.id}" enctype="multipart/form-data">
             <div class="form-group row">
@@ -120,5 +131,15 @@
                 <button class="btn btn-danger mt-5" style="filter: invert()" type="submit">Удалить</button>
             </#if>
         </form>
+        <#if theme>
+            <div>
+                <h5><b style="color: red">Проверьте поле тема</b></h5>
+            </div>
+
+        <#else>
+            <div style="filter:invert()">
+                <h5><b style="color: red">Проверьте поле тема</b></h5>
+            </div>
+        </#if>
     </#if>
 </@c.page>
