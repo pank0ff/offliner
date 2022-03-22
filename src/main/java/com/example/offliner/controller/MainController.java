@@ -728,7 +728,7 @@ public class MainController {
         }
         boolean userChoice = true;
         if (user != null) {
-            userChoice = Objects.equals(user.getChoice(), "ENG");
+            userChoice = Objects.equals(currentUser.getChoice(), "ENG");
         }
         boolean isAdmin = false;
         if (user != null) {
@@ -736,7 +736,7 @@ public class MainController {
         }
         boolean theme = true;
         if (user != null) {
-            theme = Objects.equals(user.getTheme(), "LIGHT");
+            theme = Objects.equals(currentUser.getTheme(), "LIGHT");
         }
         boolean isCurrentUser = Objects.equals(user.getUsername(), currentUser.getUsername());
         boolean isSubscriber = false;
