@@ -60,7 +60,42 @@ public class MainController {
         if (user != null) {
             theme = Objects.equals(user.getTheme(), "LIGHT");
         }
+        Integer postCount = 0;
+        Integer likesCount = 0;
+        List<Message> messages1 = messageRepo.findAll();
+        messages1.clear();
+        List<Message> messages = messageRepo.findAll();
+        List<User> users = userRepo.findAll();
+        for (User user1 : users) {
+            for (Message message : messages) {
+                message.setAverageRate(rateService.calcAverageRate(message));
+                if (user != null) {
+                    for (User user3 : message.getLikes()) {
+                        if (Objects.equals(user3.getUsername(), user.getUsername())) {
+                            message.setMeLiked(1);
+                        }
+                    }
+                }
+                if (Objects.equals(message.getAuthor().getUsername(), user1.getUsername())) {
+                    postCount++;
+                    likesCount += message.getLikes().size();
+                }
+            }
+            user1.setCountOfLikes(likesCount);
+            user1.setCountOfPosts(postCount);
 
+        }
+        for (Message message : messages) {
+            if (message.getAverageRate() >= 4) {
+                messages1.add(message);
+            }
+        }
+        boolean isAdmin = false;
+        if (user != null) {
+            isAdmin = user.isAdmin();
+        }
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("messages", messages1);
         model.addAttribute("theme", theme);
         model.addAttribute("lang", userChoice);
         model.addAttribute("user", user);
@@ -276,7 +311,6 @@ public class MainController {
         boolean theme = true;
         if (user != null) {
             theme = Objects.equals(user.getTheme(), "LIGHT");
-            ;
         }
         model.addAttribute("theme", theme);
         model.addAttribute("isAdmin", isAdmin);
