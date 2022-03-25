@@ -77,11 +77,19 @@
                         <#if isAdmin>
                             <a class="btn btn-primary ml-2 mt-4 mb-2" href="/user/profile/update/${message.id}">Edit</a>
                         </#if>
-                        <#if message.meLiked == 0>
-                            <a class="mb-2 mx-4" href="/user/like/${message.id}">
-                                ${message.likesCount}<img style="width: 15px;height: 15px"
-                                                          src="https://img.icons8.com/ios/50/000000/like--v1.png"/>
-                            </a>
+                        <#if user??>
+                            <#if message.meLiked == 0>
+                                <a class="mb-2 mx-4" href="/user/like/${message.id}">
+                                    ${message.likesCount}<img style="width: 15px;height: 15px"
+                                                              src="https://img.icons8.com/ios/50/000000/like--v1.png"/>
+                                </a>
+
+                            <#else>
+                                <a class="mb-2 mx-4">
+                                    ${message.likesCount}<img style="width: 15px;height: 15px"
+                                                              src="https://cdn-icons-png.flaticon.com/512/32/32557.png"/>
+                                </a>
+                            </#if>
                         <#else>
                             <a class="mb-2 mx-4" href="/user/unlike/${message.id}">
                                 ${message.likesCount}<img style="width: 15px;height: 15px"
@@ -184,13 +192,20 @@
                             <a class="btn btn-primary ml-2 mt-4 mb-2"
                                href="/user/profile/update/${message.id}">Изменить</a>
                         </#if>
-                        <#if message.meLiked == 0>
-                            <a class="mb-2 mx-4" href="/user/like/${message.id}">
-                                ${message.likesCount}<img style="width: 15px;height: 15px"
-                                                          src="https://img.icons8.com/ios/50/000000/like--v1.png"/>
-                            </a>
+                        <#if user??>
+                            <#if message.meLiked == 0>
+                                <a class="mb-2 mx-4" href="/user/like/${message.id}">
+                                    ${message.likesCount}<img style="width: 15px;height: 15px"
+                                                              src="https://img.icons8.com/ios/50/000000/like--v1.png"/>
+                                </a>
+                            <#else>
+                                <a class="mb-2 mx-4" href="/user/unlike/${message.id}">
+                                    ${message.likesCount}<img style="width: 15px;height: 15px"
+                                                              src="https://cdn-icons-png.flaticon.com/512/32/32557.png"/>
+                                </a>
+                            </#if>
                         <#else>
-                            <a class="mb-2 mx-4" href="/user/unlike/${message.id}">
+                            <a class="mb-2 mx-4">
                                 ${message.likesCount}<img style="width: 15px;height: 15px"
                                                           src="https://cdn-icons-png.flaticon.com/512/32/32557.png"/>
                             </a>

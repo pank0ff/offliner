@@ -252,4 +252,6 @@ public class User implements UserDetails {
     public void setCountOfLikes(int countOfLikes) {
         this.countOfLikes = countOfLikes;
     }
+
+
 }

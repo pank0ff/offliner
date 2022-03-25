@@ -87,9 +87,11 @@ public class MainController {
             Integer postCount = 0;
             Integer likesCount = 0;
             for (Message message : messages) {
-                for (User user3 : message.getLikes()) {
-                    if (Objects.equals(user3.getUsername(), user.getUsername())) {
-                        message.setMeLiked(1);
+                if (user != null) {
+                    for (User user3 : message.getLikes()) {
+                        if (Objects.equals(user3.getUsername(), user.getUsername())) {
+                            message.setMeLiked(1);
+                        }
                     }
                 }
                 if (Objects.equals(message.getAuthor().getUsername(), user1.getUsername())) {
