@@ -23,5 +23,4 @@ public class CommentService {
         comment.setAuthor(user);
         commentRepo.save(comment);
     }
-
 }
