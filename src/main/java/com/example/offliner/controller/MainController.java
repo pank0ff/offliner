@@ -66,6 +66,9 @@ public class MainController {
         messages1.clear();
         List<Message> messages = messageRepo.findAll();
         List<User> users = userRepo.findAll();
+        for (Message message : messages) {
+            message.setLikesCount(message.getLikes().size());
+        }
         for (User user1 : users) {
             for (Message message : messages) {
                 message.setAverageRate(rateService.calcAverageRate(message));
