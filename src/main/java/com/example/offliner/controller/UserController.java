@@ -88,14 +88,14 @@ public class UserController {
     public String getProfile(Model model, @AuthenticationPrincipal User user) {
         Iterable<Message> messages = messageRepo.findAll();
         ArrayList<Message> messages1 = new ArrayList<>();
-        Integer userLikes = 0;
+        int userLikes = 0;
         for (Message message : messages) {
             message.setLikesCount(message.getLikes().size());
         }
         for (Message message : messages) {
             message.setMeLiked(0);
         }
-        Integer counter = 0;
+        int counter = 0;
         for (Message message : messages) {
             for (User user3 : message.getLikes()) {
                 if (Objects.equals(user3.getUsername(), user.getUsername())) {
@@ -174,18 +174,18 @@ public class UserController {
 
     @GetMapping("/profile/{id}/{username}")
     public String userProfile(
-            Model model, @PathVariable String username, @PathVariable Long id, @AuthenticationPrincipal User currentUser) {
+            Model model, @PathVariable String username, @AuthenticationPrincipal User currentUser) {
         Iterable<Message> messages = messageRepo.findAll();
         User user = userRepo.findByUsername(username);
         ArrayList<Message> messages1 = new ArrayList<>();
-        Integer userLikes = 0;
+        int userLikes = 0;
         for (Message message : messages) {
             message.setLikesCount(message.getLikes().size());
         }
         for (Message message : messages) {
             message.setMeLiked(0);
         }
-        Integer counter = 0;
+        int counter = 0;
         for (Message message : messages) {
             for (User user3 : message.getLikes()) {
                 if (Objects.equals(user3.getUsername(), user.getUsername())) {
@@ -211,6 +211,7 @@ public class UserController {
         for (User user2 : user.getSubscribers()) {
             if (Objects.equals(user2.getUsername(), currentUser.getUsername())) {
                 isSubscriber = true;
+                break;
             }
         }
         boolean userChoice = Objects.equals(currentUser.getChoice(), "ENG");
@@ -246,13 +247,13 @@ public class UserController {
     @GetMapping("subscribe/{user}")
     public String subscribe(@PathVariable User user, @AuthenticationPrincipal User currentUser) {
         userSevice.subscribe(currentUser, user);
-        return "redirect:/user/profile/" + user.getId() + "/" + user.getUsername();
+        return "redirect:/user/profile/" + user.getId() + '/' + user.getUsername();
     }
 
     @GetMapping("/unsubscribe/{user}")
     public String unsubscribe(@PathVariable User user, @AuthenticationPrincipal User currentUser) {
         userSevice.unsubscribe(currentUser, user);
-        return "redirect:/user/profile/" + user.getId() + "/" + user.getUsername();
+        return "redirect:/user/profile/" + user.getId() + '/' + user.getUsername();
     }
 
     @GetMapping("/like/{messageId}")

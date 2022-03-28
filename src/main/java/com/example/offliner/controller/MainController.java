@@ -7,7 +7,6 @@ import com.example.offliner.domain.Message;
 import com.example.offliner.domain.User;
 import com.example.offliner.repos.CommentRepo;
 import com.example.offliner.repos.MessageRepo;
-import com.example.offliner.repos.RateRepo;
 import com.example.offliner.repos.UserRepo;
 import com.example.offliner.service.RateService;
 import org.commonmark.node.Node;
@@ -42,9 +41,6 @@ public class MainController {
     @Autowired
     private UserRepo userRepo;
 
-    @Autowired
-    private RateRepo rateRepo;
-
     Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
             "cloud_name", "dwnzejl4h",
             "api_key", "424976915584458",
@@ -60,8 +56,8 @@ public class MainController {
         if (user != null) {
             theme = Objects.equals(user.getTheme(), "LIGHT");
         }
-        Integer postCount = 0;
-        Integer likesCount = 0;
+        int postCount = 0;
+        int likesCount = 0;
         List<Message> messages1 = messageRepo.findAll();
         messages1.clear();
         List<Message> messages = messageRepo.findAll();
@@ -122,8 +118,8 @@ public class MainController {
             message.setMeLiked(0);
         }
         for (User user1 : users) {
-            Integer postCount = 0;
-            Integer likesCount = 0;
+            int postCount = 0;
+            int likesCount = 0;
             for (Message message : messages) {
                 if (user != null) {
                     for (User user3 : message.getLikes()) {
@@ -348,8 +344,8 @@ public class MainController {
         }
         List<User> users = userRepo.findAll();
         for (User user1 : users) {
-            Integer postCount = 0;
-            Integer likesCount = 0;
+            int postCount = 0;
+            int likesCount = 0;
 
             for (Message message : messages) {
                 for (User user3 : message.getLikes()) {
@@ -433,7 +429,6 @@ public class MainController {
                     }
                 } else {
                     messages2 = messageRepo.findByAuthor(user);
-                    ;
                 }
                 for (Message message : messages1) {
                     message.setAverageRate(rateService.calcAverageRate(message));
@@ -543,8 +538,8 @@ public class MainController {
         boolean theme = true;
         if (user != null) {
             theme = Objects.equals(user.getTheme(), "LIGHT");
-            ;
         }
+        assert user != null;
         model.addAttribute("userLikes", user.getCountOfLikes());
         model.addAttribute("theme", theme);
         model.addAttribute("isAdmin", isAdmin);
@@ -575,8 +570,8 @@ public class MainController {
         }
         List<User> users = userRepo.findAll();
         for (User user1 : users) {
-            Integer postCount = 0;
-            Integer likesCount = 0;
+            int postCount = 0;
+            int likesCount = 0;
             for (Message message : messages) {
                 for (User user3 : message.getLikes()) {
                     if (Objects.equals(user3.getUsername(), user.getUsername())) {
@@ -777,11 +772,13 @@ public class MainController {
         if (user != null) {
             theme = Objects.equals(currentUser.getTheme(), "LIGHT");
         }
+        assert user != null;
         boolean isCurrentUser = Objects.equals(user.getUsername(), currentUser.getUsername());
         boolean isSubscriber = false;
         for (User user2 : user.getSubscribers()) {
             if (Objects.equals(user2.getUsername(), currentUser.getUsername())) {
                 isSubscriber = true;
+                break;
             }
         }
         model.addAttribute("isSubscriber", isSubscriber);
@@ -819,7 +816,7 @@ public class MainController {
         User user = userRepo.findByUsername(username);
         Message message = new Message(text, tag, name, hashtag, user);
 
-        if (file != null && !file.getOriginalFilename().isEmpty()) {
+        if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
             File temp = null;
             try {
                 temp = File.createTempFile("myTempFile", ".png");
@@ -847,7 +844,7 @@ public class MainController {
 
     @GetMapping("/post/{id}")
     public String userPost(@PathVariable Integer id, @AuthenticationPrincipal User user, Model model) {
-        List<Message> messages = (List<Message>) messageRepo.findAll();
+        List<Message> messages = messageRepo.findAll();
         Message message = messageRepo.findById(id);
         List<Comment> comments = commentRepo.findByMessageId(id);
         Collections.reverse(comments);
@@ -860,8 +857,8 @@ public class MainController {
         }
         List<User> users = userRepo.findAll();
         for (User user1 : users) {
-            Integer postCount = 0;
-            Integer likesCount = 0;
+            int postCount = 0;
+            int likesCount = 0;
             for (Message message1 : messages) {
                 for (User user3 : message.getLikes()) {
                     if (Objects.equals(user3.getUsername(), user.getUsername())) {
@@ -889,12 +886,11 @@ public class MainController {
     }
 
     @PostMapping("/user/profile/update/{id}")
-    public String postUpdate(@AuthenticationPrincipal User user,
-                             @PathVariable Integer id,
+    public String postUpdate(@PathVariable Integer id,
                              @RequestParam String text,
                              @RequestParam String name,
                              @RequestParam String hashtag,
-                             @RequestParam String tag, Map<String, Object> model,
+                             @RequestParam String tag,
                              @RequestParam("file") MultipartFile file) throws IOException {
 
         Message message = messageRepo.findById(id);
@@ -925,7 +921,7 @@ public class MainController {
         if (isTopicChanged) {
             message.setTag(tag);
         }
-        if (file != null && !file.getOriginalFilename().isEmpty()) {
+        if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
             File temp = null;
             try {
                 temp = File.createTempFile("myTempFile", ".png");
@@ -962,8 +958,7 @@ public class MainController {
 
     @GetMapping("/post/hashtag/{hashtag}")
     public String allByHashtag(@PathVariable String hashtag, Model model, @AuthenticationPrincipal User user) {
-        List<Message> messages = messageRepo.findAll();
-        messages = messageRepo.findByHashtag(hashtag);
+        List<Message> messages = messageRepo.findByHashtag(hashtag);
         Collections.reverse(messages);
         for (Message message : messages) {
             message.setMeLiked(0);
@@ -979,8 +974,8 @@ public class MainController {
         }
         List<User> users = userRepo.findAll();
         for (User user1 : users) {
-            Integer postCount = 0;
-            Integer likesCount = 0;
+            int postCount = 0;
+            int likesCount = 0;
 
             for (Message message1 : messages) {
                 if (Objects.equals(message1.getAuthor().getUsername(), user1.getUsername())) {
@@ -1006,8 +1001,7 @@ public class MainController {
 
     @GetMapping("/post/topic/{topic}")
     public String allByTopic(@PathVariable String topic, Model model, @AuthenticationPrincipal User user) {
-        List<Message> messages = messageRepo.findAll();
-        messages = messageRepo.findByTag(topic);
+        List<Message> messages = messageRepo.findByTag(topic);
         Collections.reverse(messages);
         for (Message message : messages) {
             message.setMeLiked(0);
@@ -1023,8 +1017,8 @@ public class MainController {
         }
         List<User> users = userRepo.findAll();
         for (User user1 : users) {
-            Integer postCount = 0;
-            Integer likesCount = 0;
+            int postCount = 0;
+            int likesCount = 0;
 
             for (Message message1 : messages) {
                 if (Objects.equals(message1.getAuthor().getUsername(), user1.getUsername())) {

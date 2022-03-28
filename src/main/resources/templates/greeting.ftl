@@ -79,13 +79,13 @@
                                 </a>
 
                             <#else>
-                                <a class="mb-2 mx-4">
+                                <a class="mb-2 mx-4" href="/user/unlike/${message.id}">
                                     ${message.likesCount}<img style="width: 15px;height: 15px"
                                                               src="https://cdn-icons-png.flaticon.com/512/32/32557.png"/>
                                 </a>
                             </#if>
                         <#else>
-                            <a class="mb-2 mx-4" href="/user/unlike/${message.id}">
+                            <a class="mb-2 mx-4">
                                 ${message.likesCount}<img style="width: 15px;height: 15px"
                                                           src="https://cdn-icons-png.flaticon.com/512/32/32557.png"/>
                             </a>

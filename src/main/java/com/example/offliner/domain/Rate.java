@@ -1,10 +1,5 @@
 package com.example.offliner.domain;
 
-import com.example.offliner.domain.Message;
-import com.example.offliner.domain.User;
-import com.example.offliner.repos.RateRepo;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import javax.persistence.*;
 
 @Entity
@@ -22,12 +17,6 @@ public class Rate {
     private User user;
 
     private int rate;
-
-    public Rate(Message message,User user,int rate){
-        this.message =message;
-        this.user = user;
-        this.rate = rate;
-    }
 
     public Rate() {
 
