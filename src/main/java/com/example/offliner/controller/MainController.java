@@ -47,7 +47,11 @@ public class MainController {
             "api_secret", "TlQsPJt2OHBBSJVzwe31u3zFqgY"));
 
     @GetMapping("/")
-    public String greeting(Model model, @AuthenticationPrincipal User user) {
+    public String greeting(@RequestParam(required = false, defaultValue = "") String filter,
+                           @RequestParam(required = false, defaultValue = "0") int choice,
+                           @RequestParam(required = false, defaultValue = "1") int sortChoice,
+                           Model model,
+                           @AuthenticationPrincipal User user) {
         boolean userChoice = true;
         boolean theme = true;
         if (user != null) {
@@ -60,6 +64,8 @@ public class MainController {
         int likesCount = 0;
         List<Message> messages1 = messageRepo.findAll();
         messages1.clear();
+        List<Message> messages2 = messageRepo.findAll();
+        messages2.clear();
         List<Message> messages = messageRepo.findAll();
         List<User> users = userRepo.findAll();
         for (Message message : messages) {
@@ -93,8 +99,171 @@ public class MainController {
         if (user != null) {
             isAdmin = user.isAdmin();
         }
+        messages.clear();
+        messages = messages1;
+        switch (choice) {
+            case 1:
+                if (filter != null && !filter.isEmpty()) {
+                    for (Message message : messages) {
+                        String[] textOfName = message.getName().split(" ");
+                        boolean flag = false;
+                        for (String str : textOfName) {
+                            if (Objects.equals(str, filter)) {
+                                flag = true;
+                                break;
+                            }
+                        }
+                        List<Comment> comments = commentRepo.findByMessageId(message.getId());
+                        for (Comment comment : comments) {
+                            String[] textOfComment = comment.getText().split(" ");
+                            for (String str : textOfComment) {
+                                if (Objects.equals(str, filter)) {
+                                    flag = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (Objects.equals(message.getTag(), filter)) {
+                            flag = true;
+                        }
+                        if (Objects.equals(message.getHashtag(), filter)) {
+                            flag = true;
+                        }
+                        String[] textOfMessage = message.getText().split(" ");
+                        for (String str : textOfMessage) {
+                            if (Objects.equals(str, filter)) {
+                                flag = true;
+                                break;
+                            }
+                        }
+                        if (flag) {
+                            messages2.add(message);
+                        }
+                    }
+                } else {
+                    messages2 = messages;
+                }
+                for (Message message : messages) {
+                    message.setAverageRate(rateService.calcAverageRate(message));
+                }
+                Collections.reverse(messages2);
+
+                break;
+            case 2:
+                if (filter != null && !filter.isEmpty()) {
+                    for (Message message : messages) {
+                        String[] textOfName = message.getName().split(" ");
+                        boolean flag = false;
+                        for (String str : textOfName) {
+                            if (Objects.equals(str, filter)) {
+                                flag = true;
+                                break;
+                            }
+                        }
+                        if (flag) {
+                            messages2.add(message);
+                        }
+                    }
+                } else {
+                    messages2 = messages;
+                }
+                for (Message message : messages) {
+                    message.setAverageRate(rateService.calcAverageRate(message));
+                }
+                Collections.reverse(messages2);
+
+                break;
+            case 3:
+                if (filter != null && !filter.isEmpty()) {
+                    for (Message message : messages) {
+                        List<Comment> comments = commentRepo.findByMessageId(message.getId());
+                        for (Comment comment : comments) {
+                            String[] textOfComment = comment.getText().split(" ");
+                            boolean flag = false;
+                            for (String str : textOfComment) {
+                                if (Objects.equals(str, filter)) {
+                                    flag = true;
+                                    break;
+                                }
+                            }
+                            if (flag) {
+                                messages2.add(message);
+                            }
+                        }
+                    }
+                }
+                for (Message message : messages) {
+                    message.setAverageRate(rateService.calcAverageRate(message));
+                }
+                Collections.reverse(messages2);
+
+                break;
+            case 4:
+                if (filter != null && !filter.isEmpty()) {
+                    messages2 = messageRepo.findByTag(filter);
+                } else {
+                    messages2 = messages;
+                }
+                for (Message message : messages) {
+                    message.setAverageRate(rateService.calcAverageRate(message));
+                }
+                Collections.reverse(messages2);
+
+                break;
+            case 5:
+                if (filter != null && !filter.isEmpty()) {
+                    messages2 = messageRepo.findByHashtag(filter);
+                } else {
+                    messages2 = messages;
+                }
+                for (Message message : messages) {
+                    message.setAverageRate(rateService.calcAverageRate(message));
+                }
+                Collections.reverse(messages2);
+
+                break;
+            case 6:
+                if (filter != null && !filter.isEmpty()) {
+                    for (Message message : messages) {
+                        String[] textOfMessage = message.getText().split(" ");
+                        boolean flag = false;
+                        for (String str : textOfMessage) {
+                            if (Objects.equals(str, filter)) {
+                                flag = true;
+                                break;
+                            }
+                        }
+                        if (flag) {
+                            messages2.add(message);
+                        }
+                    }
+                } else {
+                    messages2 = messages;
+                }
+                Collections.reverse(messages2);
+                for (Message message : messages) {
+                    message.setAverageRate(rateService.calcAverageRate(message));
+                }
+
+                break;
+            default:
+                messages2 = messages;
+                Collections.reverse(messages2);
+                for (Message message : messages) {
+                    message.setAverageRate(rateService.calcAverageRate(message));
+                }
+        }
+
+        switch (sortChoice) {
+            case 1:
+                model.addAttribute("messages", messages2);
+                break;
+            case 2:
+                Collections.reverse(messages2);
+                model.addAttribute("messages", messages2);
+                break;
+        }
         model.addAttribute("isAdmin", isAdmin);
-        model.addAttribute("messages", messages1);
         model.addAttribute("theme", theme);
         model.addAttribute("lang", userChoice);
         model.addAttribute("user", user);

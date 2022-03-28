@@ -39,6 +39,46 @@
         </div>
     </#if>
 
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <form method="get" action="/" class="row d-flex flex-row">
+                <#if lang>
+                    <input type="text" name="filter" class="form-control col-4" value="" placeholder="Search ">
+                    <select name="choice" size="1" class="rounded col-3 form-control ml-1">
+                        <option value="1">Deep search</option>
+                        <option value="2">Post name</option>
+                        <option value="3">Comments</option>
+                        <option value="4">Topic</option>
+                        <option value="5">Hashtag</option>
+                        <option value="6">Text</option>
+                    </select>
+                    <select name="sortChoice" size="1" class="col-3 rounded form-control ml-1">
+                        <option value="1">Date(first earlier)</option>
+                        <option value="2">Date(first latest)</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary mt-2 col-2">Search</button>
+                <#else>
+                    <input type="text" name="filter" class="form-control col-4" value="" placeholder="Поиск ">
+                    <select name="choice" size="1" class="rounded col-3 form-control ml-1">
+                        <option value="1">Полный поиск</option>
+                        <option value="2">Название постов</option>
+                        <option value="3">Комментарии</option>
+                        <option value="4">Темы</option>
+                        <option value="5">Хэш-теги</option>
+                        <option value="6">Текст</option>
+                    </select>
+                    <select name="sortChoice" size="1" class="col-3 rounded form-control ml-1">
+                        <option value="1">Дата(сначала ранние)</option>
+                        <option value="2">Дата(сначала поздние)</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary mt-2 col-2">Поиск</button>
+                </#if>
+
+
+            </form>
+        </div>
+    </div>
+
     <div style="height: 400px; width: 900px">
         <#if lang>
             <#list messages as message>
