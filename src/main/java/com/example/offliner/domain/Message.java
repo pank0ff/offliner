@@ -11,8 +11,8 @@ public class Message {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
 
+    @Lob
     private String text;
-
     private String tag;
     private String name;
     private String hashtag;
