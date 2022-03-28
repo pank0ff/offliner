@@ -40,8 +40,8 @@
                     </li>
 
                     <li class="nav-item">
-                            <a class="nav-link" href="/user">Список пользователей</a>
-                        </li>
+                        <a class="nav-link" href="/user">Список пользователей</a>
+                    </li>
 
                     <#if user??>
                         <li class="nav-item">
