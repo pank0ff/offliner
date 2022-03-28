@@ -32,7 +32,7 @@ public class UserController {
     @Autowired
     private RateService rateService;
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping
     public String userList(@AuthenticationPrincipal User user, Model model) {
 
@@ -45,7 +45,7 @@ public class UserController {
         return "userList";
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("{user}")
     public String userEditForm(@PathVariable User user, @AuthenticationPrincipal User user1, Model model) {
         boolean userChoice = Objects.equals(user1.getChoice(), "ENG");
@@ -58,7 +58,7 @@ public class UserController {
         return "userEdit";
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping
     public String userSave(
             @RequestParam String username,
