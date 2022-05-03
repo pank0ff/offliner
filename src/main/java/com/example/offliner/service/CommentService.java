@@ -7,12 +7,14 @@ import com.example.offliner.repos.CommentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CommentService {
     private final CommentRepo commentRepo;
 
     @Autowired
-    public CommentService(CommentRepo commentRepo){
+    public CommentService(CommentRepo commentRepo) {
         this.commentRepo = commentRepo;
     }
 
@@ -22,5 +24,9 @@ public class CommentService {
         comment.setText(text);
         comment.setAuthor(user);
         commentRepo.save(comment);
+    }
+
+    public List<Comment> getCommentsByMessageId(Integer id) {
+        return commentRepo.findByMessageId(id);
     }
 }

@@ -69,11 +69,11 @@
                                 </div>
                                 <div class="p-3 bg-success text-center skill-block">
                                     <h5>Subscribers:</h5>
-                                    <h5><a href="/user/subscribers/${user.id}/list">list</a></h5>
+                                    <h5><a href="/user/subscribers/${user.id}/list">${countOfSubscribers}</a></h5>
                                 </div>
                                 <div class="p-3 bg-warning text-center skill-block">
                                     <h5>Subscriptions:</h5>
-                                    <h5><a href="/user/subscriptions/${user.id}/list">list</a></h5>
+                                    <h5><a href="/user/subscriptions/${user.id}/list">${countOfSubscriptions}</a></h5>
                                 </div>
                                 <div class="p-3 bg-danger text-center skill-block">
                                     <h5>Date of registration:</h5>
@@ -319,11 +319,11 @@
                                 </div>
                                 <div class="p-3 bg-success text-center skill-block">
                                     <h5>Подписчики:</h5>
-                                    <h5><a href="/user/subscribers/${user.id}/list">список</a></h5>
+                                    <h5><a href="/user/subscribers/${user.id}/list">${countOfSubscribers}</a></h5>
                                 </div>
                                 <div class="p-3 bg-warning text-center skill-block">
                                     <h5>Подписки:</h5>
-                                    <h5><a href="/user/subscriptions/${user.id}/list">список</a></h5>
+                                    <h5><a href="/user/subscriptions/${user.id}/list">${countOfSubscriptions}</a></h5>
                                 </div>
                                 <div class="p-3 bg-danger text-center skill-block">
                                     <h5>Дата регистрации:</h5>

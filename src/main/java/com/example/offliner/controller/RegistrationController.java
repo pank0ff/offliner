@@ -1,22 +1,23 @@
 package com.example.offliner.controller;
 
-import com.example.offliner.domain.Role;
 import com.example.offliner.domain.User;
-import com.example.offliner.repos.UserRepo;
+import com.example.offliner.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Collections;
-import java.util.Date;
 import java.util.Map;
 
 @Controller
 public class RegistrationController {
+    private final UserService userService;
+
     @Autowired
-    private UserRepo userRepo;
+    public RegistrationController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/registration")
     public String registration() {
@@ -25,20 +26,14 @@ public class RegistrationController {
 
     @PostMapping("/registration")
     public String addUser(@RequestParam String choice, @RequestParam String theme, User user, Map<String, Object> model) {
-        User userFromDb = userRepo.findByUsername(user.getUsername());
+        User userFromDb = userService.getUserByUsername(user.getUsername());
+        ;
 
         if (userFromDb != null) {
             model.put("message", "User exists!");
             return "registration";
         }
-        Date date = new Date();
-        user.setDateOfRegistration(date.toString().substring(4));
-        user.setActive(true);
-        user.setRoles(Collections.singleton(Role.USER));
-        user.setTheme(theme);
-        user.setChoice(choice);
-        userRepo.save(user);
-
+        userService.addUser(user, theme, choice);
         return "redirect:/login";
     }
 }

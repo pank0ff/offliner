@@ -2,8 +2,8 @@ package com.example.offliner.controller;
 
 import com.example.offliner.domain.Message;
 import com.example.offliner.domain.User;
-import com.example.offliner.repos.MessageRepo;
 import com.example.offliner.service.CommentService;
+import com.example.offliner.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class CommentController {
     private final CommentService commentService;
+    private final MessageService messageService;
 
     @Autowired
-    public CommentController(CommentService commentService) {
+    public CommentController(CommentService commentService, MessageService messageService) {
         this.commentService = commentService;
+        this.messageService = messageService;
     }
-    @Autowired
-    private MessageRepo messageRepo;
 
     @PostMapping("/post/add/comment/{id}")
     public String create(
@@ -29,7 +29,7 @@ public class CommentController {
             @RequestParam String text,
             @AuthenticationPrincipal User user
     ){
-        Message message = messageRepo.findById(id);
+        Message message = messageService.getMessageById(id);
        commentService.create(message,text,user);
        return "redirect:/main";
     }

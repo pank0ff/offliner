@@ -3,6 +3,7 @@ package com.example.offliner.service;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.offliner.domain.Message;
+import com.example.offliner.domain.Role;
 import com.example.offliner.domain.User;
 import com.example.offliner.repos.MessageRepo;
 import com.example.offliner.repos.UserRepo;
@@ -16,11 +17,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
-public class UserSevice implements UserDetailsService {
+public class UserService implements UserDetailsService {
     @Autowired
     private UserRepo userRepo;
 
@@ -130,5 +131,72 @@ public class UserSevice implements UserDetailsService {
     public void unlike(User user, Message message) {
         message.getLikes().removeIf(user1 -> Objects.equals(user1.getUsername(), user.getUsername()));
         messageRepo.save(message);
+    }
+
+    public void userSave(String username, Map<String, String> form, User user) {
+        user.setUsername(username);
+
+        Set<String> roles = Arrays.stream(Role.values())
+                .map(Role::name)
+                .collect(Collectors.toSet());
+
+        user.getRoles().clear();
+
+        for (String key : form.keySet()) {
+            if (roles.contains(key)) {
+                user.getRoles().add(Role.valueOf(key));
+            }
+        }
+        userRepo.save(user);
+    }
+
+    public int getUserLikesCount(User user) {
+        int counter = 0;
+        List<Message> messages = messageRepo.findByAuthor(user);
+        for (Message message : messages) {
+            counter += message.getLikesCount();
+        }
+        return counter;
+    }
+
+    public int getUserCountOfPosts(User user) {
+        return messageRepo.findByAuthor(user).size();
+    }
+
+    public boolean isSubscriber(User user, User currentUser) {
+        boolean isSubscriber = false;
+        for (User user2 : user.getSubscribers()) {
+            if (Objects.equals(user2.getUsername(), currentUser.getUsername())) {
+                isSubscriber = true;
+                break;
+            }
+        }
+        return isSubscriber;
+    }
+
+    public User getUserByUsername(String username) {
+        return userRepo.findByUsername(username);
+    }
+
+    public User getUserById(Long id) {
+        return userRepo.findById(id).get();
+    }
+
+    public void addUser(User user, String theme, String choice) {
+        Date date = new Date();
+        user.setDateOfRegistration(date.toString().substring(4));
+        user.setActive(true);
+        user.setRoles(Collections.singleton(Role.USER));
+        user.setTheme(theme);
+        user.setChoice(choice);
+        userRepo.save(user);
+    }
+
+    public List<User> getAllUsers() {
+        return userRepo.findAll();
+    }
+
+    public void deleteUser(User user) {
+        userRepo.delete(user);
     }
 }
