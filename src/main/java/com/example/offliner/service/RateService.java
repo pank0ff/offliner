@@ -44,10 +44,6 @@ public class RateService {
         return averageRate;
     }
 
-    public List<Rate> getRateByUserId(Long id) {
-        return rateRepo.findByUserId(id);
-    }
-
     public int getRateCounter(User user, Message message) {
         int counter = 0;
         for (Rate rate1 : rateRepo.findByUserId(user.getId())) {

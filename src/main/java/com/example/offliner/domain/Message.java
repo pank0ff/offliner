@@ -56,7 +56,7 @@ public class Message {
             joinColumns = {@JoinColumn(name = "message_id")},
             inverseJoinColumns = {@JoinColumn(name = "user_id")}
     )
-    private Set<User> likes = new HashSet<>();
+    private final Set<User> likes = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
@@ -96,10 +96,6 @@ public class Message {
 
     public User getAuthor() {
         return author;
-    }
-
-    public void setAuthor(User author) {
-        this.author = author;
     }
 
     public void setText(String text) {
@@ -158,28 +154,8 @@ public class Message {
         this.averageRate = averageRate;
     }
 
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
-    public List<Rate> getRates() {
-        return rates;
-    }
-
-    public void setRates(List<Rate> rates) {
-        this.rates = rates;
-    }
-
     public Set<User> getLikes() {
         return likes;
-    }
-
-    public void setLikes(Set<User> likes) {
-        this.likes = likes;
     }
 
     public int getMeLiked() {

@@ -12,8 +12,6 @@ public interface MessageRepo extends JpaRepository<Message, Long> {
 
     List<Message> findByTag(String tag);
 
-    List<Message> findByName(String filter);
-
     Message findById(Integer id);
 
     List<Message> findByAuthor(User user);

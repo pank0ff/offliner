@@ -23,11 +23,15 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
-    @Autowired
-    private UserRepo userRepo;
+
+    private final UserRepo userRepo;
+    private final MessageRepo messageRepo;
 
     @Autowired
-    private MessageRepo messageRepo;
+    public UserService(UserRepo userRepo, MessageRepo messageRepo) {
+        this.userRepo = userRepo;
+        this.messageRepo = messageRepo;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

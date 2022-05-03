@@ -1,7 +1,6 @@
 package com.example.offliner.repos;
 
 import com.example.offliner.domain.Comment;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

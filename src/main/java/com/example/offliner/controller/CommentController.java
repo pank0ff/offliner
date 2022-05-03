@@ -1,6 +1,7 @@
 package com.example.offliner.controller;
 
 import com.example.offliner.domain.User;
+import com.example.offliner.exception.ApiRequestException;
 import com.example.offliner.service.CommentService;
 import com.example.offliner.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,12 @@ public class CommentController {
             @PathVariable Integer id,
             @Valid @RequestParam String text,
             @AuthenticationPrincipal User user
-    ){
-        commentService.create(messageService.getMessageById(id), text, user);
+    ) {
+        try {
+            commentService.create(messageService.getMessageById(id), text, user);
+        } catch (Exception e) {
+            throw new ApiRequestException("can't create comment");
+        }
         return "redirect:/main";
     }
 }

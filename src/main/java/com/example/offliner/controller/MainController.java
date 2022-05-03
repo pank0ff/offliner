@@ -3,6 +3,7 @@ package com.example.offliner.controller;
 import com.example.offliner.domain.Comment;
 import com.example.offliner.domain.Message;
 import com.example.offliner.domain.User;
+import com.example.offliner.exception.ApiRequestException;
 import com.example.offliner.service.CommentService;
 import com.example.offliner.service.MessageService;
 import com.example.offliner.service.UserService;
@@ -45,17 +46,13 @@ public class MainController {
                            Model model,
                            @AuthenticationPrincipal User user) {
         messageService.loadMessages(messageService.getAllMessages(), user);
-        List<Message> messages2 = messageService.sortMessages(choice, filter, messageService.searchTopMessage());
-        switch (sortChoice) {
-            case 1:
-                Collections.reverse(messages2);
-                model.addAttribute("messages", messages2);
-                break;
-            case 2:
-                model.addAttribute("messages", messages2);
-                break;
+        try {
+            List<Message> messages2 = messageService.sortMessages(choice, filter, messageService.searchTopMessage());
+            model.addAttribute("messages", messageService.sortByDate(messages2, sortChoice));
+            userService.calcUserRateForAll();
+        } catch (Exception e) {
+            throw new ApiRequestException("Cant sort messages.Check filter, or else fields");
         }
-        userService.calcUserRateForAll();
         model.addAttribute("isAdmin", userService.getUserIsAdmin(user));
         model.addAttribute("theme", userService.getUserTheme(user));
         model.addAttribute("lang", userService.getUserLang(user));
@@ -71,16 +68,12 @@ public class MainController {
             Model model,
             @AuthenticationPrincipal User user) {
         messageService.loadMessages(messageService.getAllMessages(), user);
-        List<Message> messages2 = messageService.sortMessages(choice, filter, messageService.getAllMessages());
-        userService.calcUserRateForAll();
-        switch (sortChoice) {
-            case 1:
-                Collections.reverse(messages2);
-                model.addAttribute("messages", messages2);
-                break;
-            case 2:
-                model.addAttribute("messages", messages2);
-                break;
+        try {
+            List<Message> messages2 = messageService.sortMessages(choice, filter, messageService.getAllMessages());
+            model.addAttribute("messages", messageService.sortByDate(messages2, sortChoice));
+            userService.calcUserRateForAll();
+        } catch (Exception e) {
+            throw new ApiRequestException("Cant sort messages. Check filter, or else fields");
         }
         model.addAttribute("isAdmin", userService.getUserIsAdmin(user));
         model.addAttribute("theme", userService.getUserTheme(user));
@@ -98,19 +91,7 @@ public class MainController {
                          Model model
     ) {
         User user = userService.getUserById(id);
-        List<Message> messages2 = messageService.sortMessages(choice, filter, messageService.getMessagesByAuthor(user));
-        messageService.loadMessages(messages2, user);
-        switch (sortChoice) {
-            case 1:
-                Collections.reverse(messages2);
-                model.addAttribute("messages", messages2);
-                break;
-            case 2:
-                model.addAttribute("messages", messages2);
-                break;
-
-        }
-        user.setUserRate(userService.calcUserRate(user));
+        messageService.sortMessagesWithExceptionCheck(filter, choice, sortChoice, model, user);
         model.addAttribute("countOfSubscribers", user.getSubscribers().size());
         model.addAttribute("countOfSubscriptions", user.getSubscriptions().size());
         model.addAttribute("userLikes", user.getCountOfLikes());
@@ -133,19 +114,7 @@ public class MainController {
                                           @PathVariable String username,
                                           @AuthenticationPrincipal User currentUser) {
         User user = userService.getUserByUsername(username);
-        List<Message> messages2 = messageService.sortMessages(choice, filter, messageService.getMessagesByAuthor(user));
-        messageService.loadMessages(messages2, user);
-        switch (sortChoice) {
-            case 1:
-                Collections.reverse(messages2);
-                model.addAttribute("messages", messages2);
-                break;
-            case 2:
-                model.addAttribute("messages", messages2);
-                break;
-
-        }
-        user.setUserRate(userService.calcUserRate(user));
+        messageService.sortMessagesWithExceptionCheck(filter, choice, sortChoice, model, user);
         model.addAttribute("isSubscriber", userService.isSubscriber(user, currentUser));
         model.addAttribute("isCurrentUser", Objects.equals(user.getUsername(), currentUser.getUsername()));
         model.addAttribute("subscribersCount", user.getSubscribers().size());
@@ -171,8 +140,12 @@ public class MainController {
             @Valid @RequestParam String tag, Map<String, Object> model,
             @RequestParam("file") MultipartFile file
     ) throws IOException {
-        messageService.addMessage(username, text, name, hashtag, tag, file);
-        model.put("messages", messageService.getAllMessages());
+        try {
+            messageService.addMessage(username, text, name, hashtag, tag, file);
+            model.put("messages", messageService.getAllMessages());
+        } catch (Exception e) {
+            throw new ApiRequestException("Cant add message. Check your fields");
+        }
         return "redirect:/user/profile";
     }
 
@@ -198,8 +171,12 @@ public class MainController {
                              @Valid @RequestParam String name,
                              @Valid @RequestParam String hashtag,
                              @Valid @RequestParam String tag,
-                             @RequestParam("file") MultipartFile file) throws IOException {
-        messageService.postUpdate(id, text, hashtag, tag, name, file);
+                             @RequestParam("file") MultipartFile file) {
+        try {
+            messageService.postUpdate(id, text, hashtag, tag, name, file);
+        } catch (Exception e) {
+            throw new ApiRequestException("Cant update message. Check fields");
+        }
         return "redirect:/user/profile";
     }
 
@@ -220,13 +197,7 @@ public class MainController {
     @GetMapping("/post/hashtag/{hashtag}")
     public String allByHashtag(@Valid @PathVariable String hashtag, Model model, @AuthenticationPrincipal User user) {
         List<Message> messages = messageService.getMessagesByHashtag(hashtag);
-        messageService.loadMessages(messages, user);
-        userService.calcUserRateForAll();
-        model.addAttribute("user", user);
-        model.addAttribute("theme", Objects.equals(user.getTheme(), "LIGHT"));
-        model.addAttribute("isAdmin", user.isAdmin());
-        model.addAttribute("lang", Objects.equals(user.getLang(), "ENG"));
-        model.addAttribute("messages", messages);
+        messageService.messageLoader(model, user, messages);
         model.addAttribute("hashtag", hashtag);
 
         return "allByTag";
@@ -235,13 +206,7 @@ public class MainController {
     @GetMapping("/post/topic/{topic}")
     public String allByTopic(@Valid @PathVariable String topic, Model model, @AuthenticationPrincipal User user) {
         List<Message> messages = messageService.getMessagesByTopic(topic);
-        messageService.loadMessages(messages, user);
-        userService.calcUserRateForAll();
-        model.addAttribute("user", user);
-        model.addAttribute("theme", Objects.equals(user.getTheme(), "LIGHT"));
-        model.addAttribute("isAdmin", user.isAdmin());
-        model.addAttribute("lang", Objects.equals(user.getLang(), "ENG"));
-        model.addAttribute("messages", messages);
+        messageService.messageLoader(model, user, messages);
         model.addAttribute("topic", topic);
         return "byTopic";
     }

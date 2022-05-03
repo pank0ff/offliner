@@ -3,6 +3,7 @@ package com.example.offliner.controller;
 import com.example.offliner.domain.Message;
 import com.example.offliner.domain.Role;
 import com.example.offliner.domain.User;
+import com.example.offliner.exception.ApiRequestException;
 import com.example.offliner.service.MessageService;
 import com.example.offliner.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +61,11 @@ public class UserController {
             @RequestParam Map<String, String> form,
             @RequestParam("userId") User user
     ) {
-        userService.userSave(username, form, user);
+        try {
+            userService.userSave(username, form, user);
+        } catch (Exception e) {
+            throw new ApiRequestException("Cant save user. Check fields");
+        }
         return "redirect:/user";
     }
 
@@ -121,9 +125,12 @@ public class UserController {
             @RequestParam String linkLinkedIn,
             @RequestParam("file") MultipartFile file
 
-    ) throws IOException {
-        userService.updateProfile(userService.getUserByUsername(username), password, email, aboutMyself, userChoice, theme, linkFacebook, linkGoogle, linkYoutube, linkDribble, linkLinkedIn, file);
-
+    ) {
+        try {
+            userService.updateProfile(userService.getUserByUsername(username), password, email, aboutMyself, userChoice, theme, linkFacebook, linkGoogle, linkYoutube, linkDribble, linkLinkedIn, file);
+        } catch (Exception e) {
+            throw new ApiRequestException("Cant update user. Check fields");
+        }
         return "redirect:/user/profile";
     }
 

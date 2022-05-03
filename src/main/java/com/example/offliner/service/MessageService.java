@@ -5,6 +5,7 @@ import com.cloudinary.utils.ObjectUtils;
 import com.example.offliner.domain.Comment;
 import com.example.offliner.domain.Message;
 import com.example.offliner.domain.User;
+import com.example.offliner.exception.ApiRequestException;
 import com.example.offliner.repos.CommentRepo;
 import com.example.offliner.repos.MessageRepo;
 import com.example.offliner.repos.UserRepo;
@@ -13,6 +14,7 @@ import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -309,5 +311,33 @@ public class MessageService {
             }
         }
         return messages1;
+    }
+
+    public List<Message> sortByDate(List<Message> messages, int sortChoice) {
+        if (sortChoice == 1) {
+            Collections.reverse(messages);
+        }
+        return messages;
+    }
+
+    public void sortMessagesWithExceptionCheck(String filter, int choice, int sortChoice, Model model, User user) {
+        try {
+            List<Message> messages2 = sortMessages(choice, filter, getMessagesByAuthor(user));
+            loadMessages(messages2, user);
+            model.addAttribute("messages", sortByDate(messages2, sortChoice));
+            user.setUserRate(userService.calcUserRate(user));
+        } catch (Exception e) {
+            throw new ApiRequestException("Cant sort messages. Check filter, or else fields");
+        }
+    }
+
+    public void messageLoader(Model model, User user, List<Message> messages) {
+        loadMessages(messages, user);
+        userService.calcUserRateForAll();
+        model.addAttribute("user", user);
+        model.addAttribute("theme", Objects.equals(user.getTheme(), "LIGHT"));
+        model.addAttribute("isAdmin", user.isAdmin());
+        model.addAttribute("lang", Objects.equals(user.getLang(), "ENG"));
+        model.addAttribute("messages", messages);
     }
 }
