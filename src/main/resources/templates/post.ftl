@@ -51,7 +51,7 @@
                             <div>
                                 <a class="col align-self-center"
                                    href="/user/profile/${message.getAuthor().id}/${message.getAuthor().username}">Author: ${message.authorName}</a>
-                                rate: ${message.getAuthor().getCountOfLikes()/message.getAuthor().getCountOfPosts()}
+                                rate: ${message.getAuthor().getUserRate()}
                                 <#if isAdmin>
                                     <a class="btn btn-primary ml-2 mt-4 mb-2" href="/user/profile/update/${message.id}">Edit</a>
                                 </#if>
@@ -152,7 +152,7 @@
                             <div>
                                 <a class="col align-self-center"
                                    href="/user/profile/${message.getAuthor().id}/${message.getAuthor().username}">Автор: ${message.authorName}</a>
-                                рейтинг: ${message.getAuthor().getCountOfLikes()/message.getAuthor().getCountOfPosts()}
+                                рейтинг: ${message.getAuthor().getUserRate()}
                                 <#if isAdmin>
                                     <a class="btn btn-primary ml-2 mt-4 mb-2" href="/user/profile/update/${message.id}">Изменить</a>
                                 </#if>

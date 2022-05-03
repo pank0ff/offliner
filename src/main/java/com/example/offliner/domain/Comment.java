@@ -1,12 +1,9 @@
 package com.example.offliner.domain;
 
-import lombok.Data;
-
 import javax.persistence.*;
 
-@Data
 @Entity
-@Table(name = "comment")
+@Table
 public class Comment {
     @Id
     @GeneratedValue

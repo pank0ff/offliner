@@ -103,7 +103,7 @@
                             <div>
                                 <a class="col align-self-center"
                                    href="/user/profile/${message.getAuthor().id}/${message.getAuthor().username}">Author: ${message.authorName}</a>
-                                rate: ${message.getAuthor().getCountOfLikes()/message.getAuthor().getCountOfPosts()}
+                                rate: ${message.getAuthor().getUserRate()}
                             </div>
                             <div>
                                 <#if user??>
@@ -216,7 +216,7 @@
                             <div>
                                 <a class="col align-self-center"
                                    href="/user/profile/${message.getAuthor().id}/${message.getAuthor().username}">Автор: ${message.authorName}</a>
-                                рейтинг: ${message.getAuthor().getCountOfLikes()/message.getAuthor().getCountOfPosts()}
+                                рейтинг: ${message.getAuthor().getUserRate()}
                             </div>
                             <div>
                                 <#if user??>

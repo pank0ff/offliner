@@ -198,6 +198,7 @@ public class MessageService {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            assert temp != null;
             file.transferTo(temp);
             Map uploadResult = cloudinary.uploader().upload(temp, ObjectUtils.emptyMap());
             String resultFilename = (String) uploadResult.get("url");
@@ -238,6 +239,7 @@ public class MessageService {
             e.printStackTrace();
         }
 
+        assert temp != null;
         file.transferTo(temp);
         Map uploadResult = cloudinary.uploader().upload(temp, ObjectUtils.emptyMap());
         String resultFilename = (String) uploadResult.get("url");
@@ -297,5 +299,15 @@ public class MessageService {
         for (Message message : messages) {
             message.setAverageRate(rateService.calcAverageRate(message));
         }
+    }
+
+    public List<Message> searchTopMessage() {
+        List<Message> messages1 = new ArrayList<>();
+        for (Message message : getAllMessages()) {
+            if (message.getAverageRate() >= 4) {
+                messages1.add(message);
+            }
+        }
+        return messages1;
     }
 }

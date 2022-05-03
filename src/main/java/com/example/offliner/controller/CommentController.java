@@ -1,6 +1,5 @@
 package com.example.offliner.controller;
 
-import com.example.offliner.domain.Message;
 import com.example.offliner.domain.User;
 import com.example.offliner.service.CommentService;
 import com.example.offliner.service.MessageService;
@@ -29,8 +28,7 @@ public class CommentController {
             @RequestParam String text,
             @AuthenticationPrincipal User user
     ){
-        Message message = messageService.getMessageById(id);
-       commentService.create(message,text,user);
+       commentService.create(messageService.getMessageById(id), text, user);
        return "redirect:/main";
     }
 }

@@ -41,7 +41,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("{user}")
+    @GetMapping("/{user}")
     public String userEditForm(@PathVariable User user, @AuthenticationPrincipal User user1, Model model) {
         model.addAttribute("theme", Objects.equals(user1.getTheme(), "LIGHT"));
         model.addAttribute("lang", Objects.equals(user1.getChoice(), "ENG"));
@@ -70,14 +70,13 @@ public class UserController {
         messageService.setMeLiked(messages, user);
         user.setCountOfLikes(userService.getUserLikesCount(user));
         user.setCountOfPosts(userService.getUserCountOfPosts(user));
+        user.setUserRate(userService.calcUserRate(user));
         messageService.setMessagesAverageRate(messages);
         Collections.reverse(messages);
         model.addAttribute("countOfSubscribers", user.getSubscribers().size());
         model.addAttribute("countOfSubscriptions", user.getSubscriptions().size());
-        model.addAttribute("userLikes", userService.getUserLikesCount(user));
         model.addAttribute("theme", Objects.equals(user.getTheme(), "LIGHT"));
         model.addAttribute("lang", Objects.equals(user.getChoice(), "ENG"));
-        model.addAttribute("countOfPosts", userService.getUserCountOfPosts(user));
         model.addAttribute("user", user);
         model.addAttribute("aboutMyself", user.getAboutMyself());
         model.addAttribute("messages", messages);
@@ -120,8 +119,7 @@ public class UserController {
             @RequestParam("file") MultipartFile file
 
     ) throws IOException {
-        User user = userService.getUserByUsername(username);
-        userService.updateProfile(user, password, email, aboutMyself, userChoice, theme, linkFacebook, linkGoogle, linkYoutube, linkDribble, linkLinkedIn, file);
+        userService.updateProfile(userService.getUserByUsername(username), password, email, aboutMyself, userChoice, theme, linkFacebook, linkGoogle, linkYoutube, linkDribble, linkLinkedIn, file);
 
         return "redirect:/user/profile";
     }
@@ -135,16 +133,15 @@ public class UserController {
         messageService.setMessagesLikesCount(messages);
         user.setCountOfLikes(userService.getUserLikesCount(user));
         user.setCountOfPosts(userService.getUserCountOfPosts(user));
+        user.setUserRate(userService.calcUserRate(user));
         messageService.setMessagesAverageRate(messages);
         Collections.reverse(messages);
-        model.addAttribute("userLikes", userService.getUserLikesCount(user));
         model.addAttribute("isCurrentUser", Objects.equals(user.getUsername(), currentUser.getUsername()));
         model.addAttribute("subscribersCount", user.getSubscribers().size());
         model.addAttribute("subscriptionsCount", user.getSubscriptions().size());
         model.addAttribute("theme", Objects.equals(currentUser.getTheme(), "LIGHT"));
         model.addAttribute("isSubscriber", userService.isSubscriber(user, currentUser));
         model.addAttribute("lang", Objects.equals(currentUser.getChoice(), "ENG"));
-        model.addAttribute("countOfPosts", userService.getUserCountOfPosts(user));
         model.addAttribute("admin", currentUser.isAdmin());
         model.addAttribute("user", user);
         model.addAttribute("messages", messages);
@@ -156,8 +153,7 @@ public class UserController {
             @PathVariable String username,
             @AuthenticationPrincipal User user1
     ) {
-        User user = userService.getUserByUsername(username);
-        userService.deleteUser(user);
+        userService.deleteUser(userService.getUserByUsername(username));
         if (user1.isAdmin()) {
             return "redirect:/user";
         } else {
@@ -165,7 +161,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("subscribe/{user}")
+    @GetMapping("/subscribe/{user}")
     public String subscribe(@PathVariable User user, @AuthenticationPrincipal User currentUser) {
         userService.subscribe(currentUser, user);
         return "redirect:/user/profile/" + user.getId() + '/' + user.getUsername();
@@ -191,7 +187,7 @@ public class UserController {
         return "redirect:/post/" + message.getId();
     }
 
-    @GetMapping("{type}/{user}/list")
+    @GetMapping("/{type}/{user}/list")
     public String userListOf(Model model,
                              @PathVariable User user,
                              @PathVariable String type) {

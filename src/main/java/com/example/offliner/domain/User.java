@@ -1,6 +1,5 @@
 package com.example.offliner.domain;
 
-import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -10,7 +9,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-@Data
 @Entity
 @Table(name = "usr")
 public class User implements UserDetails {
@@ -20,6 +18,7 @@ public class User implements UserDetails {
     private String username;
     private String password;
     private boolean active;
+    private double userRate;
     private String email;
     private String aboutMyself;
     private String dateOfRegistration;
@@ -255,5 +254,11 @@ public class User implements UserDetails {
         this.countOfLikes = countOfLikes;
     }
 
+    public double getUserRate() {
+        return userRate;
+    }
 
+    public void setUserRate(double userRate) {
+        this.userRate = userRate;
+    }
 }

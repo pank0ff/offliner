@@ -17,7 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 
 @Controller
@@ -39,23 +42,8 @@ public class MainController {
                            @RequestParam(required = false, defaultValue = "1") int sortChoice,
                            Model model,
                            @AuthenticationPrincipal User user) {
-        List<Message> messages1 = new ArrayList<>();
-        List<Message> messages = messageService.getAllMessages();
-        messageService.loadMessages(messages, user);
-        for (Message message : messages) {
-            if (message.getAverageRate() >= 4) {
-                messages1.add(message);
-            }
-        }
-        boolean userChoice = true;
-        boolean theme = true;
-        boolean isAdmin = false;
-        if (user != null) {
-            userChoice = Objects.equals(user.getChoice(), "ENG");
-            theme = Objects.equals(user.getTheme(), "LIGHT");
-            isAdmin = user.isAdmin();
-        }
-        List<Message> messages2 = messageService.sortMessages(choice, filter, messages1);
+        messageService.loadMessages(messageService.getAllMessages(), user);
+        List<Message> messages2 = messageService.sortMessages(choice, filter, messageService.searchTopMessage());
         switch (sortChoice) {
             case 1:
                 Collections.reverse(messages2);
@@ -65,9 +53,10 @@ public class MainController {
                 model.addAttribute("messages", messages2);
                 break;
         }
-        model.addAttribute("isAdmin", isAdmin);
-        model.addAttribute("theme", theme);
-        model.addAttribute("lang", userChoice);
+        userService.calcUserRateForAll();
+        model.addAttribute("isAdmin", userService.getUserIsAdmin(user));
+        model.addAttribute("theme", userService.getUserTheme(user));
+        model.addAttribute("lang", userService.getUserLang(user));
         model.addAttribute("user", user);
         return "greeting";
     }
@@ -79,17 +68,9 @@ public class MainController {
             @RequestParam(required = false, defaultValue = "1") int sortChoice,
             Model model,
             @AuthenticationPrincipal User user) {
-        List<Message> messages = messageService.getAllMessages();
-        messageService.loadMessages(messages, user);
-        List<Message> messages2 = messageService.sortMessages(choice, filter, messages);
-        boolean userChoice = true;
-        boolean theme = true;
-        boolean isAdmin = false;
-        if (user != null) {
-            userChoice = Objects.equals(user.getChoice(), "ENG");
-            theme = Objects.equals(user.getTheme(), "LIGHT");
-            isAdmin = user.isAdmin();
-        }
+        messageService.loadMessages(messageService.getAllMessages(), user);
+        List<Message> messages2 = messageService.sortMessages(choice, filter, messageService.getAllMessages());
+        userService.calcUserRateForAll();
         switch (sortChoice) {
             case 1:
                 Collections.reverse(messages2);
@@ -99,9 +80,9 @@ public class MainController {
                 model.addAttribute("messages", messages2);
                 break;
         }
-        model.addAttribute("theme", theme);
-        model.addAttribute("isAdmin", isAdmin);
-        model.addAttribute("lang", userChoice);
+        model.addAttribute("isAdmin", userService.getUserIsAdmin(user));
+        model.addAttribute("theme", userService.getUserTheme(user));
+        model.addAttribute("lang", userService.getUserLang(user));
         model.addAttribute("filter", filter);
         model.addAttribute("user", user);
         return "main";
@@ -115,8 +96,7 @@ public class MainController {
                          Model model
     ) {
         User user = userService.getUserById(id);
-        List<Message> messages = messageService.getMessagesByAuthor(user);
-        List<Message> messages2 = messageService.sortMessages(choice, filter, messages);
+        List<Message> messages2 = messageService.sortMessages(choice, filter, messageService.getMessagesByAuthor(user));
         messageService.loadMessages(messages2, user);
         switch (sortChoice) {
             case 1:
@@ -128,6 +108,7 @@ public class MainController {
                 break;
 
         }
+        user.setUserRate(userService.calcUserRate(user));
         model.addAttribute("countOfSubscribers", user.getSubscribers().size());
         model.addAttribute("countOfSubscriptions", user.getSubscriptions().size());
         model.addAttribute("userLikes", user.getCountOfLikes());
@@ -150,8 +131,7 @@ public class MainController {
                                           @PathVariable String username,
                                           @AuthenticationPrincipal User currentUser) {
         User user = userService.getUserByUsername(username);
-        List<Message> messages = messageService.getMessagesByAuthor(user);
-        List<Message> messages2 = messageService.sortMessages(choice, filter, messages);
+        List<Message> messages2 = messageService.sortMessages(choice, filter, messageService.getMessagesByAuthor(user));
         messageService.loadMessages(messages2, user);
         switch (sortChoice) {
             case 1:
@@ -163,6 +143,7 @@ public class MainController {
                 break;
 
         }
+        user.setUserRate(userService.calcUserRate(user));
         model.addAttribute("isSubscriber", userService.isSubscriber(user, currentUser));
         model.addAttribute("isCurrentUser", Objects.equals(user.getUsername(), currentUser.getUsername()));
         model.addAttribute("subscribersCount", user.getSubscribers().size());
@@ -189,8 +170,7 @@ public class MainController {
             @RequestParam("file") MultipartFile file
     ) throws IOException {
         messageService.addMessage(username, text, name, hashtag, tag, file);
-        List<Message> messages = messageService.getAllMessages();
-        model.put("messages", messages);
+        model.put("messages", messageService.getAllMessages());
         return "redirect:/user/profile";
     }
 
@@ -200,6 +180,7 @@ public class MainController {
         List<Comment> comments = commentService.getCommentsByMessageId(id);
         Collections.reverse(comments);
         messageService.getPost(message, user);
+        message.getAuthor().setUserRate(userService.calcUserRate(message.getAuthor()));
         model.addAttribute("theme", Objects.equals(user.getTheme(), "LIGHT"));
         model.addAttribute("isAdmin", user.isAdmin());
         model.addAttribute("lang", Objects.equals(user.getChoice(), "ENG"));
@@ -238,6 +219,7 @@ public class MainController {
     public String allByHashtag(@PathVariable String hashtag, Model model, @AuthenticationPrincipal User user) {
         List<Message> messages = messageService.getMessagesByHashtag(hashtag);
         messageService.loadMessages(messages, user);
+        userService.calcUserRateForAll();
         model.addAttribute("user", user);
         model.addAttribute("theme", Objects.equals(user.getTheme(), "LIGHT"));
         model.addAttribute("isAdmin", user.isAdmin());
@@ -252,6 +234,7 @@ public class MainController {
     public String allByTopic(@PathVariable String topic, Model model, @AuthenticationPrincipal User user) {
         List<Message> messages = messageService.getMessagesByTopic(topic);
         messageService.loadMessages(messages, user);
+        userService.calcUserRateForAll();
         model.addAttribute("user", user);
         model.addAttribute("theme", Objects.equals(user.getTheme(), "LIGHT"));
         model.addAttribute("isAdmin", user.isAdmin());

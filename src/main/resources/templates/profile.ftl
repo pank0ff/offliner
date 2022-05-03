@@ -27,7 +27,7 @@
                         </#if>
                         <div class="d-flex flex-column">
                             <div class="d-flex flex-row justify-content-between align-items-center p-5 bg-black text-white">
-                                <h3 class="display-5">${user.username} </h3><h5>${userLikes} <img
+                                <h3 class="display-5">${user.username} </h3><h5>${user.getCountOfLikes()} <img
                                             style="width: 15px;height: 15px"
                                             src="https://img.icons8.com/ios/50/000000/like--v1.png"/></h5>
                                 <#if user.getLinkFacebook()??>
@@ -47,25 +47,25 @@
                         </#if>
                         <#if user.getLinkDribble()??>
                             <a  href="${user.getLinkDribble()}">
-                        <i class="fa fa-dribbble"></i>
+                                <i class="fa fa-dribbble"></i>
                             </a>
                         </#if>
-                        <#if user.getLinkLinkedIn()??>
-                            <a href="${user.getLinkLinkedIn()}">
-                        <i class="fa fa-linkedin" ></i>
-                            </a>
-                        </#if>
-                    </div>
+                                <#if user.getLinkLinkedIn()??>
+                                    <a href="${user.getLinkLinkedIn()}">
+                                        <i class="fa fa-linkedin"></i>
+                                    </a>
+                                </#if>
+                            </div>
 
-                    <div class="p-3 bg-blue text-white">
-                        <#if    aboutMyself??>
-                            <h6> ${aboutMyself}</h6>
-                        </#if>
-                    </div>
+                            <div class="p-3 bg-blue text-white">
+                                <#if    aboutMyself??>
+                                    <h6> ${aboutMyself}</h6>
+                                </#if>
+                            </div>
                             <div class="d-flex flex-row text-white">
                                 <div class="p-3 bg-primary text-center skill-block">
                                     <h5>Posts:</h5>
-                                    <h6>${countOfPosts}</h6>
+                                    <h6>${user.getCountOfPosts()}</h6>
                                 </div>
                                 <div class="p-3 bg-success text-center skill-block">
                                     <h5>Subscribers:</h5>
@@ -199,7 +199,7 @@
                         <div>
                             <a class="col align-self-center"
                                href="/user/profile/${message.getAuthor().id}/${message.getAuthor().username}">Author: ${message.authorName}</a>
-                            rate: ${userLikes/user.getCountOfPosts()}
+                            rate: ${user.getUserRate()}
                         </div>
                         <div>
                             <form class="d-flex flex-row justify-content-between align-items-center " method="post"
@@ -277,7 +277,7 @@
                         </#if>
                         <div class="d-flex flex-column">
                             <div class="d-flex flex-row justify-content-between align-items-center p-5 bg-black text-white">
-                                <h3 class="display-5">${user.username}</h3><h5>${userLikes} <img
+                                <h3 class="display-5">${user.username}</h3><h5>${user.getCountOfLikes()} <img
                                             style="width: 15px;height: 15px"
                                             src="https://img.icons8.com/ios/50/000000/like--v1.png"/></h5>
                                 <#if user.getLinkFacebook()??>
@@ -315,7 +315,7 @@
                             <div class="d-flex flex-row text-white">
                                 <div class="p-3 bg-primary text-center skill-block">
                                     <h5>Постов:</h5>
-                                    <h6>${countOfPosts}</h6>
+                                    <h6>${user.getCountOfPosts()}</h6>
                                 </div>
                                 <div class="p-3 bg-success text-center skill-block">
                                     <h5>Подписчики:</h5>
@@ -451,7 +451,7 @@
                         <div class="d-flex justify-content-between flex-row align-items-center">
                             <div>
                                 <a class="col align-self-center"
-                                   href="/user/profile/${message.getAuthor().id}/${message.getAuthor().username}">Автор: ${message.authorName}</a>рейтинг: ${userLikes/user.getCountOfPosts()}
+                                   href="/user/profile/${message.getAuthor().id}/${message.getAuthor().username}">Автор: ${message.authorName}</a>рейтинг: ${user.getUserRate()}
                             </div>
                             <div>
                                 <form class="d-flex flex-row justify-content-between align-items-center " method="post"

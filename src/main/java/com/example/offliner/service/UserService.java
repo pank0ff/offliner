@@ -7,6 +7,7 @@ import com.example.offliner.domain.Role;
 import com.example.offliner.domain.User;
 import com.example.offliner.repos.MessageRepo;
 import com.example.offliner.repos.UserRepo;
+import org.decimal4j.util.DoubleRounder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -97,13 +98,14 @@ public class UserService implements UserDetailsService {
         if (!StringUtils.isEmpty(password)) {
             user.setPassword(password);
         }
-        if (file != null && !file.getOriginalFilename().isEmpty()) {
+        if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
             File temp = null;
             try {
                 temp = File.createTempFile("myTempFile", ".png");
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            assert temp != null;
             file.transferTo(temp);
             Map uploadResult = cloudinary.uploader().upload(temp, ObjectUtils.emptyMap());
             String resultFilename = (String) uploadResult.get("url");
@@ -179,7 +181,11 @@ public class UserService implements UserDetailsService {
     }
 
     public User getUserById(Long id) {
-        return userRepo.findById(id).get();
+        if (userRepo.findById(id).isPresent()) {
+            return userRepo.findById(id).get();
+        } else {
+            return null;
+        }
     }
 
     public void addUser(User user, String theme, String choice) {
@@ -198,5 +204,45 @@ public class UserService implements UserDetailsService {
 
     public void deleteUser(User user) {
         userRepo.delete(user);
+    }
+
+    public double calcUserRate(User user) {
+        if (user.getCountOfPosts() == 0) {
+            return 0;
+        } else {
+            double countOfPosts = user.getCountOfPosts();
+            double countOfLikes = user.getCountOfLikes();
+            return DoubleRounder.round(countOfLikes / countOfPosts, 2);
+        }
+    }
+
+    public void calcUserRateForAll() {
+        for (User user : getAllUsers()) {
+            user.setUserRate(calcUserRate(user));
+        }
+    }
+
+    public boolean getUserTheme(User user) {
+        if (user == null) {
+            return true;
+        } else {
+            return Objects.equals(user.getTheme(), "LIGHT");
+        }
+    }
+
+    public boolean getUserLang(User user) {
+        if (user == null) {
+            return true;
+        } else {
+            return Objects.equals(user.getChoice(), "ENG");
+        }
+    }
+
+    public boolean getUserIsAdmin(User user) {
+        if (user == null) {
+            return false;
+        } else {
+            return user.isAdmin();
+        }
     }
 }

@@ -37,11 +37,10 @@ public class RateService {
             counter++;
         }
         if (counter != 0) {
-            averageRate = sum / counter;
+            averageRate = DoubleRounder.round(sum / counter, 2);
         } else {
             averageRate = 0;
         }
-        DoubleRounder.round(averageRate, 2);
         return averageRate;
     }
 

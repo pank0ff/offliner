@@ -26,7 +26,7 @@
                         </#if>
                         <div class="d-flex flex-column">
                             <div class="d-flex flex-row justify-content-between align-items-center p-5 bg-black text-white">
-                                <h3 class="display-5">${user.getUsername()}</h3><h5>${userLikes} <img
+                                <h3 class="display-5">${user.getUsername()}</h3><h5>${user.getCountOfLikes()} <img
                                             style="width: 15px;height: 15px"
                                             src="https://img.icons8.com/ios/50/000000/like--v1.png"/></h5>
                                 <#if user.getLinkFacebook()??>
@@ -65,7 +65,7 @@
                             <div class="d-flex flex-row text-white">
                                 <div class="p-3 bg-primary text-center skill-block">
                                     <h5>Posts:</h5>
-                                    <h6>${countOfPosts}</h6>
+                                    <h6>${user.getCountOfPosts()}</h6>
                                 </div>
                                 <div class="p-3 bg-success text-center skill-block">
                                     <h5>Subscribers:</h5>
@@ -214,7 +214,7 @@
                         <div>
                             <a class="col align-self-center"
                                href="/user/profile/${message.getAuthor().id}/${message.getAuthor().username}">Author: ${message.authorName}</a>
-                            rate: ${userLikes/user.getCountOfPosts()}
+                            rate: ${user.getUserRate()}
                         </div>
                         <div>
                             <#if user??>
@@ -297,7 +297,7 @@
                         </#if>
                         <div class="d-flex flex-column">
                             <div class="d-flex flex-row justify-content-between align-items-center p-5 bg-black text-white">
-                                <h3 class="display-5">${user.getUsername()}</h3><h5>${userLikes} <img
+                                <h3 class="display-5">${user.getUsername()}</h3><h5>${user.getCountOfLikes()} <img
                                             style="width: 15px;height: 15px"
                                             src="https://img.icons8.com/ios/50/000000/like--v1.png"/></h5>
                                 <#if user.getLinkFacebook()??>
@@ -336,7 +336,7 @@
                             <div class="d-flex flex-row text-white">
                                 <div class="p-3 bg-primary text-center skill-block">
                                     <h5>Постов:</h5>
-                                    <h6>${countOfPosts}</h6>
+                                    <h6>${user.getCountOfPosts()}</h6>
                                 </div>
                                 <div class="p-3 bg-success text-center skill-block">
                                     <h5>Подписчики:</h5>
@@ -488,7 +488,7 @@
                             <div>
                                 <a class="col align-self-center"
                                    href="/user/profile/${message.getAuthor().id}/${message.getAuthor().username}">Автор: ${message.authorName}</a>
-                                рейтинг: ${userLikes/user.getCountOfPosts()}
+                                рейтинг: ${user.getUserRate()}
                             </div>
                             <div>
                                 <#if user??>

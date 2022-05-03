@@ -26,10 +26,7 @@ public class RegistrationController {
 
     @PostMapping("/registration")
     public String addUser(@RequestParam String choice, @RequestParam String theme, User user, Map<String, Object> model) {
-        User userFromDb = userService.getUserByUsername(user.getUsername());
-        ;
-
-        if (userFromDb != null) {
+        if (userService.getUserByUsername(user.getUsername()) != null) {
             model.put("message", "User exists!");
             return "registration";
         }
