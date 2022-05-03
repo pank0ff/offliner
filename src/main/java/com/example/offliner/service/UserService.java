@@ -37,7 +37,7 @@ public class UserService implements UserDetailsService {
 
     public void updateProfile(User user, String password, String email, String aboutYourself, String userChoice, String theme, String linkFacebook, String linkGoogle, String linkYoutube, String linkDribble, String linkLinkedIn, MultipartFile file) throws IOException {
         String userEmail = user.getEmail();
-        String choice = user.getChoice();
+        String choice = user.getLang();
         String userTheme = user.getTheme();
         String aboutYourself1 = user.getAboutMyself();
         String linkFacebook1 = user.getLinkFacebook();
@@ -63,7 +63,7 @@ public class UserService implements UserDetailsService {
         boolean isUserChoiceChanged = (userChoice != null && !userChoice.equals(choice)) ||
                 (choice != null && !choice.equals(userChoice));
         if (isUserChoiceChanged) {
-            user.setChoice(userChoice);
+            user.setLang(userChoice);
         }
         boolean isEmailChanged = (email != null && !email.equals(userEmail)) ||
                 (userEmail != null && !userEmail.equals(email));
@@ -194,7 +194,7 @@ public class UserService implements UserDetailsService {
         user.setActive(true);
         user.setRoles(Collections.singleton(Role.USER));
         user.setTheme(theme);
-        user.setChoice(choice);
+        user.setLang(choice);
         userRepo.save(user);
     }
 
@@ -234,7 +234,7 @@ public class UserService implements UserDetailsService {
         if (user == null) {
             return true;
         } else {
-            return Objects.equals(user.getChoice(), "ENG");
+            return Objects.equals(user.getLang(), "ENG");
         }
     }
 

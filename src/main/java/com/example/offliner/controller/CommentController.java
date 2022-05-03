@@ -6,11 +6,14 @@ import com.example.offliner.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.Valid;
 
+@Validated
 @Controller
 public class CommentController {
     private final CommentService commentService;
@@ -25,10 +28,10 @@ public class CommentController {
     @PostMapping("/post/add/comment/{id}")
     public String create(
             @PathVariable Integer id,
-            @RequestParam String text,
+            @Valid @RequestParam String text,
             @AuthenticationPrincipal User user
     ){
-       commentService.create(messageService.getMessageById(id), text, user);
-       return "redirect:/main";
+        commentService.create(messageService.getMessageById(id), text, user);
+        return "redirect:/main";
     }
 }

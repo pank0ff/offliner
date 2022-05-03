@@ -10,19 +10,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-
+@Validated
 @Controller
 public class MainController {
     private final MessageService messageService;
@@ -114,7 +116,7 @@ public class MainController {
         model.addAttribute("userLikes", user.getCountOfLikes());
         model.addAttribute("theme", Objects.equals(user.getTheme(), "LIGHT"));
         model.addAttribute("isAdmin", user.isAdmin());
-        model.addAttribute("lang", Objects.equals(user.getChoice(), "ENG"));
+        model.addAttribute("lang", Objects.equals(user.getLang(), "ENG"));
         model.addAttribute("countOfPosts", userService.getUserCountOfPosts(user));
         model.addAttribute("user", user);
         model.addAttribute("aboutMyself", user.getAboutMyself());
@@ -151,7 +153,7 @@ public class MainController {
         model.addAttribute("userLikes", user.getCountOfLikes());
         model.addAttribute("theme", Objects.equals(currentUser.getTheme(), "LIGHT"));
         model.addAttribute("isAdmin", user.isAdmin());
-        model.addAttribute("lang", Objects.equals(currentUser.getChoice(), "ENG"));
+        model.addAttribute("lang", Objects.equals(currentUser.getLang(), "ENG"));
         model.addAttribute("countOfPosts", userService.getUserCountOfPosts(user));
         model.addAttribute("admin", currentUser.isAdmin());
         model.addAttribute("user", user);
@@ -162,11 +164,11 @@ public class MainController {
 
     @PostMapping("/user/profile/add/{username}")
     public String add(
-            @PathVariable String username,
-            @RequestParam String text,
-            @RequestParam String name,
-            @RequestParam String hashtag,
-            @RequestParam String tag, Map<String, Object> model,
+            @Valid @PathVariable String username,
+            @Valid @RequestParam String text,
+            @Valid @RequestParam String name,
+            @Valid @RequestParam String hashtag,
+            @Valid @RequestParam String tag, Map<String, Object> model,
             @RequestParam("file") MultipartFile file
     ) throws IOException {
         messageService.addMessage(username, text, name, hashtag, tag, file);
@@ -183,7 +185,7 @@ public class MainController {
         message.getAuthor().setUserRate(userService.calcUserRate(message.getAuthor()));
         model.addAttribute("theme", Objects.equals(user.getTheme(), "LIGHT"));
         model.addAttribute("isAdmin", user.isAdmin());
-        model.addAttribute("lang", Objects.equals(user.getChoice(), "ENG"));
+        model.addAttribute("lang", Objects.equals(user.getLang(), "ENG"));
         model.addAttribute("user", user);
         model.addAttribute("comments", comments);
         model.addAttribute("message", message);
@@ -192,10 +194,10 @@ public class MainController {
 
     @PostMapping("/user/profile/update/{id}")
     public String postUpdate(@PathVariable Integer id,
-                             @RequestParam String text,
-                             @RequestParam String name,
-                             @RequestParam String hashtag,
-                             @RequestParam String tag,
+                             @Valid @RequestParam String text,
+                             @Valid @RequestParam String name,
+                             @Valid @RequestParam String hashtag,
+                             @Valid @RequestParam String tag,
                              @RequestParam("file") MultipartFile file) throws IOException {
         messageService.postUpdate(id, text, hashtag, tag, name, file);
         return "redirect:/user/profile";
@@ -204,7 +206,7 @@ public class MainController {
     @GetMapping("/user/profile/update/{id}")
     public String postUpdateForm(@PathVariable Integer id, Model model, @AuthenticationPrincipal User user) {
         model.addAttribute("theme", Objects.equals(user.getTheme(), "LIGHT"));
-        model.addAttribute("lang", Objects.equals(user.getChoice(), "ENG"));
+        model.addAttribute("lang", Objects.equals(user.getLang(), "ENG"));
         model.addAttribute("message", messageService.getMessageById(id));
         return "editMess";
     }
@@ -216,14 +218,14 @@ public class MainController {
     }
 
     @GetMapping("/post/hashtag/{hashtag}")
-    public String allByHashtag(@PathVariable String hashtag, Model model, @AuthenticationPrincipal User user) {
+    public String allByHashtag(@Valid @PathVariable String hashtag, Model model, @AuthenticationPrincipal User user) {
         List<Message> messages = messageService.getMessagesByHashtag(hashtag);
         messageService.loadMessages(messages, user);
         userService.calcUserRateForAll();
         model.addAttribute("user", user);
         model.addAttribute("theme", Objects.equals(user.getTheme(), "LIGHT"));
         model.addAttribute("isAdmin", user.isAdmin());
-        model.addAttribute("lang", Objects.equals(user.getChoice(), "ENG"));
+        model.addAttribute("lang", Objects.equals(user.getLang(), "ENG"));
         model.addAttribute("messages", messages);
         model.addAttribute("hashtag", hashtag);
 
@@ -231,14 +233,14 @@ public class MainController {
     }
 
     @GetMapping("/post/topic/{topic}")
-    public String allByTopic(@PathVariable String topic, Model model, @AuthenticationPrincipal User user) {
+    public String allByTopic(@Valid @PathVariable String topic, Model model, @AuthenticationPrincipal User user) {
         List<Message> messages = messageService.getMessagesByTopic(topic);
         messageService.loadMessages(messages, user);
         userService.calcUserRateForAll();
         model.addAttribute("user", user);
         model.addAttribute("theme", Objects.equals(user.getTheme(), "LIGHT"));
         model.addAttribute("isAdmin", user.isAdmin());
-        model.addAttribute("lang", Objects.equals(user.getChoice(), "ENG"));
+        model.addAttribute("lang", Objects.equals(user.getLang(), "ENG"));
         model.addAttribute("messages", messages);
         model.addAttribute("topic", topic);
         return "byTopic";

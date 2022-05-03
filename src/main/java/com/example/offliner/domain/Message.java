@@ -1,6 +1,10 @@
 package com.example.offliner.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,15 +14,34 @@ import java.util.Set;
 @Table
 public class Message {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @NotBlank
+    @Size(min = 5)
     private String text;
+
+    @NotBlank
+    @Size(min = 2, max = 7)
     private String tag;
+
+    @NotBlank
+    @Size(min = 5)
     private String name;
+
+    @NotBlank
+    @Size(min = 1)
     private String hashtag;
+
+    @Min(1)
+    @Max(5)
     private double averageRate;
+
+    @Min(0)
     private int likesCount;
+
+    @Min(0)
+    @Max(1)
     private int meLiked;
 
     @OneToMany(mappedBy = "message", orphanRemoval = true)

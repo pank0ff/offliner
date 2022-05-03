@@ -1,6 +1,8 @@
 package com.example.offliner.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table
@@ -9,6 +11,8 @@ public class Comment {
     @GeneratedValue
     private Long id;
 
+    @NotBlank
+    @Size(min = 5, max = 255)
     private String text;
 
     @ManyToOne
@@ -16,7 +20,7 @@ public class Comment {
     private Message message;
 
     @ManyToOne
-    @JoinColumn(name = "user_id",nullable = false,updatable = false)
+    @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User author;
 
     public Message getMessage() {

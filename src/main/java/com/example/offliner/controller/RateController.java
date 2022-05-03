@@ -7,11 +7,14 @@ import com.example.offliner.service.RateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.Valid;
 
+@Validated
 @Controller
 public class RateController {
 
@@ -26,7 +29,7 @@ public class RateController {
 
 
     @PostMapping("/rate/{id}/{username}")
-    public String rate(@PathVariable Integer id, @AuthenticationPrincipal User user, @RequestParam int rate) {
+    public String rate(@PathVariable Integer id, @AuthenticationPrincipal User user, @Valid @RequestParam int rate) {
         Message message = messageService.getMessageById(id);
         int counter = rateService.getRateCounter(user, message);
         if (counter == 0) {

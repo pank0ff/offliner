@@ -10,15 +10,18 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+@Validated
 @Controller
 @RequestMapping("/user")
 public class UserController {
@@ -35,7 +38,7 @@ public class UserController {
     @GetMapping
     public String userList(@AuthenticationPrincipal User user, Model model) {
         model.addAttribute("theme", Objects.equals(user.getTheme(), "LIGHT"));
-        model.addAttribute("lang", Objects.equals(user.getChoice(), "ENG"));
+        model.addAttribute("lang", Objects.equals(user.getLang(), "ENG"));
         model.addAttribute("users", userService.getAllUsers());
         return "userList";
     }
@@ -44,7 +47,7 @@ public class UserController {
     @GetMapping("/{user}")
     public String userEditForm(@PathVariable User user, @AuthenticationPrincipal User user1, Model model) {
         model.addAttribute("theme", Objects.equals(user1.getTheme(), "LIGHT"));
-        model.addAttribute("lang", Objects.equals(user1.getChoice(), "ENG"));
+        model.addAttribute("lang", Objects.equals(user1.getLang(), "ENG"));
         model.addAttribute("user", user);
         model.addAttribute("roles", Role.values());
 
@@ -54,7 +57,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public String userSave(
-            @RequestParam String username,
+            @Valid @RequestParam String username,
             @RequestParam Map<String, String> form,
             @RequestParam("userId") User user
     ) {
@@ -76,7 +79,7 @@ public class UserController {
         model.addAttribute("countOfSubscribers", user.getSubscribers().size());
         model.addAttribute("countOfSubscriptions", user.getSubscriptions().size());
         model.addAttribute("theme", Objects.equals(user.getTheme(), "LIGHT"));
-        model.addAttribute("lang", Objects.equals(user.getChoice(), "ENG"));
+        model.addAttribute("lang", Objects.equals(user.getLang(), "ENG"));
         model.addAttribute("user", user);
         model.addAttribute("aboutMyself", user.getAboutMyself());
         model.addAttribute("messages", messages);
@@ -86,12 +89,12 @@ public class UserController {
 
     @GetMapping("/profile/{username}/settings")
     public String settings(
-            Model model, @PathVariable String username, @AuthenticationPrincipal User userCurrent
+            Model model, @Valid @PathVariable String username, @AuthenticationPrincipal User userCurrent
     ) {
         User user = userService.getUserByUsername(username);
         model.addAttribute("theme", Objects.equals(userCurrent.getTheme(), "LIGHT"));
-        model.addAttribute("lang", Objects.equals(userCurrent.getChoice(), "ENG"));
-        model.addAttribute("userChoice", user.getChoice());
+        model.addAttribute("lang", Objects.equals(userCurrent.getLang(), "ENG"));
+        model.addAttribute("userChoice", user.getLang());
         model.addAttribute("username", user.getUsername());
         model.addAttribute("email", user.getEmail());
         model.addAttribute("aboutMyself", user.getAboutMyself());
@@ -126,7 +129,7 @@ public class UserController {
 
     @GetMapping("/profile/{id}/{username}")
     public String userProfile(
-            Model model, @PathVariable String username, @AuthenticationPrincipal User currentUser) {
+            Model model, @Valid @PathVariable String username, @AuthenticationPrincipal User currentUser) {
         User user = userService.getUserByUsername(username);
         List<Message> messages = messageService.getMessagesByAuthor(user);
         messageService.setMeLiked(messages, currentUser);
@@ -141,7 +144,7 @@ public class UserController {
         model.addAttribute("subscriptionsCount", user.getSubscriptions().size());
         model.addAttribute("theme", Objects.equals(currentUser.getTheme(), "LIGHT"));
         model.addAttribute("isSubscriber", userService.isSubscriber(user, currentUser));
-        model.addAttribute("lang", Objects.equals(currentUser.getChoice(), "ENG"));
+        model.addAttribute("lang", Objects.equals(currentUser.getLang(), "ENG"));
         model.addAttribute("admin", currentUser.isAdmin());
         model.addAttribute("user", user);
         model.addAttribute("messages", messages);
@@ -150,7 +153,7 @@ public class UserController {
 
     @PostMapping("/profile/{username}/settings/delete")
     public String deleteUser(
-            @PathVariable String username,
+            @Valid @PathVariable String username,
             @AuthenticationPrincipal User user1
     ) {
         userService.deleteUser(userService.getUserByUsername(username));

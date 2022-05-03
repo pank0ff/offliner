@@ -1,6 +1,8 @@
 package com.example.offliner.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 @Entity
 public class Rate {
@@ -16,6 +18,8 @@ public class Rate {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Min(1)
+    @Max(5)
     private int rate;
 
     public Rate() {
