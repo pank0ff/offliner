@@ -1,5 +1,6 @@
 package com.example.offliner.domain;
 
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,6 +10,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@Data
 @Entity
 @Table(name = "usr")
 public class User implements UserDetails {
