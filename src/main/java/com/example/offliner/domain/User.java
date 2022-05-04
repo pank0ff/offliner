@@ -10,6 +10,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -36,8 +37,6 @@ public class User implements UserDetails {
     @Pattern(regexp = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$")
     private String email;
 
-    @NotBlank
-    @Size(min = 4)
     private String aboutMyself;
 
     @Min(0)
@@ -46,8 +45,6 @@ public class User implements UserDetails {
     @Min(0)
     private int countOfLikes;
 
-    @NotBlank
-    @Size(min = 2, max = 3)
     private String lang;
 
     @Size(min = 4, max = 5)
@@ -84,6 +81,14 @@ public class User implements UserDetails {
 
     public boolean isAdmin() {
         return roles.contains(Role.ADMIN);
+    }
+
+    public boolean isENG(String choice) {
+        return Objects.equals(choice, "ENG");
+    }
+
+    public boolean isLight(String theme) {
+        return Objects.equals(theme, "LIGHT");
     }
 
     public Long getId() {
@@ -125,6 +130,10 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
+    }
+
+    public boolean isEng(String userChoice) {
+        return Objects.equals(userChoice, "ENG");
     }
 
     public String getPassword() {
@@ -243,8 +252,16 @@ public class User implements UserDetails {
         return subscribers;
     }
 
+    public void setSubscribers(Set<User> subscribers) {
+        this.subscribers = subscribers;
+    }
+
     public Set<User> getSubscriptions() {
         return subscriptions;
+    }
+
+    public void setSubscriptions(Set<User> subscriptions) {
+        this.subscriptions = subscriptions;
     }
 
     public int getCountOfPosts() {

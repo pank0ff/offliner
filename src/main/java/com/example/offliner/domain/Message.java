@@ -33,7 +33,7 @@ public class Message {
     @Size(min = 1)
     private String hashtag;
 
-    @Min(1)
+    @Min(0)
     @Max(5)
     private double averageRate;
 

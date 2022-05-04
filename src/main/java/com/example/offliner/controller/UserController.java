@@ -96,6 +96,7 @@ public class UserController {
             Model model, @Valid @PathVariable String username, @AuthenticationPrincipal User userCurrent
     ) {
         User user = userService.getUserByUsername(username);
+        model.addAttribute("id", user.getId());
         model.addAttribute("theme", Objects.equals(userCurrent.getTheme(), "LIGHT"));
         model.addAttribute("lang", Objects.equals(userCurrent.getLang(), "ENG"));
         model.addAttribute("userChoice", user.getLang());
@@ -110,9 +111,9 @@ public class UserController {
         return "settings";
     }
 
-    @PostMapping("/profile/{username}/settings")
+    @PostMapping("/profile/{id}/settings")
     public String updateProfile(
-            @PathVariable String username,
+            @PathVariable Long id,
             @RequestParam String password,
             @RequestParam String email,
             @RequestParam String aboutMyself,
@@ -127,7 +128,7 @@ public class UserController {
 
     ) {
         try {
-            userService.updateProfile(userService.getUserByUsername(username), password, email, aboutMyself, userChoice, theme, linkFacebook, linkGoogle, linkYoutube, linkDribble, linkLinkedIn, file);
+            userService.updateProfile(userService.getUserById(id), password, email, aboutMyself, userChoice, theme, linkFacebook, linkGoogle, linkYoutube, linkDribble, linkLinkedIn, file);
         } catch (Exception e) {
             throw new ApiRequestException("Cant update user. Check fields");
         }
@@ -158,12 +159,12 @@ public class UserController {
         return "userProfile";
     }
 
-    @PostMapping("/profile/{username}/settings/delete")
+    @PostMapping("/profile/{id}/settings/delete")
     public String deleteUser(
-            @Valid @PathVariable String username,
+            @Valid @PathVariable Long id,
             @AuthenticationPrincipal User user1
     ) {
-        userService.deleteUser(userService.getUserByUsername(username));
+        userService.deleteUser(userService.getUserById(id));
         if (user1.isAdmin()) {
             return "redirect:/user";
         } else {

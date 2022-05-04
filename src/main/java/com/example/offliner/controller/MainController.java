@@ -48,6 +48,7 @@ public class MainController {
         messageService.loadMessages(messageService.getAllMessages(), user);
         try {
             List<Message> messages2 = messageService.sortMessages(choice, filter, messageService.searchTopMessage());
+            Collections.reverse(messages2);
             model.addAttribute("messages", messageService.sortByDate(messages2, sortChoice));
             userService.calcUserRateForAll();
         } catch (Exception e) {
@@ -70,6 +71,7 @@ public class MainController {
         messageService.loadMessages(messageService.getAllMessages(), user);
         try {
             List<Message> messages2 = messageService.sortMessages(choice, filter, messageService.getAllMessages());
+            Collections.reverse(messages2);
             model.addAttribute("messages", messageService.sortByDate(messages2, sortChoice));
             userService.calcUserRateForAll();
         } catch (Exception e) {
@@ -131,9 +133,9 @@ public class MainController {
         return "userProfile";
     }
 
-    @PostMapping("/user/profile/add/{username}")
+    @PostMapping("/user/profile/add/{id}")
     public String add(
-            @Valid @PathVariable String username,
+            @Valid @PathVariable Long id,
             @Valid @RequestParam String text,
             @Valid @RequestParam String name,
             @Valid @RequestParam String hashtag,
@@ -141,7 +143,7 @@ public class MainController {
             @RequestParam("file") MultipartFile file
     ) throws IOException {
         try {
-            messageService.addMessage(username, text, name, hashtag, tag, file);
+            messageService.addMessage(id, text, name, hashtag, tag, file);
             model.put("messages", messageService.getAllMessages());
         } catch (Exception e) {
             throw new ApiRequestException("Cant add message. Check your fields");

@@ -108,7 +108,7 @@
                             <div>
                                 <#if user??>
                                     <form class="d-flex flex-row justify-content-between align-items-center "
-                                          method="post" action="/rate/${message.id}/${user.username}">
+                                          method="post" action="/rate/${message.id}">
                                         <div class="form-group mx-2 ">
                                             <select name="rate" size="1" class="rounded">
                                                 <option value="1">1</option>
@@ -221,7 +221,7 @@
                             <div>
                                 <#if user??>
                                     <form class="d-flex flex-row justify-content-between align-items-center "
-                                          method="post" action="/rate/${message.id}/${user.username}">
+                                          method="post" action="/rate/${message.id}">
                                         <div class="form-group mx-2 ">
                                             <select name="rate" size="1" class="rounded">
                                                 <option value="1">1</option>

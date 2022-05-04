@@ -123,17 +123,17 @@
             </a>
             <div class="collapse" id="collapseExample">
                 <div class="form-group mt-3">
-                    <form method="post" action="/user/profile/add/${user.username}" enctype="multipart/form-data">
+                    <form method="post" action="/user/profile/add/${user.id}" enctype="multipart/form-data">
                         <div class="form-group">
                             <input required minlength="5" type="text" class="form-control" name="name"
                                    placeholder="Enter name of your post"/>
-                    </div>
-                    <div class="form-group">
-                        <select name="tag" size="1" class="rounded" >
-                            <option value="Nothing">Choose topic</option>
-                            <option value="Books">Books</option>
-                            <option value="Games">Games</option>
-                            <option value="Music">Music</option>
+                        </div>
+                        <div class="form-group">
+                            <select name="tag" size="1" class="rounded">
+                                <option value="Nothing">Choose topic</option>
+                                <option value="Books">Books</option>
+                                <option value="Games">Games</option>
+                                <option value="Music">Music</option>
                             <option value="Films">Films</option>
                             <option value="Sport">Sport</option>
                             <option value="IT">IT</option>
@@ -219,7 +219,7 @@
                         <div>
                             <#if user??>
                                 <form class="d-flex flex-row justify-content-between align-items-center " method="post"
-                                      action="/rate/${message.id}/${user.username}">
+                                      action="/rate/${message.id}">
                                     <div class="form-group mx-2 ">
                                         <select name="rate" size="1" class="rounded">
                                             <option value="1">1</option>
@@ -394,7 +394,7 @@
             </a>
             <div class="collapse" id="collapseExample">
                 <div class="form-group mt-3">
-                    <form method="post" action="/user/profile/add/${user.username}" enctype="multipart/form-data">
+                    <form method="post" action="/user/profile/add/${user.id}" enctype="multipart/form-data">
                         <div class="form-group">
                             <input required minlength="5" type="text" class="form-control" name="name"
                                    placeholder="Введите название вашего поста"/>
@@ -493,7 +493,7 @@
                             <div>
                                 <#if user??>
                                     <form class="d-flex flex-row justify-content-between align-items-center "
-                                          method="post" action="/rate/${message.id}/${user.username}">
+                                          method="post" action="/rate/${message.id}">
                                         <div class="form-group mx-2 ">
                                             <select name="rate" size="1" class="rounded">
                                                 <option value="1">1</option>

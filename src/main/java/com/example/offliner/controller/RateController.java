@@ -28,7 +28,7 @@ public class RateController {
     }
 
 
-    @PostMapping("/rate/{id}/{username}")
+    @PostMapping("/rate/{id}")
     public String rate(@PathVariable Integer id, @AuthenticationPrincipal User user, @Valid @RequestParam int rate) {
         Message message = messageService.getMessageById(id);
         int counter = rateService.getRateCounter(user, message);

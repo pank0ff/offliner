@@ -248,8 +248,8 @@ public class MessageService {
         message.setFilename(resultFilename);
     }
 
-    public void addMessage(String username, String text, String name, String hashtag, String tag, MultipartFile file) throws IOException {
-        User user = userRepo.findByUsername(username);
+    public void addMessage(Long id, String text, String name, String hashtag, String tag, MultipartFile file) throws IOException {
+        User user = userRepo.findById(id).get();
         Message message = new Message(text, tag, name, hashtag, user);
         if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
             loadToCloudinary(file, message);

@@ -2,7 +2,7 @@
 
 <@c.page>
         <#if lang>
-            <form method="post" action="/user/profile/${username}/settings/" enctype="multipart/form-data">
+            <form method="post" action="/user/profile/${id}/settings/" enctype="multipart/form-data">
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Password:</label>
                     <div class="col-sm-6">
@@ -12,7 +12,8 @@
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Email:</label>
                     <div class="col-sm-6">
-                    <input type="email" name="email" class="form-control" placeholder="some@some.com" value="${email!''}" />
+                        <input type="email" name="email" class="form-control" placeholder="some@some.com"
+                               value="${email!''}"/>
                 </div>
             </div>
                 <div class="form-group row">
@@ -73,17 +74,17 @@
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label">Your avatar:</label>
                 <div class="col-sm-6">
-                <div class="custom-file">
-                    <input type="file" name="file" id="customFile">
-                    <label class="custom-file-label" for="customFile">Choose file</label>
-                </div>
+                    <div class="custom-file">
+                        <input type="file" name="file" id="customFile">
+                        <label class="custom-file-label" for="customFile">Choose file</label>
+                    </div>
                 </div>
             </div>
                 <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                 <button class="btn btn-primary" type="submit">Save</button>
             </form>
 
-            <form method="post" action="/user/profile/${username}/settings/delete">
+            <form method="post" action="/user/profile/${id}/settings/delete">
                 <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                 <#if theme>
                     <button class="btn btn-danger mt-5" type="submit">Delete</button>
@@ -107,7 +108,7 @@
                 </div>
             </#if>
         <#else>
-            <form method="post" action="/user/profile/${username}/settings/" enctype="multipart/form-data">
+            <form method="post" action="/user/profile/${id}/settings/" enctype="multipart/form-data">
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Пароль:</label>
                     <div class="col-sm-6">
@@ -193,7 +194,7 @@
                 <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                 <button class="btn btn-primary" type="submit">Сохранить</button>
             </form>
-            <form method="post" action="/user/profile/${username}/settings/delete">
+            <form method="post" action="/user/profile/${id}/settings/delete">
                 <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                 <#if theme>
                     <button class="btn btn-danger mt-5" type="submit">Удалить</button>
